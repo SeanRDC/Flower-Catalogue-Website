@@ -1,0 +1,54 @@
+/* ================================
+  RESPONSIVE STYLES FOR DESKTOP
+   ================================ */
+
+/* For very large screens (≥ 1441px)
+   → Center the entire .desktop-home-page container */
+@media screen and (min-width: 1441px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #ffffff;
+  }
+
+  .desktop-home-page {
+    margin: 0 auto;
+    transform: scale(1.05); /* Slight upscale for better presence */
+    transform-origin: top center;
+  }
+}
+
+/* For smaller desktops (1024px – 1439px)
+   → Keep design intact but scale slightly for fit */
+@media screen and (max-width: 1439px) and (min-width: 1024px) {
+  .desktop-home-page {
+    transform: scale(0.9);
+    transform-origin: top center;
+    margin: 0 auto;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #ffffff;
+  }
+}
+
+/* Optional: Handle screens narrower than 1024px
+   (not mobile, just safety for small monitors) */
+@media screen and (max-width: 1023px) {
+  .desktop-home-page {
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin: 0 auto;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #ffffff;
+  }
+}
