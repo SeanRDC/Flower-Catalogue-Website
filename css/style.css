@@ -1,0 +1,611 @@
+.desktop-home-page {
+  position: relative;
+  width: 1440px;
+  height: 1168px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.desktop-home-page .foreground {
+  position: absolute;
+  top: 0;
+  left: -17px;
+  width: 1743px;
+  height: 1267px;
+}
+
+.desktop-home-page .hero-image {
+  top: 0;
+  left: 17px;
+  background: linear-gradient(
+    270deg,
+    rgba(246, 220, 233, 1) 0%,
+    rgba(255, 214, 230, 1) 100%
+  );
+  position: absolute;
+  width: 318px;
+  height: 815px;
+}
+
+.desktop-home-page .div {
+  top: 452px;
+  left: 0;
+  background: linear-gradient(
+    270deg,
+    rgba(249, 218, 233, 1) 0%,
+    rgba(255, 214, 230, 1) 100%
+  );
+  position: absolute;
+  width: 318px;
+  height: 815px;
+}
+
+.desktop-home-page .heroimage {
+  position: absolute;
+  top: 0;
+  left: 303px;
+  width: 1154px;
+  height: 810px;
+  aspect-ratio: 1.78;
+  object-fit: cover;
+}
+
+.desktop-home-page .footer {
+  position: absolute;
+  top: 810px;
+  left: 17px;
+  width: 1440px;
+  height: 380px;
+  background-color: #f4f3f1;
+}
+
+.desktop-home-page .footer-2 {
+  top: 810px;
+  width: 1442px;
+  background-color: transparent;
+  position: absolute;
+  left: 0;
+  height: 380px;
+}
+
+.desktop-home-page .footer-3 {
+  top: 0;
+  width: 1440px;
+  background-color: #f4f3f1;
+  position: absolute;
+  left: 0;
+  height: 380px;
+}
+
+.desktop-home-page .line {
+  top: 300px;
+  width: 1381px;
+  position: absolute;
+  left: 30px;
+  height: 1px;
+  object-fit: cover;
+}
+
+.desktop-home-page .text-wrapper {
+  position: absolute;
+  top: 318px;
+  left: 36px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .t-c {
+  position: absolute;
+  top: 318px;
+  left: 1055px;
+  width: 340px;
+  height: 19px;
+  display: flex;
+}
+
+.desktop-home-page .text-wrapper-2 {
+  width: 41px;
+  height: 19px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-3 {
+  width: 50px;
+  height: 19px;
+  margin-left: 27px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-4 {
+  width: 57px;
+  height: 19px;
+  margin-left: 28px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-5 {
+  width: 103px;
+  height: 19px;
+  margin-left: 26px;
+  font-family: "Lato-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .contact {
+  position: absolute;
+  top: 104px;
+  left: 1050px;
+  width: 226px;
+  height: 125px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.desktop-home-page .text-wrapper-6 {
+  width: 56px;
+  height: 19px;
+  font-family: "Lato-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-7 {
+  width: 206px;
+  height: 19px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .element-purok {
+  width: 220px;
+  height: 57px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop-home-page .feedback {
+  position: absolute;
+  top: 104px;
+  left: 804px;
+  width: 162px;
+  height: 84px;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-home-page .text-wrapper-8 {
+  width: 156px;
+  height: 19px;
+  font-family: "Lato-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-9 {
+  width: 103px;
+  height: 19px;
+  margin-top: 15px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-10 {
+  width: 84px;
+  height: 19px;
+  margin-top: 12px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .quick-access {
+  position: absolute;
+  top: 104px;
+  left: 596px;
+  width: 99px;
+  height: 84px;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-home-page .text-wrapper-11 {
+  width: 93px;
+  height: 19px;
+  font-family: "Lato-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-12 {
+  width: 46px;
+  height: 19px;
+  margin-top: 15px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.desktop-home-page .text-wrapper-13 {
+  width: 42px;
+  height: 19px;
+  margin-top: 12px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.desktop-home-page .about {
+  position: absolute;
+  top: 142px;
+  left: 113px;
+  width: 274px;
+  height: 95px;
+  display: flex;
+}
+
+.desktop-home-page .we-re-a-visual-haven {
+  width: 272px;
+  height: 95px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop-home-page .socials {
+  position: absolute;
+  top: 98px;
+  left: 113px;
+  width: 171px;
+  height: 22px;
+  display: flex;
+}
+
+.desktop-home-page .facebook-filled {
+  margin-top: 1px;
+  width: 20px;
+  height: 20px;
+}
+
+.desktop-home-page .instagram {
+  margin-top: 1px;
+  width: 20px;
+  height: 20px;
+  margin-left: 29px;
+}
+
+.desktop-home-page .linkedin {
+  width: 20px;
+  height: 20px;
+  margin-left: 31px;
+}
+
+.desktop-home-page .github {
+  margin-top: 2.0px;
+  width: 20px;
+  height: 20px;
+  margin-left: 31px;
+}
+
+.desktop-home-page .logo-text {
+  position: absolute;
+  top: 40px;
+  left: 61px;
+  width: 296px;
+  height: 41px;
+  display: flex;
+  gap: 8.8px;
+}
+
+.desktop-home-page .peony-logo {
+  margin-top: -1.2px;
+  width: 51.4px;
+  height: 51.4px;
+  margin-left: -7.2px;
+  aspect-ratio: 1;
+}
+
+.desktop-home-page .p {
+  margin-top: 9px;
+  width: 241px;
+  height: 19px;
+  font-family: "Lato-Light", Helvetica;
+  font-weight: 300;
+  color: #2c2c2c;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.desktop-home-page .img {
+  top: 29px;
+  width: 1380px;
+  position: absolute;
+  left: 30px;
+  height: 1px;
+  object-fit: cover;
+}
+
+.desktop-home-page .body {
+  position: absolute;
+  top: 179px;
+  left: 56px;
+  width: 626px;
+  height: 424px;
+}
+
+.desktop-home-page .log-in-button {
+  display: flex;
+  width: 240px;
+  height: 63px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px 142px;
+  position: absolute;
+  top: 361px;
+  left: 267px;
+  background-color: #f2f2f2;
+  border-radius: 1px;
+  box-shadow: 0px 4px 12px #0000000d;
+}
+
+.desktop-home-page .text-wrapper-14 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -11.50px;
+  margin-bottom: -9.50px;
+  margin-left: -55.00px;
+  margin-right: -55.00px;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0.50px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.desktop-home-page .browse-now-button {
+  display: flex;
+  width: 240px;
+  height: 63px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px 142px;
+  position: absolute;
+  top: 361px;
+  left: 5px;
+  background-color: #f2f2f2;
+  border-radius: 1px;
+  box-shadow: 0px 4px 12px #0000000d;
+}
+
+.desktop-home-page .text-wrapper-15 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: -11.50px;
+  margin-bottom: -9.50px;
+  margin-left: -81.00px;
+  margin-right: -81.00px;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0.50px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.desktop-home-page .main-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 630px;
+  height: 345px;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-home-page .find-the-flower-that {
+  width: 626px;
+  height: 273px;
+  font-family: "Montserrat-Bold", Helvetica;
+  font-weight: 700;
+  color: #434d20;
+  font-size: 75px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop-home-page .whether-you-re {
+  margin-left: 5px;
+  width: 607px;
+  height: 72px;
+  font-family: "Lato-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop-home-page .header {
+  position: absolute;
+  top: 31px;
+  left: 62px;
+  width: 1290px;
+  height: 50px;
+  display: flex;
+  gap: 476px;
+  background-color: transparent;
+}
+
+.desktop-home-page .search-bar {
+  display: flex;
+  width: 468px;
+  height: 50px;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 16px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  box-shadow: 0px 2px 12px #00000003;
+}
+
+.desktop-home-page .text-wrapper-16 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 147px;
+  height: 24px;
+  font-family: "Montserrat-Regular", Helvetica;
+  font-weight: 400;
+  color: #2c2c2c66;
+  font-size: 18px;
+  letter-spacing: 0.50px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.desktop-home-page .search {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.desktop-home-page .nav-bar {
+  margin-top: 14px;
+  width: 352px;
+  display: flex;
+}
+
+.desktop-home-page .text-wrapper-17 {
+  width: 57px;
+  height: 22px;
+  font-family: "Montserrat-Medium", Helvetica;
+  font-weight: 500;
+  color: #434d20;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop-home-page .chevron-down {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  margin-left: 3px;
+}
+
+.desktop-home-page .text-wrapper-18 {
+  width: 59px;
+  height: 22px;
+  margin-left: 57px;
+  font-family: "Montserrat-Medium", Helvetica;
+  font-weight: 500;
+  color: #434d20;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
