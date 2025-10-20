@@ -72,39 +72,30 @@
   height: 380px;
 }
 
-.desktop-home-page .line {
+/* Line break elements */
+
+.line1{
   top: 300px;
   width: 1750px;
   position: absolute;
-  left: 80px;
+  left: 65px;
   height: 1px;
   object-fit: cover;
 }
 
-.desktop-home-page .text-wrapper {
+.line2 {
+  top: 29px;
+  width: 1750px;
   position: absolute;
-  top: 318px;
-  left: 36px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
+  left: 65px;
+  height: 1px;
+  object-fit: cover;
 }
 
-.desktop-home-page .t-c {
-  position: absolute;
-  top: 318px;
-  left: 1055px;
-  width: 340px;
-  height: 19px;
-  display: flex;
-}
 
-.desktop-home-page .text-wrapper-2 {
+/* Footer -> Terms and Privacy */
+
+.text-wrapper-2, .text-wrapper-1 {
   width: 41px;
   height: 19px;
   font-family: "Lato-Light", Helvetica;
@@ -117,52 +108,32 @@
   white-space: nowrap;
 }
 
-.desktop-home-page .text-wrapper-3 {
-  width: 50px;
-  height: 19px;
-  margin-left: 27px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
+.text-wrapper-1 {
+  position: absolute;
+  top: 318px;
+  left: 120px;
 }
 
-.desktop-home-page .text-wrapper-4 {
-  width: 57px;
+.terms-conditions {
+  display: flex;
+  flex-direction: row;           
+  justify-content: space-between; 
+  align-items: center;           
+  width: 100%;                   
+  max-width: 300px;              
+  margin: 0 auto;   
+  position: absolute;
+  top: 318px;
+  left: 1440px;
+  width: 340px;
   height: 19px;
-  margin-left: 28px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .text-wrapper-5 {
-  width: 103px;
-  height: 19px;
-  margin-left: 26px;
-  font-family: "Lato-Regular", Helvetica;
-  font-weight: 400;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
+  display: flex;             
 }
 
 .desktop-home-page .contact {
   position: absolute;
   top: 104px;
-  left: 1050px;
+  left: 1450px;
   width: 226px;
   height: 125px;
   display: flex;
@@ -210,7 +181,7 @@
 .desktop-home-page .feedback {
   position: absolute;
   top: 104px;
-  left: 804px;
+  left: 700px;
   width: 162px;
   height: 84px;
   display: flex;
@@ -261,7 +232,7 @@
 .desktop-home-page .quick-access {
   position: absolute;
   top: 104px;
-  left: 596px;
+  left: 1090px;
   width: 99px;
   height: 84px;
   display: flex;
@@ -321,7 +292,7 @@
 }
 
 .desktop-home-page .we-re-a-visual-haven {
-  width: 272px;
+  width: 350px;
   height: 95px;
   font-family: "Lato-Light", Helvetica;
   font-weight: 300;
@@ -329,12 +300,13 @@
   font-size: 16px;
   letter-spacing: 0;
   line-height: normal;
+  margin-left: 50px;
 }
 
 .desktop-home-page .socials {
   position: absolute;
   top: 98px;
-  left: 113px;
+  left: 155px;
   width: 171px;
   height: 22px;
   display: flex;
@@ -369,7 +341,7 @@
 .desktop-home-page .logo-text {
   position: absolute;
   top: 40px;
-  left: 61px;
+  left: 110px;
   width: 296px;
   height: 41px;
   display: flex;
@@ -396,15 +368,6 @@
   letter-spacing: 0;
   line-height: normal;
   white-space: nowrap;
-}
-
-.desktop-home-page .img {
-  top: 29px;
-  width: 1750px;
-  position: absolute;
-  left: 80px;
-  height: 1px;
-  object-fit: cover;
 }
 
 .desktop-home-page .body {
