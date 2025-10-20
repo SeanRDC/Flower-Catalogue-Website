@@ -18,16 +18,71 @@
 
   <body>
     <div class="desktop-home-page">
+
+            <!-- BUTTONS -->
+        <div class="main-buttons">
+          <button class="log-in-button" aria-label="Sign in to your account">
+            <p class="text-wrapper-14">Sign in</p></button>
+
+          <button class="browse-now-button" aria-label="Browse flower catalogue">
+            <p class="text-wrapper-15">Browse Now</p></button>
+        </div>
+        
+        <!-- MAIN BODY TEXT -->
+        <section class="main-text" aria-labelledby="main-heading">
+          <p id="main-heading" class="mainheading">Find the Flower<br />That Speaks To<br />Your Heart</p>
+          <p class="subheading">
+            Whether you&#39;re seeking the perfect bouquet, exploring rare blossoms, or simply indulging in nature&#39;s
+            artistry, this space is designed to help you fall in love with flowers all over again.
+          </p>
+        </section>
+
+        <!-- SEARCH BAR -->
+      <header class="header" aria-label="Site header">
+        <form class="search-bar" role="search" aria-label="Search for flowers">
+          <input
+            type="search"
+            name="query"
+            class="text-wrapper-16"
+            placeholder="Find a Flower..."
+            aria-label="Search input"
+          />
+          <button type="submit" class="search-button" aria-label="Submit search">
+            <img class="search" src="../assets/icons/search.png" alt="Search icon" />
+          </button>
+        </form>
+
+        <!-- NAV BAR -->
+        <nav class="nav-bar" role="navigation" aria-label="Main navigation">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <span class="text-wrapper-17">Home</span>
+              <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
+            </li>
+            <li class="nav-item">
+              <span class="text-wrapper-18">Assets</span>
+              <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
+            </li>
+            <li class="nav-item">
+              <span class="text-wrapper-18">Profile</span>
+              <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- HERO IMAGE SECTION -->
       <div class="foreground">
 
-        <div class="hero-image" aria-hidden="true"></div>
-        <div class="div" aria-hidden="true"></div>
+        <div class="hero-image-filler-1" aria-hidden="true"></div>
+        <div class="hero-image-filler-2" aria-hidden="true"></div>
 
-        <img class="heroimage" src="../assets/images/heroImage-sr4.jpg" alt="Colorful hero image of flowers" />
+        <img class="hero-image-main" src="../assets/images/heroImage-sr4.jpg" alt="Colorful hero image of flowers" />
       </div>
+
       <!-- FOOTER SECTION -->
-      <footer class="footer-2" aria-label="Main site footer">
-        <div class="footer-3" aria-hidden="true"></div>
+      <footer class="footer-main" aria-label="Main site footer">
+        <div class="footer-bg" aria-hidden="true"></div>
         <img class="line1" src="../assets/icons/Line 2.png" alt="Decorative line divider" />
         <div class="text-wrapper-1">@Sean Rhani Dela Cruz</div>
         
@@ -39,83 +94,53 @@
           <div class="text-wrapper-2"><strong>© 2025 Peony</strong></div>
         </div>
 
-        <!-- CONTACT HERE -->
-        <div class="contact">
-          <div class="text-wrapper-6">Contact</div>
-          <div class="text-wrapper-7">delacruzseanrhani@gmail.com</div>
-          <p class="element-purok">
-            115 Purok 3, Strawberry St. San Francisco, Mabalacat City, Province of Pampanga
-          </p>
-        </div>
+        <div class="container">
+          <!-- CONTACT HERE -->
+          <ul class="contact-list">
+            <li class="text-wrapper-3">Contact</li>
+            <li class="text-wrapper-3">delacruzseanrhani@gmail.com</li>
+            <li class="text-wrapper-3">115 Purok 3, Strawberry St. San Francisco, Mabalacat City, Pampanga</li>
+          </ul>
 
-        <!-- FEEDBACK HERE -->
-        <div class="feedback">
-          <div class="text-wrapper-8">Give us your feedback</div>
-          <div class="text-wrapper-9">Feedback form</div>
-          <div class="text-wrapper-10">Survey form</div>
-        </div>
+          <!-- FEEDBACK HERE -->
+          <ul class="feedback-list">
+            <li class="text-wrapper-4">Give us your feedback</li>
+            <li class="text-wrapper-4">Feedback form</li>
+            <li class="text-wrapper-4">Survey form</li>
+          </ul>
 
-        <!-- QUICK ACCESS HERE -->
-        <div class="quick-access">
-          <div class="text-wrapper-11">Quick Access</div>
-          <div class="text-wrapper-12">Sign in</div>
-          <div class="text-wrapper-13">Log in</div>
-        </div>
-
-        <div class="about">
-          <p class="we-re-a-visual-haven">
-            We&#39;re a visual haven for flower lovers curating blooms that speak to the soul. Explore, feel, and find the petals that match your heart. Each stem is a story waiting to be discovered.
-          </p>
-        </div>
-        <div class="socials" aria-label="Social media links">
-          <img class="facebook-filled" src="../assets/icons/facebook-filled.png" alt="Facebook icon" />
-          <img class="instagram" src="../assets/icons/instagram.png" alt="Instagram icon" />
-          <img class="linkedin" src="../assets/icons/linkedin.png" alt="LinkedIn icon" />
-          <img class="github" src="../assets/icons/github.png" alt="GitHub icon" />
-        </div>
-        <div class="logo-text">
-          <img class="peony-logo" src="../assets/icons/Peony Logo.png" alt="Peony logo" />
-          <p class="p">Peony, a flower Catalogue Website</p>
-        </div>
-        <img class="line2" src="../assets/icons/Line 1.png" alt="Decorative line divider" />
-      </footer>
-
-      <div class="body">
-        <div class="main-buttons">
-          <button class="log-in-button" aria-label="Sign in to your account">
-          <p class="text-wrapper-14">Sign in</p>
-          </button>
-
-          <button class="browse-now-button" aria-label="Browse flower catalogue">
-            <p class="text-wrapper-15">Browse Now</p>
-          </button>
-        </div>
+          <!-- QUICK ACCESS HERE -->
+          <ul class="quick-access-list">
+            <li class="text-wrapper-5">Quick Access</li>
+            <li class="text-wrapper-5">Sign in</li>
+            <li class="text-wrapper-5">Log in</li>
+          </ul>
         
+          <!-- ABOUT HERE -->
+          <div class="logo-and-text">
+            <img class="peony-logo" src="../assets/icons/Peony Logo.png" alt="Peony logo" />
+            <p class="logo-text">Peony, a flower Catalogue Website</p>
+          </div>
 
-        <section class="main-text" aria-labelledby="main-heading">
-          <p id="main-heading" class="find-the-flower-that">Find the Flower<br />That Speaks To<br />Your Heart</p>
-          <p class="whether-you-re">
-            Whether you&#39;re seeking the perfect bouquet, exploring rare blossoms, or simply indulging in nature&#39;s
-            artistry, this space is designed to help you fall in love with flowers all over again.
-          </p>
-        </section>
-      </div>
+          <div class="about-text">
+            <p>
+              We&#39;re a visual haven for flower lovers curating blooms that speak to the soul. Explore, feel, and find the petals that match your heart. Each stem is a story waiting to be discovered.
+            </p>
+          </div>
 
-      <header class="header" aria-label="Site header">
-        <div class="search-bar" role="search" aria-label="Search for flowers">
-          <div class="text-wrapper-16">Find a Flower...</div>
-          <img class="search" src="../assets/icons/search.png" alt="Search icon" />
+          <!-- SOCIAL MEDIA ICONS AND LINKS -->
+          <div class="socials" aria-label="Social media links">
+            <img class="facebook" src="../assets/icons/facebook-filled.png" alt="Facebook icon" />
+            <img class="instagram" src="../assets/icons/instagram.png" alt="Instagram icon" />
+            <img class="linkedin" src="../assets/icons/linkedin.png" alt="LinkedIn icon" />
+            <img class="github" src="../assets/icons/github.png" alt="GitHub icon" />
+          </div>
+
+          
+
+          <img class="line2" src="../assets/icons/Line 1.png" alt="Decorative line divider" />
         </div>
-
-        <div class="nav-bar" role="navigation" aria-label="Main navigation">
-          <div class="text-wrapper-17">Home</div>
-          <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
-          <div class="text-wrapper-18">Assets</div>
-          <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
-          <div class="text-wrapper-18">Profile</div>
-          <img class="chevron-down" src="../assets/icons/chevron-down.png" alt="Dropdown arrow" />
-        </div>
-      </header>
+      </footer>
     </div>
   </body>
 </html>

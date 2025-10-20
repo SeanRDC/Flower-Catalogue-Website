@@ -1,16 +1,10 @@
+/* HERO IMAGE  */
 .desktop-home-page {
   width: 100%;
   height: 1168px;
 }
 
-.desktop-home-page .foreground {
-  position: absolute;
-  top: 0;
-  left: -17px;
-
-}
-
-.desktop-home-page .hero-image {
+.hero-image-filler-1 {
   top: 0;
   left: 17px;
   background: linear-gradient(
@@ -23,7 +17,7 @@
   height: 815px;
 }
 
-.desktop-home-page .div {
+.hero-image-filler-2 {
   top: 452px;
   left: 0;
   background: linear-gradient(
@@ -36,7 +30,7 @@
   height: 815px;
 }
 
-.desktop-home-page .heroimage {
+.hero-image-main {
   position: absolute;
   top: 0;
   left: 400px;
@@ -45,16 +39,8 @@
   object-fit: cover;
 }
 
-.desktop-home-page .footer {
-  position: absolute;
-  top: 810px;
-  left: 17px;
-  width: 1440px;
-  height: 380px;
-  background-color: #f4f3f1;
-}
-
-.desktop-home-page .footer-2 {
+/* FOOTER SECTION */
+.footer-main {
   top: 1000px;
   width: 1442px;
   background-color: transparent;
@@ -63,7 +49,7 @@
   height: 380px;
 }
 
-.desktop-home-page .footer-3 {
+.footer-bg {
   top: 0;
   width: 2000px;
   background-color: #f4f3f1;
@@ -72,8 +58,7 @@
   height: 380px;
 }
 
-/* Line break elements */
-
+/* FOOTER -> LINE ELEMENTS */
 .line1{
   top: 300px;
   width: 1750px;
@@ -92,10 +77,10 @@
   object-fit: cover;
 }
 
-
-/* Footer -> Terms and Privacy */
-
-.text-wrapper-2, .text-wrapper-1 {
+/* FOOTER -> TERMS AND CONDITIONS */
+.text-wrapper-1, .text-wrapper-2,
+.text-wrapper-3, .text-wrapper-4,
+.text-wrapper-5,.text-wrapper-6 {
   width: 41px;
   height: 19px;
   font-family: "Lato-Light", Helvetica;
@@ -130,7 +115,7 @@
   display: flex;             
 }
 
-.desktop-home-page .contact {
+.contact {
   position: absolute;
   top: 104px;
   left: 1450px;
@@ -141,146 +126,19 @@
   gap: 15px;
 }
 
-.desktop-home-page .text-wrapper-6 {
-  width: 56px;
-  height: 19px;
-  font-family: "Lato-Regular", Helvetica;
-  font-weight: 400;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .text-wrapper-7 {
-  width: 206px;
-  height: 19px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .element-purok {
-  width: 220px;
-  height: 57px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: normal;
-}
-
-.desktop-home-page .feedback {
-  position: absolute;
-  top: 104px;
-  left: 700px;
-  width: 162px;
-  height: 84px;
+.contact-list,
+.feedback-list,
+.quick-access-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* Ensures even spacing within container */
 }
 
-.desktop-home-page .text-wrapper-8 {
-  width: 156px;
-  height: 19px;
-  font-family: "Lato-Regular", Helvetica;
-  font-weight: 400;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
 
-.desktop-home-page .text-wrapper-9 {
-  width: 103px;
-  height: 19px;
-  margin-top: 15px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .text-wrapper-10 {
-  width: 84px;
-  height: 19px;
-  margin-top: 12px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .quick-access {
-  position: absolute;
-  top: 104px;
-  left: 1090px;
-  width: 99px;
-  height: 84px;
-  display: flex;
-  flex-direction: column;
-}
-
-.desktop-home-page .text-wrapper-11 {
-  width: 93px;
-  height: 19px;
-  font-family: "Lato-Regular", Helvetica;
-  font-weight: 400;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  white-space: nowrap;
-}
-
-.desktop-home-page .text-wrapper-12 {
-  width: 46px;
-  height: 19px;
-  margin-top: 15px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  text-decoration: underline;
-  white-space: nowrap;
-}
-
-.desktop-home-page .text-wrapper-13 {
-  width: 42px;
-  height: 19px;
-  margin-top: 12px;
-  font-family: "Lato-Light", Helvetica;
-  font-weight: 300;
-  color: #2c2c2c;
-  font-size: 16px;
-  text-align: center;
-  letter-spacing: 0;
-  line-height: normal;
-  text-decoration: underline;
-  white-space: nowrap;
-}
 
 .desktop-home-page .about {
   position: absolute;
