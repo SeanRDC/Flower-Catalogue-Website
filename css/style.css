@@ -36,9 +36,10 @@ body {
   align-items: center;
   background: rgba(245, 245, 245, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 25px;
+  border-radius: 5px;
   padding: 10px 20px;
-  width: 300px;
+  width: 400px;
+  height: 45px;
 }
 
 .search-bar input {
@@ -94,7 +95,7 @@ body {
 .hero-left {
   flex: 0 0 50%;
   width: 50%;
-  background: linear-gradient(135deg, #ffd6e6 0%, #ffeef5 100%);
+  background: linear-gradient(150deg, #f8d9e7 100%, #f5d0df 100%);
   padding: 140px 50px 100px 80px;
   display: flex;
   flex-direction: column;
