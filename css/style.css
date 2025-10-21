@@ -9,11 +9,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Prevent layout shift when modal opens */
-html {
-  overflow-y: scroll;
-}
-
 /* HERO SECTION */
 .hero-section {
   position: relative;
@@ -34,6 +29,7 @@ html {
   align-items: center;
   background: transparent;
   z-index: 100;
+  transition: padding-right 0s; /* Prevent transition on padding changes */
 }
 
 .search-bar {
@@ -69,6 +65,7 @@ html {
 }
 
 .nav-bar {
+  position: relative;
   display: flex;
   gap: 50px;
   align-items: center;
@@ -314,4 +311,68 @@ html {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+}
+
+/* DROPDOWN MENU STYLES */
+.nav-item {
+  position: relative;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+}
+
+.chevron-icon {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-trigger.active .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.dropdown-item {
+  padding: 12px 24px;
+  color: #333;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f8f8;
+  color: #5a6c3a;
 }
