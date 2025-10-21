@@ -1,197 +1,317 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../css/globals.css" />
-    <link rel="stylesheet" href="../css/styleguide.css" />
+    <title>Browse - Peony Flower Catalogue</title>
     <link rel="stylesheet" href="../css/browse.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="../css/modal.css" />
+</head>
+<body>
     <div class="desktop-home-page">
-      <header class="header">
-        <div class="nav">
-          <div class="sub-nav-bar"></div>
-          <div class="text-wrapper">Top picks</div>
-          <div class="div">Petals</div>
-          <div class="text-wrapper-2">Browse</div>
-        </div>
-        <img class="vector" src="img/vector-11.png" />
-        <div class="nav-bar">
-          <div class="text-wrapper-3">Home</div>
-          <div class="text-wrapper-4">Assets</div>
-          <img class="chevron-down" src="img/chevron-down.svg" />
-          <div class="text-wrapper-5">Profile</div>
-          <img class="chevron-down" src="img/chevron-down.svg" />
-        </div>
-        <div class="search-bar">
-          <div class="text-wrapper-6">Find a Flower...</div>
-          <div class="search"><img class="glyph" src="img/glyph.svg" /></div>
-        </div>
-        <img class="peony-logo" src="img/peony-logo.png" />
-      </header>
-      <div class="categories">
-        <div class="group"><div class="text-wrapper-7">Biennial</div></div>
-        <img class="mask-group" src="img/mask-group.png" />
-        <div class="text-wrapper-8">Annual</div>
-        <img class="image-living-room" src="img/image-living-room.png" />
-        <img class="img" src="img/mask-group-2.png" />
-        <div class="div-wrapper"><div class="text-wrapper-9">Perennial</div></div>
-        <div class="group-2">
-          <div class="text-wrapper-10">Browse Unlimited Flowers</div>
-          <div class="treating-all-skin-co">Browse Flowers by Category</div>
-        </div>
-      </div>
-      <div class="top-picks">
-        <div class="title">Top Picks</div>
-        <div class="frame">
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-2">Pink Rose</div>
-                <p class="sort-description">Pink roses symbolize grace, admiration, and joy.</p>
-              </div>
+        <!-- HEADER -->
+        <header class="header">
+            <!-- Hero Background Image -->
+            <img class="vector" src="../assets/images/heroImage-sr4.jpg" alt="Header background" />
+            
+            <!-- Logo -->
+            <img class="peony-logo" src="../assets/icons/Peony Logo.png" alt="Peony Logo" />
+            
+            <!-- Search Bar -->
+            <form class="search-bar" role="search">
+                <input type="search" placeholder="Find a Flower..." class="text-wrapper-6" />
+                <button type="submit" class="search-button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </form>
+            
+            <!-- Main Navigation -->
+            <nav class="nav-bar">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <span>Home</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </li>
+                    <li class="nav-item dropdown-trigger" data-dropdown="assets">
+                        <span>Assets</span>
+                        <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        <div class="dropdown-menu" id="assetsDropdown">
+                            <ul>
+                                <li class="dropdown-item">Favorites</li>
+                                <li class="dropdown-item">Collections</li>
+                                <li class="dropdown-item">Account</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown-trigger" data-dropdown="profile">
+                        <span>Profile</span>
+                        <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        <div class="dropdown-menu" id="profileDropdown">
+                            <ul>
+                                <li class="dropdown-item sign-in-link">Sign in</li>
+                                <li class="dropdown-item log-in-link">Log in</li>
+                                <li class="dropdown-item">Help and Support</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- Sub Navigation -->
+            <div class="nav">
+                <div class="sub-nav-bar"></div>
+                <a href="#browse" class="text-wrapper-2">Browse</a>
+                <a href="#top-picks" class="text-wrapper">Top picks</a>
+                <a href="#petals" class="div">Petals</a>
             </div>
-            <img class="images" src="img/image.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-3">White Rose</div>
-                <p class="sort-description">White roses symbolize purity, innocence, and new beginnings.</p>
-              </div>
+        </header>
+
+        <!-- CATEGORIES SECTION -->
+        <section class="categories" id="browse">
+            <div class="group-2">
+                <div class="text-wrapper-10">Browse Unlimited Flowers</div>
+                <div class="treating-all-skin-co">Browse Flowers by Category</div>
             </div>
-            <img class="images" src="img/images.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="product-name-wrapper">
-              <div class="product-name">
-                <div class="product-name-4">White Hibiscus</div>
-                <p class="p">White hibiscus symbolizes purity, enlightenment, and feminine energy</p>
-              </div>
+            
+            <div class="category-grid">
+                <div class="category-item">
+                    <img class="mask-group" src="../assets/images/category1.jpg" alt="Annual Flowers" />
+                    <div class="text-wrapper-8">Annual</div>
+                </div>
+                <div class="category-item">
+                    <img class="image-living-room" src="../assets/images/category2.jpg" alt="Biennial Flowers" />
+                    <div class="text-wrapper-7">Biennial</div>
+                </div>
+                <div class="category-item">
+                    <img class="img" src="../assets/images/category3.jpg" alt="Perennial Flowers" />
+                    <div class="text-wrapper-9">Perennial</div>
+                </div>
             </div>
-            <img class="images" src="img/images-2.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-5">Oxeye Daisy</div>
-                <p class="sort-description">It symbolizes innocence, patience, and simplicity.</p>
-              </div>
+        </section>
+
+        <!-- TOP PICKS SECTION -->
+        <section class="top-picks" id="top-picks">
+            <h2 class="title">Top Picks</h2>
+            
+            <div class="frame">
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/pink-rose.jpg" alt="Pink Rose" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-2">Pink Rose</div>
+                        <p class="sort-description">Pink roses symbolize grace, admiration, and joy.</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/white-rose.jpg" alt="White Rose" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-3">White Rose</div>
+                        <p class="sort-description">White roses symbolize purity, innocence, and new beginnings.</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/white-hibiscus.jpg" alt="White Hibiscus" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-4">White Hibiscus</div>
+                        <p class="sort-description">White hibiscus symbolizes purity, enlightenment, and feminine energy</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/oxeye-daisy.jpg" alt="Oxeye Daisy" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-5">Oxeye Daisy</div>
+                        <p class="sort-description">It symbolizes innocence, patience, and simplicity.</p>
+                    </div>
+                </div>
             </div>
-            <img class="images" src="img/images-5.png" />
-          </div>
-        </div>
-        <div class="frame-2">
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-6">Stargazer Lily</div>
-                <p class="sort-description">Stargazer Lily&nbsp;&nbsp;symbolizes ambition, prosperity, and passion.</p>
-              </div>
+            
+            <div class="frame-2">
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/stargazer-lily.jpg" alt="Stargazer Lily" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-6">Stargazer Lily</div>
+                        <p class="sort-description">Stargazer Lily symbolizes ambition, prosperity, and passion.</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/sunflower.jpg" alt="Sunflower" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-7">Sunflower</div>
+                        <p class="sort-description">Sunflower symbolizes loyalty, warmth, and adoration.</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/red-rose.jpg" alt="Red Rose" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-8">Red Rose</div>
+                        <p class="sort-description">Red Rose symbolizes love, romance, and deep passion.</p>
+                    </div>
+                </div>
+                
+                <div class="top-pick">
+                    <img class="images" src="../assets/images/peony.jpg" alt="Peony" />
+                    <div class="BG"></div>
+                    <div class="description">
+                        <div class="product-name-9">Peony</div>
+                        <p class="sort-description">Peony symbolizes romance, prosperity, and honor.</p>
+                    </div>
+                </div>
             </div>
-            <img class="images" src="img/images-6.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-7">Sunflower</div>
-                <p class="sort-description">Sunflower symbolizes loyalty, warmth, and adoration.</p>
-              </div>
+            
+            <button class="show-more">
+                <span class="text-wrapper-11">Show more</span>
+            </button>
+        </section>
+
+        <!-- PETALS SECTION -->
+        <section class="share" id="petals">
+            <div class="title-2">
+                <div class="title-3">Diverse flowers for everyone</div>
+                <div class="title-4">#Petals</div>
             </div>
-            <img class="images" src="img/images-4.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-8">Red Rose</div>
-                <p class="sort-description">Red Rose symbolizes love, romance, and deep passion.</p>
-              </div>
+            <div class="images-2">
+                <img class="jei-lee" src="../assets/images/petal1.jpg" alt="Flower collection" />
+                <img class="andrew-small-efhcuc" src="../assets/images/petal2.jpg" alt="Flower collection" />
+                <img class="zoltan-tasi" src="../assets/images/petal3.jpg" alt="Flower collection" />
+                <img class="bence-balla" src="../assets/images/petal4.jpg" alt="Flower collection" />
+                <img class="carnation" src="../assets/images/petal5.jpg" alt="Flower collection" />
+                <img class="zoe-richardson" src="../assets/images/petal6.jpg" alt="Flower collection" />
+                <img class="kwang" src="../assets/images/petal7.jpg" alt="Flower collection" />
+                <img class="quino-al" src="../assets/images/petal8.jpg" alt="Flower collection" />
+                <img class="the-new-york-public" src="../assets/images/petal9.jpg" alt="Flower collection" />
             </div>
-            <img class="images" src="img/images-3.png" />
-          </div>
-          <div class="top-pick">
-            <div class="BG"></div>
-            <div class="description">
-              <div class="product-name">
-                <div class="product-name-9">Peony</div>
-                <p class="sort-description">Peony symbolizes romance, prosperity, and honor.</p>
-              </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-2"></div>
+            <img class="line" src="../assets/icons/Line 2.png" alt="Divider" />
+            
+            <div class="footer-content-grid">
+                <div class="logo-text">
+                    <img class="peony-logo-2" src="../assets/icons/Peony Logo.png" alt="Peony Logo" />
+                    <p class="text-wrapper-25">Peony, a flower Catalogue Website</p>
+                </div>
+                
+                <div class="about">
+                    <p class="we-re-a-visual-haven">
+                        We're a visual haven for flower lovers curating blooms that speak to the soul. 
+                        Explore, feel, and find the petals that match your heart. Each stem is a story 
+                        waiting to be discovered.
+                    </p>
+                </div>
+                
+                <div class="socials">
+                    <a href="https://www.facebook.com" target="_blank">
+                        <img class="facebook-filled" src="../assets/icons/facebook-filled.png" alt="Facebook" />
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank">
+                        <img class="instagram" src="../assets/icons/instagram.png" alt="Instagram" />
+                    </a>
+                    <a href="https://www.linkedin.com" target="_blank">
+                        <img class="linkedin" src="../assets/icons/linkedin.png" alt="LinkedIn" />
+                    </a>
+                    <a href="https://github.com" target="_blank">
+                        <img class="github" src="../assets/icons/github.png" alt="GitHub" />
+                    </a>
+                </div>
+                
+                <div class="quick-access">
+                    <div class="text-wrapper-22">Quick Access</div>
+                    <div class="text-wrapper-23 footer-sign-in-link">Sign in</div>
+                    <div class="text-wrapper-24 footer-log-in-link">Log in</div>
+                </div>
+                
+                <div class="feedback">
+                    <div class="text-wrapper-19">Give us your feedback</div>
+                    <div class="text-wrapper-20">Feedback form</div>
+                    <div class="text-wrapper-21">Survey form</div>
+                </div>
+                
+                <div class="contact">
+                    <div class="text-wrapper-17">Contact</div>
+                    <div class="text-wrapper-18">delacruzseanrhani@gmail.com</div>
+                    <p class="element-purok">
+                        115 Purok 3, Strawberry St. San Francisco, Mabalacat City, Province of Pampanga
+                    </p>
+                </div>
             </div>
-            <img class="images" src="img/images-7.png" />
-          </div>
-        </div>
-        <div class="show-more"><div class="text-wrapper-11">Show more</div></div>
-      </div>
-      <div class="share">
-        <div class="images-2">
-          <img class="jei-lee" src="img/jei-lee-yrxuxvy4sq4-unsplash-1.png" />
-          <img class="andrew-small-efhcuc" src="img/andrew-small-efhcuc-fjru-unsplash-1.png" />
-          <img class="zoltan-tasi" src="img/zoltan-tasi-yanhwfwyoau-unsplash-1.png" />
-          <img class="bence-balla" src="img/bence-balla-schottner-x68faxtyx90-unsplash-1.png" />
-          <img class="carnation" src="img/carnation-sr1-2.png" />
-          <img class="zoe-richardson" src="img/zoe-richardson-oy7njng-ck4-unsplash-1.png" />
-          <img class="kwang" src="img/kwang-mathurosemontri-fy1ecb1rcd0-unsplash-1.png" />
-          <img class="quino-al" src="img/quino-al-3kfr1gvkxy-unsplash-1.png" />
-          <img class="the-new-york-public" src="img/the-new-york-public-library-uyu-pnj6q6w-unsplash-1.png" />
-        </div>
-        <div class="title-2">
-          <div class="title-3">Diverse flowers for everyone</div>
-          <div class="title-4">#Petals</div>
-        </div>
-      </div>
-      <footer class="footer">
-        <div class="footer-2"></div>
-        <img class="line" src="img/line-2.svg" />
-        <div class="text-wrapper-12">@Sean Rhani Dela Cruz</div>
-        <div class="t-c">
-          <div class="text-wrapper-13">Terms</div>
-          <div class="text-wrapper-14">Privacy</div>
-          <div class="text-wrapper-15">SiteMap</div>
-          <div class="text-wrapper-16">© 2025 Peony</div>
-        </div>
-        <div class="contact">
-          <div class="text-wrapper-17">Contact</div>
-          <div class="text-wrapper-18">delacruzseanrhani@gmail.com</div>
-          <p class="element-purok">
-            115 Purok 3, Strawberry St. San<br />Francisco, Mabalacat City,<br />Province of Pampanga
-          </p>
-        </div>
-        <div class="feedback">
-          <div class="text-wrapper-19">Give us your feedback</div>
-          <div class="text-wrapper-20">Feedback form</div>
-          <div class="text-wrapper-21">Survey form</div>
-        </div>
-        <div class="quick-access">
-          <div class="text-wrapper-22">Quick Access</div>
-          <div class="text-wrapper-23">Sign in</div>
-          <div class="text-wrapper-24">Log in</div>
-        </div>
-        <div class="about">
-          <p class="we-re-a-visual-haven">
-            We’re a visual haven for flower lovers <br />curating blooms that speak to the soul. <br />Explore, feel,
-            and find the petals that <br />match your heart. Each stem is a story <br />waiting to be discovered.om
-          </p>
-        </div>
-        <div class="socials">
-          <img class="facebook-filled" src="img/facebook-filled.svg" />
-          <img class="instagram" src="img/instagram.svg" />
-          <img class="linkedin" src="img/linkedin.svg" />
-          <img class="github" src="img/github.svg" />
-        </div>
-        <div class="logo-text">
-          <img class="peony-logo-2" src="img/peony-logo-2.png" />
-          <p class="text-wrapper-25">Peony, a flower Catalogue Website</p>
-        </div>
-        <img class="line-2" src="img/line-1.svg" />
-      </footer>
+            
+            <img class="line-2" src="../assets/icons/Line 1.png" alt="Divider" />
+            
+            <div class="footer-bottom">
+                <div class="text-wrapper-12">@Sean Rhani Dela Cruz</div>
+                <div class="t-c">
+                    <div class="text-wrapper-13">Terms</div>
+                    <div class="text-wrapper-14">Privacy</div>
+                    <div class="text-wrapper-15">SiteMap</div>
+                    <div class="text-wrapper-16"><strong>© 2025 Peony</strong></div>
+                </div>
+            </div>
+        </footer>
     </div>
-  </body>
+
+    <!-- SIGN UP MODAL -->
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <h2 class="modal-title">Sign up for free</h2>
+            <p class="modal-subtitle">Full access to in any of our products</p>
+            
+            <form class="modal-form">
+                <input 
+                    type="email" 
+                    class="modal-input" 
+                    placeholder="Enter your email address"
+                    aria-label="Email address"
+                />
+                
+                <button type="button" class="modal-continue-btn">Continue</button>
+                
+                <div class="modal-divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="modal-google-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="../js/utils.js"></script>
+</body>
 </html>
