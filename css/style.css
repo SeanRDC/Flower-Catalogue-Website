@@ -246,7 +246,8 @@ body {
   cursor: pointer;
 }
 
-.footer-section li:hover {
+.footer-section li:hover
+.footer-mail:hover {
   color: #5a6c3a;
 }
 
@@ -281,6 +282,18 @@ body {
   color: #333;
 }
 
+.footer-mail {
+  text-decoration: none;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+}
+
+.footer-link:hover,
+.footer-mail:hover {
+  text-decoration: underline;
+}
 
 /* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 1200px) {
