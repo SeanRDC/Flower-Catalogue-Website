@@ -9,6 +9,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Prevent layout shift when modal opens */
+html {
+  overflow-y: scroll;
+}
+
 /* HERO SECTION */
 .hero-section {
   position: relative;
@@ -270,6 +275,7 @@ body {
 .terms-conditions strong {
   color: #333;
 }
+
 
 /* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 1200px) {
