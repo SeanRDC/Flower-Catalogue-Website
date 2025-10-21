@@ -234,7 +234,7 @@ body {
   margin-bottom: 60px;
 }
 
-.text-wrapper-10 {
+.header-1 {
   font-family: 'Open Sans', Helvetica, sans-serif;
   font-weight: 700;
   color: #2c2c2c;
@@ -242,7 +242,7 @@ body {
   margin-bottom: 10px;
 }
 
-.treating-all-skin-co {
+.sub-header-1 {
   font-family: 'Lato', Helvetica, sans-serif;
   font-weight: 400;
   color: #666;
@@ -273,18 +273,14 @@ body {
   transform: scale(1.05);
 }
 
-.category-item div {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+.category-text {
   font-family: 'Open Sans', Helvetica, sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   color: #2c2c2c;
-  font-size: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 8px 20px;
+  font-size: 22px;
+  padding: 15px 20px;
   border-radius: 5px;
+  text-align: center;
 }
 
 /* TOP PICKS SECTION */
