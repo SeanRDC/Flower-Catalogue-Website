@@ -1,0 +1,232 @@
+/* ===== SELECTED PICK FUNCTIONALITY ===== */
+
+/* Expanded Flower Modal */
+.expanded-flower-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.expanded-flower-modal.active {
+    opacity: 1;
+}
+
+.expanded-flower-content {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.expanded-flower-modal.active .expanded-flower-content {
+    transform: scale(1);
+}
+
+/* Close and Expand Buttons */
+.close-expanded-btn,
+.expand-fullscreen-btn {
+    position: absolute;
+    top: 20px;
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.close-expanded-btn {
+    right: 20px;
+}
+
+.expand-fullscreen-btn {
+    right: 70px;
+}
+
+.close-expanded-btn:hover,
+.expand-fullscreen-btn:hover {
+    background: #f5f5f5;
+    transform: scale(1.1);
+}
+
+/* Expanded Layout */
+.expanded-flower-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 0;
+    height: 100%;
+}
+
+.expanded-flower-image-container {
+    position: relative;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    min-height: 500px;
+}
+
+.expanded-flower-image-container img {
+    max-width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.expanded-flower-info {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+
+.expanded-flower-info h2 {
+    font-family: 'Open Sans', Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 20px;
+}
+
+.expanded-flower-info p {
+    font-family: 'Lato', Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Action Buttons */
+.expanded-flower-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.action-btn {
+    flex: 1;
+    background: white;
+    border: 2px solid #2c2c2c;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: #2c2c2c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:hover svg {
+    stroke: white;
+}
+
+.action-btn svg {
+    stroke: #2c2c2c;
+    transition: stroke 0.3s ease;
+}
+
+.action-btn.favorited svg {
+    fill: #ff69b4;
+    stroke: #ff69b4;
+}
+
+/* Fullscreen Modal */
+.fullscreen-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 11000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.fullscreen-modal.active {
+    display: flex;
+}
+
+.fullscreen-modal img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+}
+
+.close-fullscreen-btn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.close-fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .expanded-flower-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .expanded-flower-image-container {
+        min-height: 300px;
+        padding: 20px;
+    }
+    
+    .expanded-flower-info {
+        padding: 20px;
+    }
+    
+    .expanded-flower-info h2 {
+        font-size: 24px;
+    }
+    
+    .expand-fullscreen-btn {
+        right: auto;
+        left: 20px;
+    }
+}

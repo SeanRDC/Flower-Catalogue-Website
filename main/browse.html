@@ -13,6 +13,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon/fav-192px.jpg" />
     <link rel="stylesheet" href="../css/browse.css" />
     <link rel="stylesheet" href="../css/modal.css" />
+    <link rel="stylesheet" href="../css/selected.css" />
 </head>
 <body>
     <div class="desktop-home-page">
@@ -180,7 +181,7 @@
                 </div>
                 
                 <div class="top-pick">
-                    <img class="images" src="../assets/images/peony-sr13.jpg" alt="Peony" />>
+                    <img class="images" src="../assets/images/peony-sr13.jpg" alt="Peony" />
                     <div class="description">
                         <div class="product-name-9">Peony</div>
                         <p class="sort-description">Peony symbolizes romance, prosperity, and honor.</p>
@@ -250,6 +251,71 @@
                 </button>
             </form>
         </div>
+    </div>
+
+    <!-- SELECTED PICK FUNCTIONALITY -->
+    <div id="expandedFlowerModal" class="expanded-flower-modal">
+        <div class="expanded-flower-content">
+            <button class="expand-fullscreen-btn" id="expandFullscreenBtn" aria-label="Expand to fullscreen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                </svg>
+            </button>
+            
+            <button class="close-expanded-btn" id="closeExpandedBtn" aria-label="Close expanded view">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="expanded-flower-layout">
+                <div class="expanded-flower-image-container">
+                    <img id="expandedFlowerImage" src="" alt="" />
+                </div>
+                
+                <div class="expanded-flower-info">
+                    <h2 id="expandedFlowerName"></h2>
+                    <p id="expandedFlowerDescription"></p>
+                    
+                    <div class="expanded-flower-actions">
+                        <button class="action-btn" id="addToCollectionBtn" title="Add to collections">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </button>
+                        
+                        <button class="action-btn" id="addToFavoritesBtn" title="Add to favorites">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        
+                        <button class="action-btn" id="downloadImageBtn" title="Download image">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN MODAL -->
+    <div id="fullscreenModal" class="fullscreen-modal">
+        <button class="close-fullscreen-btn" id="closeFullscreenBtn" aria-label="Close fullscreen">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <img id="fullscreenImage" src="" alt="" />
     </div>
 
         <!-- FOOTER -->
@@ -334,5 +400,6 @@
     <!-- JAVASCRIPT -->
     <script src="../js/main.js"></script>
     <script src="../js/modal.js"></script>
+    <script src="../js/selected.js"></script>
 </body>
 </html>
