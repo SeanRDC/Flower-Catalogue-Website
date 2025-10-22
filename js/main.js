@@ -93,42 +93,42 @@ autoScroll();
 const showMoreBtn = document.querySelector('.show-more');
 const additionalFlowers = [
     {
-        img: '../assets/images/tulip.jpg',
+        img: '../assets/images/tulip-sr17.jpg',
         name: 'Tulip',
         description: 'Tulips symbolize perfect love and spring renewal.'
     },
     {
-        img: '../assets/images/orchid.jpg',
+        img: '../assets/images/orchid-sr18.jpg',
         name: 'Orchid',
         description: 'Orchids represent luxury, beauty, and strength.'
     },
     {
-        img: '../assets/images/lavender.jpg',
+        img: '../assets/images/lavender-sr19.jpg',
         name: 'Lavender',
         description: 'Lavender symbolizes serenity, grace, and calmness.'
     },
     {
-        img: '../assets/images/dahlia.jpg',
+        img: '../assets/images/dhalia-sr20.jpg',
         name: 'Dahlia',
         description: 'Dahlias represent elegance, dignity, and commitment.'
     },
     {
-        img: '../assets/images/marigold.jpg',
+        img: '../assets/images/marigold-sr21.jpg',
         name: 'Marigold',
         description: 'Marigolds symbolize passion, creativity, and joy.'
     },
     {
-        img: '../assets/images/carnation.jpg',
+        img: '../assets/images/carnation-sr23.jpg',
         name: 'Carnation',
         description: 'Carnations represent love, fascination, and distinction.'
     },
     {
-        img: '../assets/images/iris.jpg',
+        img: '../assets/images/iris-sr24.jpg',
         name: 'Iris',
         description: 'Iris flowers symbolize wisdom, hope, and valor.'
     },
     {
-        img: '../assets/images/jasmine.jpg',
+        img: '../assets/images/jasmine-sr22.jpg',
         name: 'Jasmine',
         description: 'Jasmine represents love, beauty, and sensuality.'
     }
