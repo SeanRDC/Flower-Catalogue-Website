@@ -295,6 +295,10 @@ body {
   text-decoration: underline;
 }
 
+.no-underline {
+  text-decoration: none;
+}
+
 /* RESPONSIVE ADJUSTMENTS */
 @media (max-width: 1200px) {
   .main-text h1 {

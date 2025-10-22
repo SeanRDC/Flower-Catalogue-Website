@@ -576,6 +576,10 @@ body {
   text-decoration: underline;
 }
 
+.no-underline {
+  text-decoration: none;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1200px) {
   .category-grid,
