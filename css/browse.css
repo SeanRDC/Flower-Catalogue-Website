@@ -580,6 +580,10 @@ body {
   text-decoration: none;
 }
 
+.peony-logo {
+  border-radius: 100px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1200px) {
   .category-grid,
