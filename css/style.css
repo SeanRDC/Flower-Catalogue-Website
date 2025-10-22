@@ -246,7 +246,7 @@ body {
   cursor: pointer;
 }
 
-.footer-section li:hover
+.footer-section li:hover,
 .footer-mail:hover {
   color: #5a6c3a;
 }

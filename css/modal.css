@@ -26,9 +26,9 @@
 
 .modal-content {
   background-color: #ffffff;
-  padding: 50px 40px;
+  padding: 40px 30px;
   border-radius: 12px;
-  width: 90%;
+  width: 95%;
   max-width: 420px;
   position: relative;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -73,7 +73,7 @@
 }
 
 .modal-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   color: #333;
   text-align: center;
@@ -171,13 +171,4 @@
   border-color: #ccc;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.modal-content {
-  padding: 40px 30px;
-  width: 95%;
-}
-
-.modal-title {
-  font-size: 24px;
 }
