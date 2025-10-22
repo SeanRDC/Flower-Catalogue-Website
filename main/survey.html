@@ -11,7 +11,9 @@
 <body>
   <!-- HEADER -->
   <header class="header">
-    <!-- Hero Background Image -->
+    
+
+    <!-- Hero Background Image and logo -->
     <div style="position: relative; width: 100%; height: 200px;">
         <img class="vector" src="../assets/images/heroImage-sr4.jpg" alt="Header background" />
         <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
@@ -21,69 +23,53 @@
             </clipPath>
             </defs>
         </svg>
+
+        <div class="back-logo">
+            <img class="peony-logo" src="../assets/icons/Peony Logo.png" alt="Peony Logo" />
+            <a href="#" class="back-btn">← Go back</a>
+        </div>
     </div>
-
-    <!-- Logo -->
-    <img class="peony-logo" src="../assets/icons/Peony Logo.png" alt="Peony Logo" />
-
-    <!-- Search Bar -->
-    <form class="search-bar" role="search">
-        <input type="search" placeholder="Find a Flower..." class="text-wrapper-6" />
-        <button type="submit" class="search-button">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-            </svg>
-        </button>
-    </form>
-
-    <!-- Main Navigation -->
-    <nav class="nav-bar">
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a class="home-link" href="index.html">
-                    <span>Home</span>
-                    <svg class="remove-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    
+        <!-- Main Navigation -->
+        <nav class="nav-bar">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a class="home-link" href="index.html">
+                        <span>Home</span>
+                        <svg class="remove-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </a>
+                </li>
+                <li class="nav-item dropdown-trigger" data-dropdown="assets">
+                    <span>Assets</span>
+                    <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </a>
-            </li>
-            <li class="nav-item dropdown-trigger" data-dropdown="assets">
-                <span>Assets</span>
-                <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                <div class="dropdown-menu" id="assetsDropdown">
-                    <ul>
-                        <li class="dropdown-item">Favorites</li>
-                        <li class="dropdown-item">Collections</li>
-                        <li class="dropdown-item">Account</li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item dropdown-trigger" data-dropdown="profile">
-                <span>Profile</span>
-                <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                <div class="dropdown-menu" id="profileDropdown">
-                    <ul>
-                        <li class="dropdown-item sign-in-link">Sign in</li>
-                        <li class="dropdown-item log-in-link">Log in</li>
-                        <li class="dropdown-item">Help and Support</li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </nav>
-              
-        <!-- Sub Navigation -->
-            <div class="sub-nav-bar">
-                <a href="#browse">Browse</a>
-                <a href="#top-picks">Top picks</a>
-                <a href="#petals">Petals</a>
-            </div>
-  </header>
+                    <div class="dropdown-menu" id="assetsDropdown">
+                        <ul>
+                            <li class="dropdown-item">Favorites</li>
+                            <li class="dropdown-item">Collections</li>
+                            <li class="dropdown-item">Account</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item dropdown-trigger" data-dropdown="profile">
+                    <span>Profile</span>
+                    <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <ul>
+                            <li class="dropdown-item sign-in-link">Sign in</li>
+                            <li class="dropdown-item log-in-link">Log in</li>
+                            <li class="dropdown-item">Help and Support</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="container">
         <div class="intro">

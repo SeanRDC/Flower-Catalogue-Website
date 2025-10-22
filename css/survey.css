@@ -41,53 +41,31 @@ body {
   filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.9));
 }
 
+.back-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 101;
+    padding-top: 30px;
+    padding-left: 45px;
+}
+
+
 .peony-logo {
-  position: absolute;
-  top: 45px;
-  left: 60px;
-  width: 70px;
-  height: 70px;
-  z-index: 10;
-  cursor: pointer;
-  z-index: 101;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    z-index: 101;
 }
 
-/* SEARCH BAR */
-.search-bar {
-  position: absolute;
-  top: 45px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 890px;
-  max-width: 60%;
-  height: 50px;
-  padding: 11px 16px;
-  background-color: #f2f2f2;
-  border-radius: 5px;
-  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.03);
-  z-index: 101;
-  border: none;
-}
-
-.text-wrapper-6 {
-  flex: 1;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 18px;
-  color: rgba(44, 44, 44, 0.4);
-  font-family: 'Montserrat', Helvetica, sans-serif;
-}
-
-.search-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 10px;
+.back-btn {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    z-index: 101;
 }
 
 /* NAVIGATION BAR - RIGHT ALIGNED */
@@ -178,50 +156,17 @@ body {
 }
 
 .remove-svg {
-  display: none;
+    display: none;
 }
 
 .home-link {
-  text-decoration: none;
-  cursor: pointer;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: 18px;
-  font-family: 'Montserrat', Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 18px;
+    font-family: 'Montserrat', Helvetica, sans-serif;
 }
-
-/* SUB NAVIGATION - CENTERED */
-
-.sub-nav-bar {
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 250px;
-  background-color: #9fa881;
-  border-radius: 10px 10px 0 0;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 290px;
-  padding-bottom: 40px;
-}
-
-.sub-nav-bar a {
-  font-family: 'Montserrat', Helvetica, sans-serif;
-  font-weight: 500;
-  color: #ffffff;
-  font-size: 18px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1;
-}
-
-.sub-nav-bar a:hover {
-  transform: translateY(-2px);
-}
-
 
 /* SURVEY CONTAINER */
 .container {
