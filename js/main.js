@@ -89,7 +89,7 @@ function autoScroll() {
 // Start auto-scrolling (no pause on hover)
 autoScroll();
 
-// ===== SHOW MORE FUNCTIONALITY =====
+// ===== SHOW MORE/LESS FUNCTIONALITY =====
 const showMoreBtn = document.querySelector('.show-more');
 const additionalFlowers = [
     {
@@ -134,45 +134,84 @@ const additionalFlowers = [
     }
 ];
 
-let currentIndex = 0;
-const flowersPerLoad = 4;
+let isExpanded = false;
+let additionalFrames = [];
 
 showMoreBtn.addEventListener('click', function() {
     const topPicksSection = document.querySelector('.top-picks');
-    const existingFrames = topPicksSection.querySelectorAll('.frame, .frame-2');
-    const lastFrame = existingFrames[existingFrames.length - 1];
     
-    // Create new frame
-    const newFrame = document.createElement('div');
-    newFrame.className = existingFrames.length % 2 === 0 ? 'frame' : 'frame-2';
-    
-    // Add flowers to new frame
-    for (let i = 0; i < flowersPerLoad && currentIndex < additionalFlowers.length; i++) {
-        const flower = additionalFlowers[currentIndex];
+    if (!isExpanded) {
+        // SHOW MORE - Create and show all additional flowers
+        let currentIndex = 0;
+        const flowersPerFrame = 4;
         
-        const topPick = document.createElement('div');
-        topPick.className = 'top-pick';
-        topPick.innerHTML = `
-            <img class="images" src="${flower.img}" alt="${flower.name}" />
-            <div class="BG"></div>
-            <div class="description">
-                <div class="product-name-${10 + currentIndex}">${flower.name}</div>
-                <p class="sort-description">${flower.description}</p>
-            </div>
-        `;
+        while (currentIndex < additionalFlowers.length) {
+            const newFrame = document.createElement('div');
+            newFrame.className = 'frame additional-frame';
+            newFrame.style.maxHeight = '0';
+            newFrame.style.opacity = '0';
+            newFrame.style.overflow = 'hidden';
+            newFrame.style.transition = 'max-height 0.6s ease, opacity 0.6s ease, margin 0.6s ease';
+            newFrame.style.marginBottom = '0';
+            
+            // Add flowers to frame
+            for (let i = 0; i < flowersPerFrame && currentIndex < additionalFlowers.length; i++) {
+                const flower = additionalFlowers[currentIndex];
+                
+                const topPick = document.createElement('div');
+                topPick.className = 'top-pick';
+                topPick.innerHTML = `
+                    <img class="images" src="${flower.img}" alt="${flower.name}" />
+                    <div class="description">
+                        <div class="product-name-${10 + currentIndex}">${flower.name}</div>
+                        <p class="sort-description">${flower.description}</p>
+                    </div>
+                `;
+                
+                newFrame.appendChild(topPick);
+                currentIndex++;
+            }
+            
+            topPicksSection.insertBefore(newFrame, showMoreBtn);
+            additionalFrames.push(newFrame);
+        }
         
-        newFrame.appendChild(topPick);
-        currentIndex++;
+        // Trigger animation
+        setTimeout(() => {
+            additionalFrames.forEach((frame, index) => {
+                setTimeout(() => {
+                    frame.style.maxHeight = '600px';
+                    frame.style.opacity = '1';
+                    frame.style.marginBottom = '20px';
+                }, index * 150);
+            });
+        }, 10);
+        
+        // Update button
+        showMoreBtn.querySelector('.text-wrapper-11').textContent = 'Show less';
+        isExpanded = true;
+        
+    } else {
+        // SHOW LESS - Hide all additional flowers
+        additionalFrames.reverse().forEach((frame, index) => {
+            setTimeout(() => {
+                frame.style.maxHeight = '0';
+                frame.style.opacity = '0';
+                frame.style.marginBottom = '0';
+            }, index * 150);
+        });
+        
+        // Remove frames after animation
+        setTimeout(() => {
+            additionalFrames.forEach(frame => frame.remove());
+            additionalFrames = [];
+        }, additionalFrames.length * 150 + 600);
+        
+        // Update button
+        showMoreBtn.querySelector('.text-wrapper-11').textContent = 'Show more';
+        isExpanded = false;
+        
+        // Scroll back to top picks section
+        topPicksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    
-    // Insert new frame before the show more button
-    topPicksSection.insertBefore(newFrame, showMoreBtn);
-    
-    // Hide button if all flowers are loaded
-    if (currentIndex >= additionalFlowers.length) {
-        showMoreBtn.style.display = 'none';
-    }
-    
-    // Smooth scroll to new content
-    newFrame.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
