@@ -66,6 +66,14 @@ body {
   z-index: 101;
 }
 
+.back-btn:hover {
+  font-weight: 500;
+}
+
+.back-btn:active {
+  transform: scale(0.98);
+}
+
 /* NAVIGATION BAR - RIGHT ALIGNED */
 .nav-bar {
   position: absolute;
