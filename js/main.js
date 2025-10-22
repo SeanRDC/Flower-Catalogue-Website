@@ -215,3 +215,4 @@ showMoreBtn.addEventListener('click', function() {
         topPicksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 });
+
