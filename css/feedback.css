@@ -161,6 +161,12 @@ body {
   color: #5a6c3a;
 }
 
+.dropdown-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
 .remove-svg {
   display: none;
 }

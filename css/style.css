@@ -405,3 +405,8 @@ body {
   background-color: #f8f8f8;
   color: #5a6c3a;
 }
+
+.dropdown-item a {
+  text-decoration: none;
+  color: inherit;
+}
