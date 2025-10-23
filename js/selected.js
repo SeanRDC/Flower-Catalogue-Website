@@ -1,4 +1,4 @@
-// ===== SELECTED PICK FUNCTIONALITY =====
+// ===== SELECTED PICK FUNCTIONALITY (FIXED) =====
 
 // Extended flower descriptions
 const flowerDetails = {
@@ -36,12 +36,15 @@ const addToCollectionBtn = document.getElementById('addToCollectionBtn');
 const addToFavoritesBtn = document.getElementById('addToFavoritesBtn');
 const downloadImageBtn = document.getElementById('downloadImageBtn');
 
-// Track favorites
-let favorites = new Set();
+// Store current flower data
+let currentFlower = null;
 
 // Function to open expanded modal
 function openExpandedFlower(flowerName, flowerImage, shortDescription) {
     const fullDescription = flowerDetails[flowerName] || shortDescription;
+    
+    // Store current flower data
+    currentFlower = new Flower(flowerName, flowerImage, fullDescription);
     
     expandedFlowerImage.src = flowerImage;
     expandedFlowerImage.alt = flowerName;
@@ -49,6 +52,9 @@ function openExpandedFlower(flowerName, flowerImage, shortDescription) {
     fullscreenImage.alt = flowerName;
     expandedFlowerName.textContent = flowerName;
     expandedFlowerDescription.textContent = fullDescription;
+    
+    // Update button states
+    updateButtonStates(flowerName);
     
     // Show modal
     expandedModal.style.display = 'flex';
@@ -63,12 +69,29 @@ function openExpandedFlower(flowerName, flowerImage, shortDescription) {
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = '100%';
     document.body.style.paddingRight = `${scrollbarWidth}px`;
+}
+
+// Function to update button states
+function updateButtonStates(flowerName) {
+    // Check if action buttons exist (they won't on favorite/collection pages)
+    if (addToFavoritesBtn) {
+        if (FavoritesManager.has(flowerName)) {
+            addToFavoritesBtn.classList.add('favorited');
+            addToFavoritesBtn.title = 'Remove from favorites';
+        } else {
+            addToFavoritesBtn.classList.remove('favorited');
+            addToFavoritesBtn.title = 'Add to favorites';
+        }
+    }
     
-    // Update favorite button state
-    if (favorites.has(flowerName)) {
-        addToFavoritesBtn.classList.add('favorited');
-    } else {
-        addToFavoritesBtn.classList.remove('favorited');
+    if (addToCollectionBtn) {
+        if (CollectionsManager.has(flowerName)) {
+            addToCollectionBtn.classList.add('in-collection');
+            addToCollectionBtn.title = 'Remove from collections';
+        } else {
+            addToCollectionBtn.classList.remove('in-collection');
+            addToCollectionBtn.title = 'Add to collections';
+        }
     }
 }
 
@@ -101,7 +124,10 @@ function closeFullscreen() {
 
 // Add click events to all flower tiles
 document.querySelectorAll('.top-pick').forEach(tile => {
-    tile.addEventListener('click', function() {
+    tile.addEventListener('click', function(e) {
+        // Don't open if clicking remove button
+        if (e.target.closest('.remove-btn')) return;
+        
         const img = this.querySelector('.images');
         const nameElement = this.querySelector('[class*="product-name-"]');
         const descElement = this.querySelector('.sort-description');
@@ -117,76 +143,114 @@ document.querySelectorAll('.top-pick').forEach(tile => {
 });
 
 // Close expanded modal
-closeExpandedBtn.addEventListener('click', closeExpandedFlower);
+if (closeExpandedBtn) {
+    closeExpandedBtn.addEventListener('click', closeExpandedFlower);
+}
 
 // Open fullscreen
-expandFullscreenBtn.addEventListener('click', openFullscreen);
+if (expandFullscreenBtn) {
+    expandFullscreenBtn.addEventListener('click', openFullscreen);
+}
 
 // Close fullscreen
-closeFullscreenBtn.addEventListener('click', closeFullscreen);
+if (closeFullscreenBtn) {
+    closeFullscreenBtn.addEventListener('click', closeFullscreen);
+}
 
 // Close expanded modal when clicking outside
-expandedModal.addEventListener('click', function(e) {
-    if (e.target === expandedModal) {
-        closeExpandedFlower();
-    }
-});
+if (expandedModal) {
+    expandedModal.addEventListener('click', function(e) {
+        if (e.target === expandedModal) {
+            closeExpandedFlower();
+        }
+    });
+}
 
 // Close fullscreen when clicking outside image
-fullscreenModal.addEventListener('click', function(e) {
-    if (e.target === fullscreenModal) {
-        closeFullscreen();
-    }
-});
+if (fullscreenModal) {
+    fullscreenModal.addEventListener('click', function(e) {
+        if (e.target === fullscreenModal) {
+            closeFullscreen();
+        }
+    });
+}
 
-// Add to collections
-addToCollectionBtn.addEventListener('click', function() {
-    const flowerName = expandedFlowerName.textContent;
-    alert(`"${flowerName}" has been added to your collections!`);
-    // Here you would typically save to a database or localStorage
-});
+// Add to collections - FIXED
+if (addToCollectionBtn) {
+    addToCollectionBtn.addEventListener('click', function() {
+        if (!currentFlower) return;
+        
+        const result = CollectionsManager.toggle(currentFlower);
+        
+        // Update button state
+        if (CollectionsManager.has(currentFlower.name)) {
+            this.classList.add('in-collection');
+            this.title = 'Remove from collections';
+            showNotification(`"${currentFlower.name}" added to collections!`, 'success');
+        } else {
+            this.classList.remove('in-collection');
+            this.title = 'Add to collections';
+            showNotification(`"${currentFlower.name}" removed from collections`, 'success');
+        }
+        
+        console.log('Collections count:', CollectionsManager.count());
+    });
+}
 
-// Add to favorites
-addToFavoritesBtn.addEventListener('click', function() {
-    const flowerName = expandedFlowerName.textContent;
-    
-    if (favorites.has(flowerName)) {
-        favorites.delete(flowerName);
-        this.classList.remove('favorited');
-        alert(`"${flowerName}" has been removed from your favorites.`);
-    } else {
-        favorites.add(flowerName);
-        this.classList.add('favorited');
-        alert(`"${flowerName}" has been added to your favorites!`);
-    }
-    
-    // Here you would typically save to a database or localStorage
-    console.log('Current favorites:', Array.from(favorites));
-});
+// Add to favorites - FIXED
+if (addToFavoritesBtn) {
+    addToFavoritesBtn.addEventListener('click', function() {
+        if (!currentFlower) return;
+        
+        const result = FavoritesManager.toggle(currentFlower);
+        
+        // Update button state
+        if (FavoritesManager.has(currentFlower.name)) {
+            this.classList.add('favorited');
+            this.title = 'Remove from favorites';
+            showNotification(`"${currentFlower.name}" added to favorites!`, 'success');
+        } else {
+            this.classList.remove('favorited');
+            this.title = 'Add to favorites';
+            showNotification(`"${currentFlower.name}" removed from favorites`, 'success');
+        }
+        
+        console.log('Favorites count:', FavoritesManager.count());
+    });
+}
 
 // Download image
-downloadImageBtn.addEventListener('click', function() {
-    const flowerName = expandedFlowerName.textContent;
-    const imageSrc = expandedFlowerImage.src;
-    
-    // Create a temporary link and trigger download
-    const link = document.createElement('a');
-    link.href = imageSrc;
-    link.download = `${flowerName.toLowerCase().replace(/\s+/g, '-')}.jpg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    alert(`"${flowerName}" image is being downloaded!`);
-});
+if (downloadImageBtn) {
+    downloadImageBtn.addEventListener('click', function() {
+        if (!currentFlower) return;
+        
+        const flowerName = expandedFlowerName.textContent;
+        const imageSrc = expandedFlowerImage.src;
+        
+        // Create a temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = imageSrc;
+        link.download = `${flowerName.toLowerCase().replace(/\s+/g, '-')}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showNotification(`"${flowerName}" image is downloading!`, 'success');
+    });
+}
 
 // Close modals with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        if (fullscreenModal.classList.contains('active')) {
+        if (fullscreenModal && fullscreenModal.classList.contains('active')) {
             closeFullscreen();
-        } else if (expandedModal.classList.contains('active')) {
+        } else if (expandedModal && expandedModal.classList.contains('active')) {
             closeExpandedFlower();
         }
     }
 });
+
+// Export function to window for use in other scripts
+window.openExpandedFlower = openExpandedFlower;
+
+console.log('✅ Selected flower functionality initialized');

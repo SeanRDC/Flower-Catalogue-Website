@@ -1,5 +1,4 @@
-// ===== DISPLAY COLLECTIONS PAGE =====
-// This script loads and displays all collected flowers on the collection.html page
+// ===== DISPLAY COLLECTIONS PAGE (FINAL FIXED VERSION) =====
 
 // Wait for DOM to load
 document.addEventListener('DOMContentLoaded', function() {
@@ -91,9 +90,8 @@ function createFlowerCard(flower) {
         
         const img = this.querySelector('.images');
         const nameElement = this.querySelector('.product-name-2');
-        const descElement = this.querySelector('.sort-description');
         
-        if (img && nameElement && descElement) {
+        if (img && nameElement && typeof openExpandedFlower === 'function') {
             openExpandedFlower(nameElement.textContent, img.src, flower.description);
         }
     });
@@ -150,9 +148,9 @@ function displayEmptyState(container) {
     `;
 }
 
-// Add CSS for remove button and animation
-const style = document.createElement('style');
-style.textContent = `
+// Add CSS for remove button and animation (use unique variable name)
+const collectionPageStyles = document.createElement('style');
+collectionPageStyles.textContent = `
     .top-pick {
         position: relative;
     }
@@ -200,4 +198,4 @@ style.textContent = `
         }
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(collectionPageStyles);
