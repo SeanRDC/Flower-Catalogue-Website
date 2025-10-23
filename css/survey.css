@@ -55,6 +55,7 @@ body {
 	height: 70px;
 	cursor: pointer;
 	z-index: 101;
+	border-radius: 100px;
 }
 
 .back-btn {
@@ -350,6 +351,7 @@ textarea {
 	position: static;
 	width: 50px;
 	height: 50px;
+	border-radius: 100px;
 }
 
 .logo-text {
