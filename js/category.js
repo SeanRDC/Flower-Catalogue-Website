@@ -4,40 +4,42 @@
 const getImagePath = (imagePath) => {
     const isGitHubPages = window.location.hostname.includes('github.io');
     const repoName = isGitHubPages ? '/Flower-Catalogue-Website' : '';
-    return `${repoName}/${imagePath}`;
+    // Remove leading slash from imagePath if present to avoid double slashes
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    return `${repoName}/${cleanPath}`;
 };
 
 // Flower database with categories
 const flowerDatabase = {
     annual: [
-        { name: 'Marigold', image: getImagePath('assets/images/marigold-sr21.jpg'), description: 'Marigolds symbolize passion, creativity, and joy.' },
-        { name: 'Petunia', image: getImagePath('assets/images/peony-sr13.jpg'), description: 'Petunias represent comfort and keeping company with someone.' },
-        { name: 'Zinnia', image: getImagePath('assets/images/sunflower-sr10.jpg'), description: 'Zinnias symbolize thoughts of an absent friend and lasting affection.' },
-        { name: 'Cosmos', image: getImagePath('assets/images/pinkrose-sr8.jpg'), description: 'Cosmos flowers represent order, harmony, and peace.' },
-        { name: 'Impatiens', image: getImagePath('assets/images/whiterose-sr5.jpg'), description: 'Impatiens symbolize motherly love and patience.' },
-        { name: 'Snapdragon', image: getImagePath('assets/images/redrose-sr11.jpg'), description: 'Snapdragons represent grace and strength.' },
-        { name: 'Sweet Pea', image: getImagePath('assets/images/lavender-sr19.jpg'), description: 'Sweet peas symbolize blissful pleasure and delicate beauty.' },
-        { name: 'Calendula', image: getImagePath('assets/images/oxeyedaisy-sr9.jpg'), description: 'Calendula represents winning grace and protection.' }
+        { name: 'Marigold', image: 'assets/images/marigold-sr21.jpg', description: 'Marigolds symbolize passion, creativity, and joy.' },
+        { name: 'Petunia', image: 'assets/images/peony-sr13.jpg', description: 'Petunias represent comfort and keeping company with someone.' },
+        { name: 'Zinnia', image: 'assets/images/sunflower-sr10.jpg', description: 'Zinnias symbolize thoughts of an absent friend and lasting affection.' },
+        { name: 'Cosmos', image: 'assets/images/pinkrose-sr8.jpg', description: 'Cosmos flowers represent order, harmony, and peace.' },
+        { name: 'Impatiens', image: 'assets/images/whiterose-sr5.jpg', description: 'Impatiens symbolize motherly love and patience.' },
+        { name: 'Snapdragon', image: 'assets/images/redrose-sr11.jpg', description: 'Snapdragons represent grace and strength.' },
+        { name: 'Sweet Pea', image: 'assets/images/lavender-sr19.jpg', description: 'Sweet peas symbolize blissful pleasure and delicate beauty.' },
+        { name: 'Calendula', image: 'assets/images/oxeyedaisy-sr9.jpg', description: 'Calendula represents winning grace and protection.' }
     ],
     biennial: [
-        { name: 'Foxglove', image: getImagePath('assets/images/iris-sr24.jpg'), description: 'Foxgloves symbolize healing, protection, and magic.' },
-        { name: 'Sweet William', image: getImagePath('assets/images/carnation-sr23.jpg'), description: 'Sweet William represents gallantry and finesse.' },
-        { name: 'Canterbury Bells', image: getImagePath('assets/images/orchid-sr18.jpg'), description: 'Canterbury Bells symbolize gratitude and constancy.' },
-        { name: 'Hollyhock', image: getImagePath('assets/images/stargazer-sr12.jpg'), description: 'Hollyhocks represent ambition and fruitfulness.' },
-        { name: 'Forget-Me-Not', image: getImagePath('assets/images/whitehibiscus_sr7.jpg'), description: 'Forget-me-nots symbolize true love and remembrance.' },
-        { name: 'Stock Flower', image: getImagePath('assets/images/tulip-sr17.jpg'), description: 'Stock flowers represent lasting beauty and contentment.' },
-        { name: 'Wallflower', image: getImagePath('assets/images/jasmine-sr22.jpg'), description: 'Wallflowers symbolize faithfulness in adversity.' },
-        { name: 'Honesty', image: getImagePath('assets/images/dhalia-sr20.jpg'), description: 'Honesty flowers represent transparency and sincerity.' }
+        { name: 'Foxglove', image: 'assets/images/iris-sr24.jpg', description: 'Foxgloves symbolize healing, protection, and magic.' },
+        { name: 'Sweet William', image: 'assets/images/carnation-sr23.jpg', description: 'Sweet William represents gallantry and finesse.' },
+        { name: 'Canterbury Bells', image: 'assets/images/orchid-sr18.jpg', description: 'Canterbury Bells symbolize gratitude and constancy.' },
+        { name: 'Hollyhock', image: 'assets/images/stargazer-sr12.jpg', description: 'Hollyhocks represent ambition and fruitfulness.' },
+        { name: 'Forget-Me-Not', image: 'assets/images/whitehibiscus_sr7.jpg', description: 'Forget-me-nots symbolize true love and remembrance.' },
+        { name: 'Stock Flower', image: 'assets/images/tulip-sr17.jpg', description: 'Stock flowers represent lasting beauty and contentment.' },
+        { name: 'Wallflower', image: 'assets/images/jasmine-sr22.jpg', description: 'Wallflowers symbolize faithfulness in adversity.' },
+        { name: 'Honesty', image: 'assets/images/dhalia-sr20.jpg', description: 'Honesty flowers represent transparency and sincerity.' }
     ],
     perennial: [
-        { name: 'Rose', image: getImagePath('assets/images/redrose-sr11.jpg'), description: 'Roses symbolize love, romance, and deep passion.' },
-        { name: 'Peony', image: getImagePath('assets/images/peony-sr13.jpg'), description: 'Peonies represent romance, prosperity, and honor.' },
-        { name: 'Lavender', image: getImagePath('assets/images/lavender-sr19.jpg'), description: 'Lavender symbolizes serenity, grace, and calmness.' },
-        { name: 'Dahlia', image: getImagePath('assets/images/dhalia-sr20.jpg'), description: 'Dahlias represent elegance, dignity, and commitment.' },
-        { name: 'Iris', image: getImagePath('assets/images/iris-sr24.jpg'), description: 'Iris flowers symbolize wisdom, hope, and valor.' },
-        { name: 'Lily', image: getImagePath('assets/images/stargazer-sr12.jpg'), description: 'Lilies represent purity, passion, and rebirth.' },
-        { name: 'Tulip', image: getImagePath('assets/images/tulip-sr17.jpg'), description: 'Tulips symbolize perfect love and spring renewal.' },
-        { name: 'Hibiscus', image: getImagePath('assets/images/whitehibiscus_sr7.jpg'), description: 'Hibiscus symbolizes delicate beauty and femininity.' }
+        { name: 'Rose', image: 'assets/images/redrose-sr11.jpg', description: 'Roses symbolize love, romance, and deep passion.' },
+        { name: 'Peony', image: 'assets/images/peony-sr13.jpg', description: 'Peonies represent romance, prosperity, and honor.' },
+        { name: 'Lavender', image: 'assets/images/lavender-sr19.jpg', description: 'Lavender symbolizes serenity, grace, and calmness.' },
+        { name: 'Dahlia', image: 'assets/images/dhalia-sr20.jpg', description: 'Dahlias represent elegance, dignity, and commitment.' },
+        { name: 'Iris', image: 'assets/images/iris-sr24.jpg', description: 'Iris flowers symbolize wisdom, hope, and valor.' },
+        { name: 'Lily', image: 'assets/images/stargazer-sr12.jpg', description: 'Lilies represent purity, passion, and rebirth.' },
+        { name: 'Tulip', image: 'assets/images/tulip-sr17.jpg', description: 'Tulips symbolize perfect love and spring renewal.' },
+        { name: 'Hibiscus', image: 'assets/images/whitehibiscus_sr7.jpg', description: 'Hibiscus symbolizes delicate beauty and femininity.' }
     ]
 };
 
@@ -163,8 +165,12 @@ function updateTopPicksSection(section, category, flowers) {
 function createFlowerCard(flower) {
     const card = document.createElement('div');
     card.className = 'top-pick';
+    
+    // Apply the getImagePath function to the image
+    const imagePath = getImagePath(flower.image);
+    
     card.innerHTML = `
-        <img class="images" src="${flower.image}" alt="${flower.name}" />
+        <img class="images" src="${imagePath}" alt="${flower.name}" onerror="console.error('Failed to load image:', '${imagePath}')" />
         <div class="description">
             <div class="product-name-2">${flower.name}</div>
             <p class="sort-description">${flower.description}</p>
@@ -175,7 +181,7 @@ function createFlowerCard(flower) {
     card.addEventListener('click', function(e) {
         e.preventDefault();
         if (typeof openExpandedFlower === 'function') {
-            openExpandedFlower(flower.name, flower.image, flower.description);
+            openExpandedFlower(flower.name, imagePath, flower.description);
         }
     });
     
@@ -370,5 +376,8 @@ if (document.readyState === 'loading') {
     initializeCategoryFilter();
 }
 
+// Debug logging
 console.log('✅ Category filtering initialized');
 console.log('📂 Available categories:', Object.keys(flowerDatabase));
+console.log('🌐 Is GitHub Pages:', window.location.hostname.includes('github.io'));
+console.log('📍 Current path:', window.location.pathname);
