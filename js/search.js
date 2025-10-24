@@ -1,8 +1,7 @@
 // ===== FLOWER SEARCH FUNCTIONALITY =====
 
 // Get the base path for images (works for both local and GitHub Pages)
-const getImagePath = (imagePath) => {
-    // If on GitHub Pages, prepend the repo name
+const getImagePathSearch = (imagePath) => {
     const isGitHubPages = window.location.hostname.includes('github.io');
     const repoName = isGitHubPages ? '/Flower-Catalogue-Website' : '';
     return `${repoName}/${imagePath}`;
@@ -11,24 +10,24 @@ const getImagePath = (imagePath) => {
 // All available flowers database
 const allFlowers = [
     // Top Picks (Browse page)
-    { name: 'Pink Rose', image: getImagePath('assets/images/pinkrose-sr8.jpg'), description: 'Pink roses symbolize grace, admiration, and joy.', page: 'browse' },
-    { name: 'White Rose', image: getImagePath('assets/images/whiterose-sr5.jpg'), description: 'White roses symbolize purity, innocence, and new beginnings.', page: 'browse' },
-    { name: 'White Hibiscus', image: getImagePath('assets/images/whitehibiscus_sr7.jpg'), description: 'White hibiscus symbolizes purity, enlightenment, and feminine energy', page: 'browse' },
-    { name: 'Oxeye Daisy', image: getImagePath('assets/images/oxeyedaisy-sr9.jpg'), description: 'It symbolizes innocence, patience, and simplicity.', page: 'browse' },
-    { name: 'Stargazer Lily', image: getImagePath('assets/images/stargazer-sr12.jpg'), description: 'Stargazer Lily symbolizes ambition, prosperity, and passion.', page: 'browse' },
-    { name: 'Sunflower', image: getImagePath('assets/images/sunflower-sr10.jpg'), description: 'Sunflower symbolizes loyalty, warmth, and adoration.', page: 'browse' },
-    { name: 'Red Rose', image: getImagePath('assets/images/redrose-sr11.jpg'), description: 'Red Rose symbolizes love, romance, and deep passion.', page: 'browse' },
-    { name: 'Peony', image: getImagePath('assets/images/peony-sr13.jpg'), description: 'Peony symbolizes romance, prosperity, and honor.', page: 'browse' },
+    { name: 'Pink Rose', image: getImagePathSearch('assets/images/pinkrose-sr8.jpg'), description: 'Pink roses symbolize grace, admiration, and joy.', page: 'browse' },
+    { name: 'White Rose', image: getImagePathSearch('assets/images/whiterose-sr5.jpg'), description: 'White roses symbolize purity, innocence, and new beginnings.', page: 'browse' },
+    { name: 'White Hibiscus', image: getImagePathSearch('assets/images/whitehibiscus_sr7.jpg'), description: 'White hibiscus symbolizes purity, enlightenment, and feminine energy', page: 'browse' },
+    { name: 'Oxeye Daisy', image: getImagePathSearch('assets/images/oxeyedaisy-sr9.jpg'), description: 'It symbolizes innocence, patience, and simplicity.', page: 'browse' },
+    { name: 'Stargazer Lily', image: getImagePathSearch('assets/images/stargazer-sr12.jpg'), description: 'Stargazer Lily symbolizes ambition, prosperity, and passion.', page: 'browse' },
+    { name: 'Sunflower', image: getImagePathSearch('assets/images/sunflower-sr10.jpg'), description: 'Sunflower symbolizes loyalty, warmth, and adoration.', page: 'browse' },
+    { name: 'Red Rose', image: getImagePathSearch('assets/images/redrose-sr11.jpg'), description: 'Red Rose symbolizes love, romance, and deep passion.', page: 'browse' },
+    { name: 'Peony', image: getImagePathSearch('assets/images/peony-sr13.jpg'), description: 'Peony symbolizes romance, prosperity, and honor.', page: 'browse' },
     
     // Additional flowers (Show More)
-    { name: 'Tulip', image: getImagePath('assets/images/tulip-sr17.jpg'), description: 'Tulips symbolize perfect love and spring renewal.', page: 'browse' },
-    { name: 'Orchid', image: getImagePath('assets/images/orchid-sr18.jpg'), description: 'Orchids represent luxury, beauty, and strength.', page: 'browse' },
-    { name: 'Lavender', image: getImagePath('assets/images/lavender-sr19.jpg'), description: 'Lavender symbolizes serenity, grace, and calmness.', page: 'browse' },
-    { name: 'Dahlia', image: getImagePath('assets/images/dhalia-sr20.jpg'), description: 'Dahlias represent elegance, dignity, and commitment.', page: 'browse' },
-    { name: 'Marigold', image: getImagePath('assets/images/marigold-sr21.jpg'), description: 'Marigolds symbolize passion, creativity, and joy.', page: 'browse' },
-    { name: 'Carnation', image: getImagePath('assets/images/carnation-sr23.jpg'), description: 'Carnations represent love, fascination, and distinction.', page: 'browse' },
-    { name: 'Iris', image: getImagePath('assets/images/iris-sr24.jpg'), description: 'Iris flowers symbolize wisdom, hope, and valor.', page: 'browse' },
-    { name: 'Jasmine', image: getImagePath('assets/images/jasmine-sr22.jpg'), description: 'Jasmine represents love, beauty, and sensuality.', page: 'browse' }
+    { name: 'Tulip', image: getImagePathSearch('assets/images/tulip-sr17.jpg'), description: 'Tulips symbolize perfect love and spring renewal.', page: 'browse' },
+    { name: 'Orchid', image: getImagePathSearch('assets/images/orchid-sr18.jpg'), description: 'Orchids represent luxury, beauty, and strength.', page: 'browse' },
+    { name: 'Lavender', image: getImagePathSearch('assets/images/lavender-sr19.jpg'), description: 'Lavender symbolizes serenity, grace, and calmness.', page: 'browse' },
+    { name: 'Dahlia', image: getImagePathSearch('assets/images/dhalia-sr20.jpg'), description: 'Dahlias represent elegance, dignity, and commitment.', page: 'browse' },
+    { name: 'Marigold', image: getImagePathSearch('assets/images/marigold-sr21.jpg'), description: 'Marigolds symbolize passion, creativity, and joy.', page: 'browse' },
+    { name: 'Carnation', image: getImagePathSearch('assets/images/carnation-sr23.jpg'), description: 'Carnations represent love, fascination, and distinction.', page: 'browse' },
+    { name: 'Iris', image: getImagePathSearch('assets/images/iris-sr24.jpg'), description: 'Iris flowers symbolize wisdom, hope, and valor.', page: 'browse' },
+    { name: 'Jasmine', image: getImagePathSearch('assets/images/jasmine-sr22.jpg'), description: 'Jasmine represents love, beauty, and sensuality.', page: 'browse' }
 ];
 
 // Initialize search functionality
@@ -36,7 +35,6 @@ function initializeSearch() {
     const searchForms = document.querySelectorAll('.search-bar');
     
     searchForms.forEach(form => {
-        // Changed to look for input[type="text"] instead of input[type="search"]
         const searchInput = form.querySelector('input[type="text"]');
         const searchButton = form.querySelector('.search-button');
         
@@ -45,11 +43,20 @@ function initializeSearch() {
         // Handle form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             performSearch(searchInput.value.trim());
         });
         
-        // Real-time search suggestions (optional)
-        searchInput.addEventListener('input', function() {
+        // Handle button click
+        searchButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            performSearch(searchInput.value.trim());
+        });
+        
+        // Real-time search suggestions
+        searchInput.addEventListener('input', function(e) {
+            e.stopPropagation();
             const query = this.value.trim();
             if (query.length >= 2) {
                 showSearchSuggestions(query, this);
@@ -58,19 +65,32 @@ function initializeSearch() {
             }
         });
         
-        // Close suggestions when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.search-bar')) {
-                hideSearchSuggestions();
+        // Prevent input from triggering other events
+        searchInput.addEventListener('focus', function(e) {
+            e.stopPropagation();
+        });
+        
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                performSearch(this.value.trim());
             }
         });
+    });
+    
+    // Close suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-bar')) {
+            hideSearchSuggestions();
+        }
     });
 }
 
 // Perform search
 function performSearch(query) {
     if (!query) {
-        showNotification('Please enter a flower name to search', 'error');
+        showSearchNotification('Please enter a flower name to search', 'error');
         return;
     }
     
@@ -85,12 +105,15 @@ function performSearch(query) {
     console.log('📊 Found', results.length, 'results');
     
     if (results.length === 0) {
-        showNotification(`No flowers found for "${query}"`, 'error');
+        showSearchNotification(`No flowers found for "${query}"`, 'error');
         return;
     }
     
     // Display search results
     displaySearchResults(query, results);
+    
+    // Hide suggestions
+    hideSearchSuggestions();
 }
 
 // Display search results in a modal
@@ -120,7 +143,7 @@ function displaySearchResults(query, results) {
             <p class="search-results-count">Found ${results.length} flower${results.length > 1 ? 's' : ''}</p>
             <div class="search-results-grid">
                 ${results.map(flower => `
-                    <div class="search-result-card" data-flower='${JSON.stringify(flower)}'>
+                    <div class="search-result-card" data-flower='${JSON.stringify(flower).replace(/'/g, '&apos;')}'>
                         <img src="${flower.image}" alt="${flower.name}" />
                         <div class="search-result-info">
                             <h3>${flower.name}</h3>
@@ -138,10 +161,7 @@ function displaySearchResults(query, results) {
     setTimeout(() => modal.classList.add('active'), 10);
     
     // Prevent body scroll
-    const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
     
     // Add click handlers
     const closeBtn = modal.querySelector('.close-search-btn');
@@ -160,20 +180,16 @@ function displaySearchResults(query, results) {
             const flower = JSON.parse(this.getAttribute('data-flower'));
             closeSearchResults();
             
-            // Open flower details
-            if (typeof openExpandedFlower === 'function') {
-                openExpandedFlower(flower.name, flower.image, flower.description);
-            } else {
-                showNotification('Opening flower details...', 'success');
-                // Fallback: redirect to browse page
-                setTimeout(() => {
-                    window.location.href = 'browse.html';
-                }, 1000);
-            }
+            // Open flower details using the expanded view
+            setTimeout(() => {
+                if (typeof openExpandedFlower === 'function') {
+                    openExpandedFlower(flower.name, flower.image, flower.description);
+                } else {
+                    console.error('openExpandedFlower function not found');
+                }
+            }, 300);
         });
     });
-    
-    hideSearchSuggestions();
 }
 
 // Close search results modal
@@ -185,13 +201,8 @@ function closeSearchResults() {
     
     setTimeout(() => {
         modal.remove();
-        
         // Restore body scroll
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        document.body.style.overflow = '';
     }, 300);
 }
 
@@ -223,11 +234,12 @@ function showSearchSuggestions(query, inputElement) {
     
     // Add click handlers
     dropdown.querySelectorAll('.search-suggestion-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             const flowerName = this.getAttribute('data-name');
             inputElement.value = flowerName;
             performSearch(flowerName);
-            hideSearchSuggestions();
         });
     });
 }
@@ -238,7 +250,34 @@ function hideSearchSuggestions() {
     suggestions.forEach(s => s.remove());
 }
 
-// Add styles for search results
+// Show search notification
+function showSearchNotification(message, type = 'info') {
+    const existingNotification = document.querySelector('.search-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = `search-notification ${type}`;
+    notification.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${type === 'error' ? '#f44336' : '#4CAF50'}" stroke-width="2">
+            ${type === 'error' ? 
+                '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>' :
+                '<polyline points="20 6 9 17 4 12"></polyline>'
+            }
+        </svg>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('hide');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add styles for search results and notifications
 const searchStyles = document.createElement('style');
 searchStyles.textContent = `
     .search-results-modal {
@@ -254,6 +293,7 @@ searchStyles.textContent = `
         justify-content: center;
         opacity: 0;
         transition: opacity 0.3s ease;
+        padding: 20px;
     }
     
     .search-results-modal.active {
@@ -265,8 +305,8 @@ searchStyles.textContent = `
         background: white;
         border-radius: 16px;
         max-width: 900px;
-        width: 90%;
-        max-height: 80vh;
+        width: 100%;
+        max-height: 85vh;
         overflow-y: auto;
         padding: 30px;
         position: relative;
@@ -360,6 +400,7 @@ searchStyles.textContent = `
         overflow-y: auto;
         z-index: 1000;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 0;
     }
     
     .search-suggestion-item {
@@ -387,6 +428,48 @@ searchStyles.textContent = `
         color: #333;
     }
     
+    /* Search Notification */
+    .search-notification {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease;
+    }
+    
+    .search-notification.hide {
+        animation: slideOut 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+    
     /* Mobile responsiveness */
     @media (max-width: 768px) {
         .search-results-content {
@@ -402,19 +485,30 @@ searchStyles.textContent = `
         .search-results-header h2 {
             font-size: 20px;
         }
+        
+        .search-notification {
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+        }
     }
 `;
 document.head.appendChild(searchStyles);
 
 // Initialize search when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeSearch);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSearch);
+} else {
+    initializeSearch();
+}
 
 // Close search results with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeSearchResults();
+        hideSearchSuggestions();
     }
 });
 
 console.log('✅ Search functionality initialized');
-console.log('📚 Searchable flowers:', allFlowers.length);
+console.log('📚 Searchable flowers:', allFlowers.length)

@@ -44,20 +44,19 @@ const flowerDatabase = {
 // Store current state
 let currentCategory = null;
 let isFilterActive = false;
+let originalTopPicks = null;
 
 // Initialize category functionality
 function initializeCategoryFilter() {
     const categoryItems = document.querySelectorAll('.category-item');
     
     categoryItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
             const categoryText = this.querySelector('.category-text').textContent.toLowerCase();
             showCategoryFlowers(categoryText);
         });
     });
-    
-    // Update sub-nav when in filter mode
-    updateSubNav();
 }
 
 // Show flowers by category
@@ -72,59 +71,92 @@ function showCategoryFlowers(category) {
         return;
     }
     
+    // Store original content if not already stored
+    if (!originalTopPicks) {
+        const topPicksSection = document.querySelector('.top-picks');
+        originalTopPicks = {
+            title: topPicksSection.querySelector('.title').textContent,
+            frame1: topPicksSection.querySelector('.frame').innerHTML,
+            frame2: topPicksSection.querySelector('.frame-2').innerHTML
+        };
+    }
+    
     // Hide categories section
     const categoriesSection = document.querySelector('.categories');
-    categoriesSection.style.display = 'none';
+    if (categoriesSection) {
+        categoriesSection.style.display = 'none';
+    }
     
     // Hide petals section
     const petalsSection = document.querySelector('.share');
-    petalsSection.style.display = 'none';
+    if (petalsSection) {
+        petalsSection.style.display = 'none';
+    }
     
     // Update top picks section
     const topPicksSection = document.querySelector('.top-picks');
-    updateTopPicksSection(topPicksSection, category, flowers);
+    if (topPicksSection) {
+        updateTopPicksSection(topPicksSection, category, flowers);
+    }
     
     // Update sub-nav to show categories
     updateSubNav(true);
     
+    // Show notification
+    showCategoryNotification(category);
+    
     // Smooth scroll to top picks
-    topPicksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+        topPicksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 }
 
 // Update the top picks section with category flowers
 function updateTopPicksSection(section, category, flowers) {
     // Update title
     const title = section.querySelector('.title');
-    title.textContent = `${capitalizeFirst(category)} Flowers`;
+    if (title) {
+        title.textContent = `${capitalizeFirst(category)} Flowers`;
+    }
     
     // Clear existing frames
     const frame1 = section.querySelector('.frame');
     const frame2 = section.querySelector('.frame-2');
     
-    frame1.innerHTML = '';
-    frame2.innerHTML = '';
+    if (frame1) frame1.innerHTML = '';
+    if (frame2) frame2.innerHTML = '';
     
     // Split flowers into two rows (4 per row)
     const firstRow = flowers.slice(0, 4);
     const secondRow = flowers.slice(4, 8);
     
     // Populate first row
-    firstRow.forEach(flower => {
-        frame1.appendChild(createFlowerCard(flower));
-    });
+    if (frame1) {
+        firstRow.forEach(flower => {
+            frame1.appendChild(createFlowerCard(flower));
+        });
+    }
     
     // Populate second row
-    secondRow.forEach(flower => {
-        frame2.appendChild(createFlowerCard(flower));
-    });
+    if (frame2) {
+        secondRow.forEach(flower => {
+            frame2.appendChild(createFlowerCard(flower));
+        });
+    }
     
     // Update "Show more" button to "Back to Browse"
     const showMoreBtn = section.querySelector('.show-more');
-    const btnText = showMoreBtn.querySelector('.text-wrapper-11');
-    btnText.textContent = 'Back to Browse';
-    
-    // Change button behavior
-    showMoreBtn.onclick = resetToBrowse;
+    if (showMoreBtn) {
+        const btnText = showMoreBtn.querySelector('.text-wrapper-11');
+        if (btnText) {
+            btnText.textContent = 'Back to Browse';
+        }
+        
+        // Remove old listeners and add new one
+        const newBtn = showMoreBtn.cloneNode(true);
+        showMoreBtn.parentNode.replaceChild(newBtn, showMoreBtn);
+        newBtn.addEventListener('click', resetToBrowse);
+    }
 }
 
 // Create a flower card element
@@ -140,7 +172,8 @@ function createFlowerCard(flower) {
     `;
     
     // Add click event for expanded view
-    card.addEventListener('click', function() {
+    card.addEventListener('click', function(e) {
+        e.preventDefault();
         if (typeof openExpandedFlower === 'function') {
             openExpandedFlower(flower.name, flower.image, flower.description);
         }
@@ -156,19 +189,67 @@ function resetToBrowse() {
     
     // Show categories section
     const categoriesSection = document.querySelector('.categories');
-    categoriesSection.style.display = 'block';
+    if (categoriesSection) {
+        categoriesSection.style.display = 'block';
+    }
     
     // Show petals section
     const petalsSection = document.querySelector('.share');
-    petalsSection.style.display = 'block';
+    if (petalsSection) {
+        petalsSection.style.display = 'block';
+    }
     
     // Restore original top picks
-    location.reload(); // Simple approach - reload the page
+    if (originalTopPicks) {
+        const topPicksSection = document.querySelector('.top-picks');
+        const title = topPicksSection.querySelector('.title');
+        const frame1 = topPicksSection.querySelector('.frame');
+        const frame2 = topPicksSection.querySelector('.frame-2');
+        
+        if (title) title.textContent = originalTopPicks.title;
+        if (frame1) frame1.innerHTML = originalTopPicks.frame1;
+        if (frame2) frame2.innerHTML = originalTopPicks.frame2;
+        
+        // Re-attach click handlers to restored cards
+        const topPicks = topPicksSection.querySelectorAll('.top-pick');
+        topPicks.forEach(pick => {
+            pick.addEventListener('click', function() {
+                const name = this.querySelector('[class*="product-name-"]').textContent;
+                const image = this.querySelector('.images').src;
+                const description = this.querySelector('.sort-description').textContent;
+                
+                if (typeof openExpandedFlower === 'function') {
+                    openExpandedFlower(name, image, description);
+                }
+            });
+        });
+        
+        // Restore show more button
+        const showMoreBtn = topPicksSection.querySelector('.show-more');
+        if (showMoreBtn) {
+            const btnText = showMoreBtn.querySelector('.text-wrapper-11');
+            if (btnText) {
+                btnText.textContent = 'Show more';
+            }
+        }
+    }
+    
+    // Restore original sub-nav
+    updateSubNav(false);
+    
+    // Scroll to categories
+    setTimeout(() => {
+        const categoriesSection = document.querySelector('.categories');
+        if (categoriesSection) {
+            categoriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
 }
 
 // Update sub-navigation based on state
 function updateSubNav(filterMode = false) {
     const subNavBar = document.querySelector('.sub-nav-bar');
+    if (!subNavBar) return;
     
     if (filterMode) {
         subNavBar.innerHTML = `
@@ -196,12 +277,44 @@ function updateSubNav(filterMode = false) {
         if (currentLink) {
             currentLink.style.fontWeight = '700';
         }
+    } else {
+        // Restore original sub-nav
+        subNavBar.innerHTML = `
+            <a href="#browse">Browse</a>
+            <a href="#top-picks">Top picks</a>
+            <a href="#petals">Petals</a>
+        `;
     }
 }
 
 // Helper function to capitalize first letter
 function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Show notification
+function showCategoryNotification(category) {
+    // Remove existing notification
+    const existingNotification = document.querySelector('.category-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = 'category-notification';
+    notification.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Showing ${capitalizeFirst(category)} flowers</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('hide');
+        setTimeout(() => notification.remove(), 300);
+    }, 2500);
 }
 
 // Add notification styles
@@ -250,27 +363,12 @@ notificationStyles.textContent = `
 `;
 document.head.appendChild(notificationStyles);
 
-// Show notification
-function showCategoryNotification(category) {
-    const notification = document.createElement('div');
-    notification.className = 'category-notification';
-    notification.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        <span>Showing ${capitalizeFirst(category)} flowers</span>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.classList.add('hide');
-        setTimeout(() => notification.remove(), 300);
-    }, 2500);
-}
-
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeCategoryFilter);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeCategoryFilter);
+} else {
+    initializeCategoryFilter();
+}
 
 console.log('✅ Category filtering initialized');
 console.log('📂 Available categories:', Object.keys(flowerDatabase));
