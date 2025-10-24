@@ -1,5 +1,13 @@
 // ===== FLOWER SEARCH FUNCTIONALITY =====
 
+// Get the base path for images (works for both local and GitHub Pages)
+const getImagePath = (imagePath) => {
+    // If on GitHub Pages, prepend the repo name
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const repoName = isGitHubPages ? '/Flower-Catalogue-Website' : '';
+    return `${repoName}/${imagePath}`;
+};
+
 // All available flowers database
 const allFlowers = [
     // Top Picks (Browse page)
@@ -28,7 +36,8 @@ function initializeSearch() {
     const searchForms = document.querySelectorAll('.search-bar');
     
     searchForms.forEach(form => {
-        const searchInput = form.querySelector('input[type="search"]');
+        // Changed to look for input[type="text"] instead of input[type="search"]
+        const searchInput = form.querySelector('input[type="text"]');
         const searchButton = form.querySelector('.search-button');
         
         if (!searchInput || !searchButton) return;
