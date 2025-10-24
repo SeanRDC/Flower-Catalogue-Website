@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/fav-32px.jpg" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/fav-180px.jpg" />
     <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/fav-192px.jpg" />
-    <link rel="stylesheet" href="css/browse.css" />
+    <link rel="stylesheet" href="css/favorite.css" />
     <link rel="stylesheet" href="css/modal.css" />
     <link rel="stylesheet" href="css/selected.css" />
 </head>
@@ -64,12 +64,12 @@
                         <div class="dropdown-menu" id="assetsDropdown">
                             <ul>
                                 <li class="dropdown-item">
-                                <a href="main/favorite.html">Favorites</a>
+                                <a href="favorite.html">Favorites</a>
                                 </li>
                                 <li class="dropdown-item">
-                                <a href="main/collection.html">Collections</a>
+                                <a href="collection.html">Collections</a>
                                 </li>
-                                <li class="dropdown-item"><a href="main/404page.html">Account</a></li>
+                                <li class="dropdown-item"><a href="404page.html">Account</a></li>
                             </ul>
                         </div>
                     </li>
@@ -82,7 +82,7 @@
                             <ul>
                                 <li class="dropdown-item sign-in-link">Sign in</li>
                                 <li class="dropdown-item log-in-link">Log in</li>
-                                <li class="dropdown-item"><a href="main/404page.html">Help and Support</a></li>
+                                <li class="dropdown-item"><a href="404page.html">Help and Support</a></li>
                             </ul>
                         </div>
                     </li>
@@ -91,130 +91,22 @@
             
             <!-- Sub Navigation -->
                 <div class="sub-nav-bar">
-                    <a href="#browse">Browse</a>
-                    <a href="#top-picks">Top picks</a>
-                    <a href="#petals">Petals</a>
+                    <a href="favorite.html">Favorites</a>
+                    <a href="collection.html">Collections</a>
                 </div>
         </header>
 
-        <!-- CATEGORIES SECTION -->
-        <section class="categories" id="browse">
-            <div class="group-2">
-                <div class="header-1">Browse Unlimited Flowers</div>
-                <div class="sub-header-1">Browse Flowers by Category</div>
-            </div>
-            
-            <div class="category-grid">
-                <div class="category-item">
-                    <img src="assets/images/annual flower.jpg" alt="Annual Flowers" />
-                    <p class="category-text">Annual</p>
-                </div>
-                
-                <div class="category-item">
-                    <img src="assets/images/biennial flower.jpg" alt="Biennial Flowers" />
-                    <p class="category-text">Biennial</p>
-                </div>
-                <div class="category-item">
-                    <img src="assets/images/perennial flower.jpg" alt="Perennial Flowers" />
-                    <p class="category-text">Perennial</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TOP PICKS SECTION -->
-        <section class="top-picks" id="top-picks">
-            <h2 class="title">Top Picks</h2>
+        <!-- FAVORITES SECTION -->
+        <section class="favorite" id="top-picks">
+            <h2 class="title">Favorites</h2>
             
             <div class="frame">
-                <div class="top-pick">
-                    <img class="images" src="assets/images/pinkrose-sr8.jpg" alt="Pink Rose" />
-                    <div class="description">
-                        <div class="product-name-2">Pink Rose</div>
-                        <p class="sort-description">Pink roses symbolize grace, admiration, and joy.</p>
-                    </div>
-                </div>
                 
-                <div class="top-pick">
-                    <img class="images" src="assets/images/whiterose-sr5.jpg" alt="White Rose" />
-                    <div class="description">
-                        <div class="product-name-3">White Rose</div>
-                        <p class="sort-description">White roses symbolize purity, innocence, and new beginnings.</p>
-                    </div>
-                </div>
-                
-                <div class="top-pick">
-                    <img class="images" src="assets/images/whitehibiscus_sr7.jpg" alt="White Hibiscus" />
-                    <div class="description">
-                        <div class="product-name-4">White Hibiscus</div>
-                        <p class="sort-description">White hibiscus symbolizes purity, enlightenment, and feminine energy</p>
-                    </div>
-                </div>
-                
-                <div class="top-pick">
-                    <img class="images" src="assets/images/oxeyedaisy-sr9.jpg" alt="Oxeye Daisy" />
-                    <div class="description">
-                        <div class="product-name-5">Oxeye Daisy</div>
-                        <p class="sort-description">It symbolizes innocence, patience, and simplicity.</p>
-                    </div>
-                </div>
             </div>
             
             <div class="frame-2">
-                <div class="top-pick">
-                    <img class="images" src="assets/images/stargazer-sr12.jpg" alt="Stargazer Lily" />
-                    <div class="description">
-                        <div class="product-name-6">Stargazer Lily</div>
-                        <p class="sort-description">Stargazer Lily symbolizes ambition, prosperity, and passion.</p>
-                    </div>
-                </div>
                 
-                <div class="top-pick">
-                    <img class="images" src="assets/images/sunflower-sr10.jpg" alt="Sunflower" />
-                    <div class="description">
-                        <div class="product-name-7">Sunflower</div>
-                        <p class="sort-description">Sunflower symbolizes loyalty, warmth, and adoration.</p>
-                    </div>
-                </div>
-                
-                <div class="top-pick">
-                    <img class="images" src="assets/images/redrose-sr11.jpg" alt="Red Rose" />
-                    <div class="description">
-                        <div class="product-name-8">Red Rose</div>
-                        <p class="sort-description">Red Rose symbolizes love, romance, and deep passion.</p>
-                    </div>
-                </div>
-                
-                <div class="top-pick">
-                    <img class="images" src="assets/images/peony-sr13.jpg" alt="Peony" />
-                    <div class="description">
-                        <div class="product-name-9">Peony</div>
-                        <p class="sort-description">Peony symbolizes romance, prosperity, and honor.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <button class="show-more">
-                <span class="text-wrapper-11">Show more</span>
-            </button>
-        </section>
-
-        <!-- PETALS CAROUSEL SECTION -->
-        <section class="share" id="petals">
-            <div class="title-2">
-                <div class="title-3">Diverse flowers for everyone</div>
-                <div class="title-4">#Petals</div>
-            </div>
-            <div class="images-2">
-                <img src="assets/images/rflower-1.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower2.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-3.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-4.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-5.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-6.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-7.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-8.jpg" alt="Flower collection" />
-                <img src="assets/images/rflower-9.jpg" alt="Flower collection" />
-            </div>
+            </div>   
         </section>
 
         <!-- SIGN UP MODAL -->
@@ -283,21 +175,7 @@
                     <p id="expandedFlowerDescription"></p>
                     
                     <div class="expanded-flower-actions">
-                        <button class="action-btn" id="addToCollectionBtn" title="Add to collections">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                        </button>
-                        
-                        <button class="action-btn" id="addToFavoritesBtn" title="Add to favorites">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
-                        </button>
-                        
+
                         <button class="action-btn" id="downloadImageBtn" title="Download image">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -404,9 +282,8 @@
     <!-- JAVASCRIPT -->
     <script src="js/main.js"></script>
     <script src="js/modal.js"></script>
-    <script src="js/selected.js"></script>   
-    <script src="js/data.js"></script>    
-    <script src="js/search.js"></script>
-    
+    <script src="js/data.js"></script>       
+    <script src="js/selected.js"></script>                
+    <script src="js/display-favorite.js"></script> 
 </body>
 </html>
