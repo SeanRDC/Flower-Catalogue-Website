@@ -3,24 +3,24 @@
 // All available flowers database
 const allFlowers = [
     // Top Picks (Browse page)
-    { name: 'Pink Rose', image: '../assets/images/pinkrose-sr8.jpg', description: 'Pink roses symbolize grace, admiration, and joy.', page: 'browse' },
-    { name: 'White Rose', image: '../assets/images/whiterose-sr5.jpg', description: 'White roses symbolize purity, innocence, and new beginnings.', page: 'browse' },
-    { name: 'White Hibiscus', image: '../assets/images/whitehibiscus_sr7.jpg', description: 'White hibiscus symbolizes purity, enlightenment, and feminine energy', page: 'browse' },
-    { name: 'Oxeye Daisy', image: '../assets/images/oxeyedaisy-sr9.jpg', description: 'It symbolizes innocence, patience, and simplicity.', page: 'browse' },
-    { name: 'Stargazer Lily', image: '../assets/images/stargazer-sr12.jpg', description: 'Stargazer Lily symbolizes ambition, prosperity, and passion.', page: 'browse' },
-    { name: 'Sunflower', image: '../assets/images/sunflower-sr10.jpg', description: 'Sunflower symbolizes loyalty, warmth, and adoration.', page: 'browse' },
-    { name: 'Red Rose', image: '../assets/images/redrose-sr11.jpg', description: 'Red Rose symbolizes love, romance, and deep passion.', page: 'browse' },
-    { name: 'Peony', image: '../assets/images/peony-sr13.jpg', description: 'Peony symbolizes romance, prosperity, and honor.', page: 'browse' },
+    { name: 'Pink Rose', image: 'assets/images/pinkrose-sr8.jpg', description: 'Pink roses symbolize grace, admiration, and joy.', page: 'browse' },
+    { name: 'White Rose', image: 'assets/images/whiterose-sr5.jpg', description: 'White roses symbolize purity, innocence, and new beginnings.', page: 'browse' },
+    { name: 'White Hibiscus', image: 'assets/images/whitehibiscus_sr7.jpg', description: 'White hibiscus symbolizes purity, enlightenment, and feminine energy', page: 'browse' },
+    { name: 'Oxeye Daisy', image: 'assets/images/oxeyedaisy-sr9.jpg', description: 'It symbolizes innocence, patience, and simplicity.', page: 'browse' },
+    { name: 'Stargazer Lily', image: 'assets/images/stargazer-sr12.jpg', description: 'Stargazer Lily symbolizes ambition, prosperity, and passion.', page: 'browse' },
+    { name: 'Sunflower', image: 'assets/images/sunflower-sr10.jpg', description: 'Sunflower symbolizes loyalty, warmth, and adoration.', page: 'browse' },
+    { name: 'Red Rose', image: 'assets/images/redrose-sr11.jpg', description: 'Red Rose symbolizes love, romance, and deep passion.', page: 'browse' },
+    { name: 'Peony', image: 'assets/images/peony-sr13.jpg', description: 'Peony symbolizes romance, prosperity, and honor.', page: 'browse' },
     
     // Additional flowers (Show More)
-    { name: 'Tulip', image: '../assets/images/tulip-sr17.jpg', description: 'Tulips symbolize perfect love and spring renewal.', page: 'browse' },
-    { name: 'Orchid', image: '../assets/images/orchid-sr18.jpg', description: 'Orchids represent luxury, beauty, and strength.', page: 'browse' },
-    { name: 'Lavender', image: '../assets/images/lavender-sr19.jpg', description: 'Lavender symbolizes serenity, grace, and calmness.', page: 'browse' },
-    { name: 'Dahlia', image: '../assets/images/dhalia-sr20.jpg', description: 'Dahlias represent elegance, dignity, and commitment.', page: 'browse' },
-    { name: 'Marigold', image: '../assets/images/marigold-sr21.jpg', description: 'Marigolds symbolize passion, creativity, and joy.', page: 'browse' },
-    { name: 'Carnation', image: '../assets/images/carnation-sr23.jpg', description: 'Carnations represent love, fascination, and distinction.', page: 'browse' },
-    { name: 'Iris', image: '../assets/images/iris-sr24.jpg', description: 'Iris flowers symbolize wisdom, hope, and valor.', page: 'browse' },
-    { name: 'Jasmine', image: '../assets/images/jasmine-sr22.jpg', description: 'Jasmine represents love, beauty, and sensuality.', page: 'browse' }
+    { name: 'Tulip', image: 'assets/images/tulip-sr17.jpg', description: 'Tulips symbolize perfect love and spring renewal.', page: 'browse' },
+    { name: 'Orchid', image: 'assets/images/orchid-sr18.jpg', description: 'Orchids represent luxury, beauty, and strength.', page: 'browse' },
+    { name: 'Lavender', image: 'assets/images/lavender-sr19.jpg', description: 'Lavender symbolizes serenity, grace, and calmness.', page: 'browse' },
+    { name: 'Dahlia', image: 'assets/images/dhalia-sr20.jpg', description: 'Dahlias represent elegance, dignity, and commitment.', page: 'browse' },
+    { name: 'Marigold', image: 'assets/images/marigold-sr21.jpg', description: 'Marigolds symbolize passion, creativity, and joy.', page: 'browse' },
+    { name: 'Carnation', image: 'assets/images/carnation-sr23.jpg', description: 'Carnations represent love, fascination, and distinction.', page: 'browse' },
+    { name: 'Iris', image: 'assets/images/iris-sr24.jpg', description: 'Iris flowers symbolize wisdom, hope, and valor.', page: 'browse' },
+    { name: 'Jasmine', image: 'assets/images/jasmine-sr22.jpg', description: 'Jasmine represents love, beauty, and sensuality.', page: 'browse' }
 ];
 
 // Initialize search functionality
