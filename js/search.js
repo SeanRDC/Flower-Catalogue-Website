@@ -1,13 +1,5 @@
 // ===== FLOWER SEARCH FUNCTIONALITY =====
 
-
-const getImagePath = (imagePath) => {
-    
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const repoName = isGitHubPages ? '/Flower-Catalogue-Website' : ''; 
-    return `${repoName}/${imagePath}`;
-};
-
 // All available flowers database
 const allFlowers = [
     // Top Picks (Browse page)
