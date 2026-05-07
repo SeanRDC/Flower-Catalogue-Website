@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Browse from './pages/Browse';
 import Footer from './components/Footer';
-import './styles/global.css';
+import './styles/global.css'; // Your base styles
 
 function App() {
   return (
