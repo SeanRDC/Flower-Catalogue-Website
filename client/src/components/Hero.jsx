@@ -1,18 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
-import '../styles/Hero.css';
+import '../styles/Hero.css'; 
+
+import heroImage from '../assets/heroimage.jpg';
 
 const Hero = () => {
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate('/browse'); 
-  };
-
   return (
-    <section className="hero-section">
-      <div className="hero-left">
+    <main className="hero-section">
+      <a><img 
+        className="hero-background" 
+        src={heroImage} 
+        alt="Beautiful featured flower" 
+      /></a>
+      <div className='hero-overlay'></div>
+      <div className="hero-content">
         <div className="main-text">
           <h1>Find the Flower<br />That Speaks To<br />Your Heart</h1>
           <p>
@@ -31,15 +33,7 @@ const Hero = () => {
           <button className="log-in-button">Sign in</button>
         </div>
       </div>
-      
-      <div className="hero-right">
-        <img 
-          className="hero-image-main" 
-          src="https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=1200&q=80" 
-          alt="Beautiful pink flowers" 
-        />
-      </div>
-    </section>
+    </main>
   );
 };
 
