@@ -1,9 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Browse from './pages/Browse';
-import Footer from './components/Footer';
-import './styles/global.css'; // Your base styles
+
+import './styles/global.css'; 
 
 function App() {
   return (
@@ -12,9 +11,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Hero />} />
-          <Route path="/browse" element={<Browse />} />
+          <Route path="/browse" element={<div>Browse Page Coming Soon!</div>} />
         </Routes>
-        <Footer />
       </div>
     </Router>
   );
