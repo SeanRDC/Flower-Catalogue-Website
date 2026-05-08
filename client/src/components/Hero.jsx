@@ -1,19 +1,20 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Hero.css'; 
-
 import heroImage from '../assets/heroimage.jpg';
 
 const Hero = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = "Home | Peony";
+  }, []);
+
   return (
-    <main className="hero-section">
-      <a><img 
-        className="hero-background" 
-        src={heroImage} 
-        alt="Beautiful featured flower" 
-      /></a>
-      <div className='hero-overlay'></div>
+    <section className="hero-section">
+      <img className="hero-background" src={heroImage} alt="Beautiful featured flower" />
+      <div className="hero-overlay"></div>
+
       <div className="hero-content">
         <div className="main-text">
           <h1>Find the Flower<br />That Speaks To<br />Your Heart</h1>
@@ -24,16 +25,13 @@ const Hero = () => {
           </p>
         </div>
         <div className="main-buttons">
-          <button 
-            onClick={() => navigate('/browse')} 
-            className="browse-now-button"
-          >
+          <button onClick={() => navigate('/browse')} className="browse-now-button">
             Browse Now
           </button>
           <button className="log-in-button">Sign in</button>
         </div>
       </div>
-    </main>
+    </section>
   );
 };
 
