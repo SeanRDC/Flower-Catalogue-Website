@@ -14,6 +14,8 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
 
+// --- ROUTES ---
+
 app.get('/api/flowers', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -26,6 +28,16 @@ app.get('/api/flowers', async (req, res) => {
     res.json({ flowers, totalPages: Math.ceil(total / limit), currentPage: page });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/flowers', async (req, res) => {
+  try {
+    const flowers = await Flower.find({}); 
+    res.json(flowers);
+  } catch (error) {
+    console.error("Error fetching flowers:", error);
+    res.status(500).json({ message: "Server Error" });
   }
 });
 

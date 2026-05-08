@@ -76,7 +76,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <div className="footer-bottom-left">@Sean Rhani Dela Cruz</div>
+        <div className="footer-bottom-left">Developed by Sean Rhani Dela Cruz</div>
         <div className="terms-conditions">
           <div>Terms</div>
           <div>Privacy</div>
