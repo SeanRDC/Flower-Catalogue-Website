@@ -1,19 +1,40 @@
-/* ========================================= */
-/* BASE NAVBAR LAYOUT                        */
-/* ========================================= */
-
 .header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  padding: 30px 10%;
+  padding: 30px 8%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: transparent;
-  z-index: 100;
-  transition: background 0.3s ease;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.peony-logo-nav {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .search-bar {
@@ -23,18 +44,24 @@
   backdrop-filter: blur(10px);
   border-radius: 5px;
   padding: 10px 20px;
-  width: 400px;
+  flex: 1;
   height: 45px;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .search-bar input {
   border: none;
   background: transparent;
   outline: none;
-  font-size: 14px;
+  font-size: 15px;
   width: 100%;
-  color: #666;
+  color: #2c2c2c;
+  font-family: 'Montserrat', Helvetica, sans-serif;
+}
+
+.search-bar input::placeholder {
+  color: rgba(44, 44, 44, 0.5);
 }
 
 .search-button {
@@ -43,19 +70,23 @@
   cursor: pointer;
   padding: 0;
   margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-bar {
   display: flex;
-  gap: 50px;
+  gap: 40px;
   align-items: center;
 }
 
 .nav-list {
   display: flex;
-  gap: 50px;
+  gap: 40px;
   list-style: none;
   align-items: center;
+  margin: 0;
 }
 
 .nav-item {
@@ -67,19 +98,30 @@
   font-weight: 500;
   color: #5a6c3a;
   font-size: 16px;
+  font-family: 'Montserrat', Helvetica, sans-serif;
+  transition: color 0.3s ease;
+}
+
+.nav-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .home-link {
   text-decoration: none;
-  color: #5a6c3a;
+  color: inherit;
   font-weight: 600;
+  display: block;
+  width: 100%;
 }
 
 .chevron-icon {
   transition: transform 0.3s ease;
 }
 
-.chevron-icon.rotate {
+.dropdown-trigger.active .chevron-icon {
   transform: rotate(180deg);
 }
 
@@ -113,18 +155,25 @@
 }
 
 .dropdown-item {
-  padding: 12px 24px;
   color: #333;
   font-size: 15px;
-  cursor: pointer;
   transition: background-color 0.2s ease;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.dropdown-item a {
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item a,
+.dropdown-item div {
   text-decoration: none;
   color: inherit;
   display: block;
+  padding: 12px 24px;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .dropdown-item:hover {
@@ -141,35 +190,82 @@
   z-index: 101;
 }
 
-/* ========================================= */
-/* RESPONSIVE DESIGN                         */
-/* ========================================= */
-
-@media (max-width: 1024px) {
-  .header {
-    padding: 30px 6%;
-  }
+.header.browse-mode {
+  padding: 30px 60px;
 }
 
-@media (max-width: 768px) {
-  .header {
-    padding: 20px 6%;
-    gap: 15px;
+.header.browse-mode.scrolled .nav-item {
+  color: #5a6c3a;
+}
+
+.header.browse-mode.scrolled .search-bar {
+  border: 1px solid #e0e0e0;
+}
+
+.header.browse-mode .peony-logo-nav {
+  width: 70px;
+  height: 70px;
+}
+
+.header.browse-mode .search-bar {
+  position: relative;
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: 100%;
+  height: 50px;
+  background-color: #f2f2f2;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.03);
+  backdrop-filter: none;
+  margin: 0 40px;
+}
+
+.header.browse-mode .nav-item {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   TABLET RESPONSIVENESS
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .header, .header.browse-mode {
+    padding: 30px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
   }
 
-  .header.mobile-active {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-  }
-
-  .search-bar {
-    width: 100%;
+  .header-left {
     flex: 1;
-    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .header.browse-mode .peony-logo-nav {
+    display: block;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .search-bar, .header.browse-mode .search-bar {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    left: 0;
+    transform: none;
+    margin: 0;
   }
 
   .mobile-menu-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .nav-bar {
@@ -182,26 +278,39 @@
     padding: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .nav-bar.mobile-open {
-    max-height: 500px;
-    padding: 0 6% 20px 6%;
+    max-height: 800px;
+    padding: 20px 5% 30px 5%;
   }
 
   .nav-list {
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     align-items: flex-start;
     width: 100%;
   }
 
-  .nav-item {
+  .nav-item, 
+  .header.browse-mode .nav-item {
+    color: #5a6c3a; 
     width: 100%;
     justify-content: space-between;
     flex-wrap: wrap;
+    font-size: 18px;
+  }
+
+  .full-width-click {
+    width: 100%;
+  }
+
+  .home-link, .nav-item-content {
+    padding: 15px 0;
   }
 
   .dropdown-menu {
@@ -209,7 +318,7 @@
     box-shadow: none;
     width: 100%;
     margin-top: 0;
-    border-left: 2px solid #5a6c3a;
+    border-left: 3px solid #5a6c3a;
     border-radius: 0;
     background: transparent;
     max-height: 0;
@@ -220,9 +329,66 @@
   }
 
   .dropdown-menu.active {
-    max-height: 250px;
-    margin-top: 15px;
+    max-height: 300px;
+    margin-top: 10px;
     opacity: 1;
     visibility: visible;
+  }
+
+  .mobile-sub-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #9fa881;
+    border-radius: 8px;
+    margin-top: 20px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .mobile-sub-nav a {
+    display: block;
+    width: 100%;
+    color: white;
+    padding: 16px 20px;
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  .mobile-sub-nav a:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header, .header.browse-mode {
+    padding: 20px 5%;
+    gap: 15px;
+  }
+
+  .header.mobile-active {
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .header-left {
+    gap: 15px;
+  }
+
+  .header.browse-mode .peony-logo-nav {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mobile-menu-btn {
+    background: white;
+    border-radius: 5px;
+    height: 45px;
+    width: 48px;
+    padding: 0;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
   }
 }

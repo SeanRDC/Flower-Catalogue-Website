@@ -1,4 +1,7 @@
-/* RESET EVERYTHING */
+html {
+  scroll-behavior: smooth !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +11,6 @@
 html, body {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -17,9 +19,11 @@ html, body {
   max-width: 100% !important; 
   margin: 0;
   padding: 0;
+  overflow-x: clip;
 }
 
 .app-container {
   width: 100%;
   min-height: 100vh;
+  overflow-x: clip;
 }
