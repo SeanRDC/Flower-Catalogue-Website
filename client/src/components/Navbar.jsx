@@ -4,7 +4,7 @@ import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import peonyLogo from '../assets/peony-logo.jpg';
 import '../styles/Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ onSearchClick }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,9 +42,13 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleSearch = (e) => {
+  const handleSearchClick = (e) => {
     e.preventDefault();
-    navigate('/browse');
+    if (isBrowsePage) {
+      onSearchClick();
+    } else {
+      navigate('/browse');
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -84,8 +88,12 @@ const Navbar = () => {
           <img className="peony-logo-nav" src={peonyLogo} alt="Peony logo" />
         </Link>
         
-        <form className="search-bar" onSubmit={handleSearch}>
-          <input type="text" placeholder="Find a Flower..." />
+        <form className="search-bar" onClick={handleSearchClick} onSubmit={(e) => e.preventDefault()}>
+          <input 
+            type="text" 
+            placeholder="Find a Flower..." 
+            readOnly
+          />
           <button type="submit" className="search-button">
             <Search size={18} color="#666" />
           </button>

@@ -19,9 +19,20 @@ app.get('/api/flowers', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
+    const search = req.query.search || '';
+    let query = {};
+    if (search) {
+      query = {
+        $or: [
+          { commonName: { $regex: search, $options: 'i' } },
+          { scientificName: { $regex: search, $options: 'i' } },
+          { family: { $regex: search, $options: 'i' } }
+        ]
+      };
+    }
 
-    const flowers = await Flower.find().skip(skip).limit(limit);
-    const total = await Flower.countDocuments();
+    const flowers = await Flower.find(query).skip(skip).limit(limit);
+    const total = await Flower.countDocuments(query);
 
     res.json({ flowers, totalPages: Math.ceil(total / limit), currentPage: page });
   } catch (error) {
