@@ -51,7 +51,6 @@ const MOCK_FLOWERS = [
   }
 ];
 
-
 const Browse = () => {
   const [allFlowers, setAllFlowers] = useState([]);
   const [showAll, setShowAll] = useState(false);
@@ -64,15 +63,30 @@ const Browse = () => {
   const subNavRef = useRef(null); 
   
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const urlSearchQuery = searchParams.get('search') || '';
-  
-  const [currentSearchQuery, setCurrentSearchQuery] = useState(urlSearchQuery);
+  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
 
   useEffect(() => {
-    setCurrentSearchQuery(urlSearchQuery);
-  }, [urlSearchQuery]);
+    const searchParams = new URLSearchParams(location.search);
+    setCurrentSearchQuery(searchParams.get('search') || '');
+  }, [location.search]);
 
+  
+  useEffect(() => {
+    document.title = 'Browse | Peony';
+
+    if (currentSearchQuery) {
+      const query = currentSearchQuery.toLowerCase();
+      const filteredResults = MOCK_FLOWERS.filter((flower) => 
+        flower.commonName.toLowerCase().includes(query) || 
+        flower.family.toLowerCase().includes(query)
+      );
+      setAllFlowers(filteredResults);
+    } else {
+      setAllFlowers(MOCK_FLOWERS);
+    }
+  }, [currentSearchQuery]);
+  
+/*
   useEffect(() => {
     document.title = 'Browse | Peony';
 
@@ -92,7 +106,7 @@ const Browse = () => {
       .catch((err) => console.error(err));
       
   }, [currentSearchQuery]);
-
+*/
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (subNavRef.current && !subNavRef.current.contains(event.target)) {
