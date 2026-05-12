@@ -15,7 +15,7 @@ const Favorites = () => {
   }, []);
 
   return (
-    <div className="desktop-home-page asset-page">
+    <div className="desktop-home-page asset-page asset-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
