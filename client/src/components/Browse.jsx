@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from './Navbar'; 
-import SearchOverlay from './SearchOverlay'; 
 import '../styles/Browse.css';
 
 const Browse = () => {
@@ -11,18 +10,22 @@ const Browse = () => {
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
-  const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false); // NEW: Overlay State
 
   const browseRef = useRef(null);
   const topPicksRef = useRef(null);
   const petalsRef = useRef(null);
   const subNavRef = useRef(null); 
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  const initialSearchQuery = searchParams.get('search') || '';
   
-  const [currentSearchQuery, setCurrentSearchQuery] = useState(initialSearchQuery);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const urlSearchQuery = searchParams.get('search') || '';
+  
+  const [currentSearchQuery, setCurrentSearchQuery] = useState(urlSearchQuery);
+
+ 
+  useEffect(() => {
+    setCurrentSearchQuery(urlSearchQuery);
+  }, [urlSearchQuery]);
 
   useEffect(() => {
     document.title = 'Browse | Peony';
@@ -73,18 +76,6 @@ const Browse = () => {
     }, 50);
   };
 
-  const handlePerformSearch = (newQuery) => {
-    if (newQuery.trim()) {
-      setCurrentSearchQuery(newQuery.trim());
-      navigate(`/browse?search=${encodeURIComponent(newQuery.trim())}`, { replace: true }); 
-      setIsSearchOverlayOpen(false);
-    }
-  };
-
-  const handleOpenSearchOverlay = () => {
-    setIsSearchOverlayOpen(true);
-  };
-
   const uniqueFamilies = Array.from(new Set(allFlowers.map(f => f.family))).filter(Boolean).slice(0, 3);
   const dynamicCategories = uniqueFamilies.map(family => {
     const representativeFlower = allFlowers.find(f => f.family === family);
@@ -102,14 +93,7 @@ const Browse = () => {
   return (
     <>
 
-      <Navbar onSearchClick={handleOpenSearchOverlay} />
-      {isSearchOverlayOpen && (
-        <SearchOverlay 
-          onClose={() => setIsSearchOverlayOpen(false)}
-          onSearch={handlePerformSearch}
-          currentQuery={currentSearchQuery}
-        />
-      )}
+      <Navbar />
 
       <div className="desktop-home-page">
         <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
