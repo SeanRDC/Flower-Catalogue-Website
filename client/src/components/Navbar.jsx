@@ -1,9 +1,48 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
-import axios from 'axios';
 import peonyLogo from '../assets/peony-logo.jpg';
 import '../styles/Navbar.css';
+
+/* MOCK DATA FOR NAVBAR DROPDOWN TESTING */
+const MOCK_FLOWERS = [
+  {
+    _id: "1",
+    commonName: "Pink Peony",
+    family: "Paeoniaceae",
+    imageUrl: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    _id: "2",
+    commonName: "Red Rose",
+    family: "Rosaceae",
+    imageUrl: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    _id: "3",
+    commonName: "Yellow Sunflower",
+    family: "Asteraceae",
+    imageUrl: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    _id: "4",
+    commonName: "White Tulip",
+    family: "Liliaceae",
+    imageUrl: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    _id: "5",
+    commonName: "Blue Hydrangea",
+    family: "Hydrangeaceae",
+    imageUrl: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    _id: "6",
+    commonName: "Purple Orchid",
+    family: "Orchidaceae",
+    imageUrl: "https://images.unsplash.com/photo-1528659914406-81622381f9b3?auto=format&fit=crop&w=800&q=80"
+  }
+];
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -21,16 +60,19 @@ const Navbar = () => {
 
   const isBrowsePage = location.pathname === '/browse';
 
+  // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
-      const fetchRecommendations = async () => {
-        try {
-          const res = await axios.get(`http://localhost:5000/api/flowers?search=${searchQuery}&limit=5`);
-          setRecommendations(res.data.flowers || []);
-        } catch (err) {
-          console.error(err);
-        }
+      const fetchRecommendations = () => {
+        const query = searchQuery.toLowerCase();
+        const filtered = MOCK_FLOWERS.filter(flower => 
+          flower.commonName.toLowerCase().includes(query) || 
+          flower.family.toLowerCase().includes(query)
+        ).slice(0, 5);
+        
+        setRecommendations(filtered);
       };
+
       const timeoutId = setTimeout(fetchRecommendations, 300);
       return () => clearTimeout(timeoutId);
     } else {
