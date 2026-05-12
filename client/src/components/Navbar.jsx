@@ -59,7 +59,7 @@ const Navbar = () => {
   const searchContainerRef = useRef(null);
 
   const isBrowsePage = location.pathname === '/browse';
-
+  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey';
   // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
@@ -155,44 +155,51 @@ const Navbar = () => {
           <img className="peony-logo-nav" src={peonyLogo} alt="Peony logo" />
         </Link>
         
-        <div className="search-container" ref={searchContainerRef}>
-          <form className="search-bar" onSubmit={handleSearchSubmit}>
-            <input 
-              type="text" 
-              placeholder="Find a Flower..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-            />
-            <button type="submit" className="search-button">
-              <Search size={18} color="#666" />
-            </button>
-          </form>
+        {!(location.pathname === '/feedback' || location.pathname === '/survey') && (
+          <div className="search-container" ref={searchContainerRef}>
+            <form className="search-bar" onSubmit={handleSearchSubmit}>
+              <input 
+                type="text" 
+                placeholder="Find a Flower..." 
+                value={searchQuery}
+                autoComplete="off"
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setIsSearchFocused(true);
+                }}
+                onFocus={() => setIsSearchFocused(true)}
+                onClick={() => setIsSearchFocused(true)}
+              />
+              <button type="submit" className="search-button">
+                <Search size={18} color="#666" />
+              </button>
+            </form>
 
-          {isSearchFocused && searchQuery.trim().length > 0 && (
-            <div className="search-recommendations">
-              {recommendations.length > 0 ? (
-                recommendations.map((flower) => (
-                  <div 
-                    key={flower._id} 
-                    className="recommendation-item" 
-                    onClick={() => handleRecommendationClick(flower.commonName)}
-                  >
-                    <img src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
-                    <div className="rec-details">
-                      <span className="rec-name">{flower.commonName}</span>
-                      <span className="rec-family">{flower.family || 'Flower'}</span>
+            {isSearchFocused && searchQuery.trim().length > 0 && (
+              <div className="search-recommendations">
+                {recommendations.length > 0 ? (
+                  recommendations.map((flower) => (
+                    <div 
+                      key={flower._id} 
+                      className="recommendation-item" 
+                      onClick={() => handleRecommendationClick(flower.commonName)}
+                    >
+                      <img src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+                      <div className="rec-details">
+                        <span className="rec-name">{flower.commonName}</span>
+                        <span className="rec-family">{flower.family || 'Flower'}</span>
+                      </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="recommendation-no-results">No flowers found</div>
-              )}
-            </div>
-          )}
-        </div>
+                  ))
+                ) : (
+                  <div className="recommendation-no-results">No flowers found</div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-
+      
       <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
         {isMobileMenuOpen ? <X size={28} color="#666" /> : <Menu size={28} color="#666" />}
       </button>
