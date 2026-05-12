@@ -283,6 +283,10 @@
   height: 70px;
 }
 
+.header.browse-mode .search-container {
+  margin: 0 40px;
+}
+
 .header.browse-mode .search-bar {
   position: relative;
   left: 0;
@@ -346,6 +350,10 @@
    ========================================================================== */
 
 @media (max-width: 1024px) {
+  .search-container, .header.browse-mode .search-container {
+    margin: 0;
+  }
+  
   .header, .header.browse-mode {
     padding: 30px 5%;
     display: flex;
