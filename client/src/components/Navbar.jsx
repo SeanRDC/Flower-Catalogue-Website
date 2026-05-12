@@ -61,6 +61,7 @@ const Navbar = () => {
   const isBrowsePage = location.pathname === '/browse';
   const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || 
   location.pathname === '/support';
+  const isAssetPage = location.pathname === '/favorites' || location.pathname === '/collections';
 
   // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
   useEffect(() => {
@@ -177,7 +178,7 @@ const Navbar = () => {
               </button>
             </form>
 
-            {isSearchFocused && searchQuery.trim().length > 0 && (
+            {isSearchFocused && searchQuery.trim().length > 0 && !isAssetPage && (
               <div className="search-recommendations">
                 {recommendations.length > 0 ? (
                   recommendations.map((flower) => (

@@ -6,6 +6,8 @@ import Feedback from './components/Feedback';
 import Survey from './components/Survey';
 import Footer from './components/Footer';
 import Support from './components/Support';
+import Favorites from './components/Favorites';
+import Collections from './components/Collections';
 import './styles/global.css'; 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/survey" element={<Survey />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/collections" element={<Collections />} />
         </Routes>
         <Footer />
       </div>
