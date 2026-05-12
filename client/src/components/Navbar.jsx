@@ -61,7 +61,7 @@ const Navbar = () => {
   const isBrowsePage = location.pathname === '/browse';
   const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || 
   location.pathname === '/support';
-  
+
   // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
@@ -157,7 +157,7 @@ const Navbar = () => {
           <img className="peony-logo-nav" src={peonyLogo} alt="Peony logo" />
         </Link>
         
-        {!(location.pathname === '/feedback' || location.pathname === '/survey') && (
+        {!(location.pathname === '/feedback' || location.pathname === '/survey' || location.pathname === '/support') && (
           <div className="search-container" ref={searchContainerRef}>
             <form className="search-bar" onSubmit={handleSearchSubmit}>
               <input 
