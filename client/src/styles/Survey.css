@@ -1,0 +1,160 @@
+.survey-container {
+  max-width: 700px;
+  margin: 240px auto 80px;
+  padding: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.survey-intro {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.survey-intro h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.survey-intro p {
+  color: #666;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.survey-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.survey-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.survey-title h2 {
+  color: #5a6c3a;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.scale-info {
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.question {
+  margin-bottom: 30px;
+}
+
+.question-text {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.rating-btn:hover {
+  border-color: #5a6c3a;
+  background: #f9faf7;
+  color: #5a6c3a;
+}
+
+.rating-btn.selected {
+  background: #5a6c3a;
+  border-color: #5a6c3a;
+  color: white;
+}
+
+.textarea-section {
+  margin-top: 35px;
+}
+
+.textarea-section label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.textarea-section textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.3s ease;
+}
+
+.textarea-section textarea:focus {
+  outline: none;
+  border-color: #5a6c3a;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 60px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-clear {
+  background-color: transparent;
+  border: 2px solid #ccc;
+  color: #666;
+}
+
+.btn-submit {
+  background-color: white;
+  border: 2px solid #333;
+  color: #333;
+}
+
+.btn-clear:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+.btn-submit:hover {
+  background-color: #333;
+  color: white;
+}

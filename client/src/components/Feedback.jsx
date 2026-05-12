@@ -18,7 +18,7 @@ const Feedback = () => {
   };
 
   return (
-    <div className="desktop-home-page">
+    <div className="desktop-home-page short-header-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
           <img 

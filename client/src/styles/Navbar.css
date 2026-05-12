@@ -1,3 +1,14 @@
+
+/* SPECIFIC ADJUSTMENT FOR FEEDBACK & SURVEY PAGES */
+   
+.short-header-page .subpage-hero-header {
+  height: 140px;
+}
+
+.short-header-page .vector {
+  height: 150px;
+}
+
 .header {
   position: fixed;
   top: 0;
