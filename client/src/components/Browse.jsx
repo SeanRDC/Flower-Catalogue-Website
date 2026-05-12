@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Navbar from './Navbar'; 
 import '../styles/Browse.css';
 
-// MOCK CODE
+
 const MOCK_FLOWERS = [
   {
     _id: "1",
@@ -72,23 +72,6 @@ const Browse = () => {
   useEffect(() => {
     setCurrentSearchQuery(urlSearchQuery);
   }, [urlSearchQuery]);
-
-  // MOCK CODE
-  useEffect(() => {
-    document.title = 'Browse | Peony';
-
-    if (currentSearchQuery) {
-      const query = currentSearchQuery.toLowerCase();
-      const filteredResults = MOCK_FLOWERS.filter((flower) => 
-        flower.commonName.toLowerCase().includes(query) || 
-        flower.family.toLowerCase().includes(query)
-      );
-      setAllFlowers(filteredResults);
-    } else {
-      setAllFlowers(MOCK_FLOWERS);
-    }
-  }, [currentSearchQuery]);
-  
 
   useEffect(() => {
     document.title = 'Browse | Peony';
@@ -215,12 +198,30 @@ const Browse = () => {
             <div className="header-1">
               {currentSearchQuery ? `Search Results for "${currentSearchQuery}"` : "Browse Unlimited Flowers"}
             </div>
-            <div className="sub-header-1">Browse Flowers by Category</div>
+            <div className="sub-header-1">
+              {currentSearchQuery ? `Showing matching flowers` : "Browse Flowers by Category"}
+            </div>
           </div>
           
           {allFlowers.length === 0 ? (
             <div style={{textAlign: "center", padding: "50px 0"}}>
-               <h2>No flowers found! Try searching for "Rose" or "Tulip".</h2>
+               <h2>No flowers found! Try searching for something else.</h2>
+            </div>
+          ) : currentSearchQuery ? (
+            <div className="frame">
+              {allFlowers.map((flower) => (
+                <div key={flower._id} className="top-pick">
+                  <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+                  <div className="description">
+                    <div className="product-name-item">{flower.commonName}</div>
+                    <p className="sort-description">
+                      {flower.description?.length > 80 
+                        ? `${flower.description.substring(0, 80)}...` 
+                        : flower.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="category-grid">
