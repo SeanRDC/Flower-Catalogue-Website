@@ -5,6 +5,7 @@ import Browse from './components/Browse';
 import Feedback from './components/Feedback';
 import Survey from './components/Survey';
 import Footer from './components/Footer';
+import Support from './components/Support';
 import './styles/global.css'; 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/browse" element={<Browse />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/survey" element={<Survey />} />
+          <Route path="/support" element={<Support />} />
         </Routes>
         <Footer />
       </div>

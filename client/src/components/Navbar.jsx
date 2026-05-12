@@ -59,7 +59,9 @@ const Navbar = () => {
   const searchContainerRef = useRef(null);
 
   const isBrowsePage = location.pathname === '/browse';
-  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey';
+  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || 
+  location.pathname === '/support';
+  
   // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
@@ -199,7 +201,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      
+
       <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
         {isMobileMenuOpen ? <X size={28} color="#666" /> : <Menu size={28} color="#666" />}
       </button>
