@@ -1,0 +1,44 @@
+.asset-page .subpage-hero-header {
+  height: 250px;
+  background-color: #9fa881; /* Matches your blueprint's sub-nav color */
+  position: relative;
+}
+
+.asset-sub-nav {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  z-index: 10;
+}
+
+.asset-sub-nav a {
+  font-family: 'Montserrat', sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.asset-sub-nav a.active {
+  color: #ffffff;
+  font-weight: 700;
+  border-bottom: 2px solid white;
+  padding-bottom: 5px;
+}
+
+.favorite-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.empty-msg {
+  text-align: center;
+  grid-column: 1 / -1;
+  color: #888;
+  padding: 50px;
+}
