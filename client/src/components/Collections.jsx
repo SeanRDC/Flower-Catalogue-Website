@@ -15,6 +15,8 @@ const Collections = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Comment
+
   return (
     <div className="desktop-home-page asset-page">
       <div className="subpage-hero-header">
