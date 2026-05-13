@@ -51,7 +51,9 @@ const Footer = () => {
           <h3>Quick Access</h3>
           <ul>
             {currentUser ? (
-              <li className="footer-link" onClick={logout}>Log out</li>
+              <li className="footer-link" onClick={() => openModal('logout')}>
+                Log out ({currentUser.email})
+              </li>
             ) : (
               <>
                 <li className="footer-link" onClick={() => openModal('signup')}>Sign in</li>

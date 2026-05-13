@@ -4,13 +4,54 @@ import { Link } from 'react-router-dom';
 import '../styles/modal.css'; 
 
 const AuthModal = () => {
-  const { isModalOpen, closeModal, modalMode, setModalMode, signup, login, signInWithGoogle } = useAuth();
+  const { isModalOpen, closeModal, modalMode, setModalMode, signup, login, signInWithGoogle, logout, currentUser } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [agreed, setAgreed] = useState(false);
 
   if (!isModalOpen) return null;
+
+  if (modalMode === 'logout') {
+    return (
+      <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="close-btn" onClick={closeModal} aria-label="Close modal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          <h2 className="modal-title">Sign Out</h2>
+          <p className="modal-subtitle" style={{ marginBottom: '25px' }}>
+            Are you sure you want to log out of <br/>
+            <strong>{currentUser?.email}</strong>?
+          </p>
+
+          <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
+            <button 
+              className="modal-continue-btn" 
+              style={{ background: '#f5f5f5', color: '#333', border: '1px solid #ddd' }}
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+            <button 
+              className="modal-continue-btn" 
+              style={{ background: '#d32f2f' }}
+              onClick={() => {
+                logout();
+                closeModal();
+              }}
+            >
+              Yes, Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const isSignUp = modalMode === 'signup';
 
