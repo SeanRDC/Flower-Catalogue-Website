@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios'; // Restored!
+import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, X } from 'lucide-react';
 import '../styles/Browse.css';
+import { useAuth } from '../context/AuthContext';
 
 const MOCK_FLOWERS = [
   {
@@ -50,6 +51,7 @@ const MOCK_FLOWERS = [
 ];
 
 const Browse = () => {
+  const { currentUser, openModal } = useAuth();
   const [allFlowers, setAllFlowers] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
@@ -86,8 +88,7 @@ const Browse = () => {
     }
   }, [currentSearchQuery]);
 
-  /* RESTORED AXIOS BLOCK FOR YOUR BACKEND */
-  /* useEffect(() => {
+  useEffect(() => {
     document.title = 'Browse | Peony';
 
     const endpoint = currentSearchQuery 
@@ -106,7 +107,7 @@ const Browse = () => {
       .catch((err) => console.error(err));
       
   }, [currentSearchQuery]);
-  */
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {

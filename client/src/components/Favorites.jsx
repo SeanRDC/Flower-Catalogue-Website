@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { Maximize2, Trash2, X } from 'lucide-react';
 import '../styles/Browse.css';
 import '../styles/Favorites.css';
 
-const MOCK_FAVORITES = [
-  { _id: "f1", commonName: "Purple Orchid", description: "Exotic and graceful statement bloom.", imageUrl: "https://images.unsplash.com/photo-1528659914406-81622381f9b3?auto=format&fit=crop&w=800&q=80" }
-];
-
 const Favorites = () => {
-  const [items, setItems] = useState(MOCK_FAVORITES);
+  const { currentUser, openModal } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  const [expandedId, setExpandedId] = useState(null);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
+
   const location = useLocation();
   const [currentSearchQuery, setCurrentSearchQuery] = useState('');
 
@@ -37,13 +42,38 @@ const Favorites = () => {
     }
   }, [currentUser]);
 
+  const handleRemoveItem = async (e, flowerId) => {
+    e.stopPropagation();
+    try {
+      await axios.post('http://localhost:5000/api/favorites/remove', {
+        email: currentUser.email,
+        flowerId: flowerId
+      });
+      setItems(items.filter(item => item._id !== flowerId));
+      setExpandedId(null); 
+    } catch (err) {
+      console.error("Failed to remove favorite", err);
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!window.confirm("Are you sure you want to remove all your favorite flowers?")) return;
+    
+    try {
+      await axios.post('http://localhost:5000/api/favorites/clear', { email: currentUser.email });
+      setItems([]);
+    } catch (err) {
+      console.error("Failed to clear favorites", err);
+    }
+  };
+
   const filteredItems = items.filter(item => 
     item.commonName.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
-    item.description.toLowerCase().includes(currentSearchQuery.toLowerCase())
+    item.description?.toLowerCase().includes(currentSearchQuery.toLowerCase())
   );
 
   return (
-    <div className="desktop-home-page">
+    <div className="desktop-home-page asset-page">
       <div className="browse-hero-header">
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
@@ -56,35 +86,83 @@ const Favorites = () => {
           </svg>
         </div>
         
-        <div className="sub-nav-bar">
+        <div className="sub-nav-bar desktop-only">
           <Link to="/favorites" className={location.pathname === '/favorites' ? 'active' : ''}>Favorites</Link>
           <Link to="/collections" className={location.pathname === '/collections' ? 'active' : ''}>Collections</Link>
         </div>
       </div>
 
       <section className="favorite-section">
-        <h2 className="title">
-          {currentSearchQuery ? `Search Results in Favorites for "${currentSearchQuery}"` : "My Favorites"}
-        </h2>
-        
-        <div className="frame">
-          {filteredItems.length > 0 ? (
-            filteredItems.map((item) => (
-              <div key={item._id} className="top-pick">
-                <img className="images" src={item.imageUrl} alt={item.commonName} />
-                <div className="description">
-                  <div className="product-name-item">{item.commonName}</div>
-                  <p className="sort-description">{item.description}</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="empty-msg">
-              {currentSearchQuery ? "No matching favorites found." : "You haven't added any favorites yet."}
-            </p>
+        <div className="section-header">
+          <h2 className="title">
+            {currentSearchQuery ? `Search Results in Favorites for "${currentSearchQuery}"` : "My Favorites"}
+          </h2>
+          {items.length > 0 && !currentSearchQuery && (
+            <button className="clear-all-btn" onClick={handleClearAll}>
+              Clear Favorites
+            </button>
           )}
         </div>
+        
+        {!currentUser ? (
+          <div className="empty-msg">
+            <p>Please log in to view your saved favorites.</p>
+            <button onClick={() => openModal('login')} style={{padding: '10px 30px', background: '#5a6c3a', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px'}}>
+              Log In
+            </button>
+          </div>
+        ) : loading ? (
+          <p className="empty-msg">Loading your garden...</p>
+        ) : (
+          <div className="frame">
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => {
+                const isExpanded = expandedId === item._id;
+                return (
+                  <div key={item._id} className={`top-pick ${isExpanded ? 'expanded' : ''}`} onClick={() => setExpandedId(isExpanded ? null : item._id)}>
+                    <div className="image-wrapper">
+                      <img className="images" src={item.imageUrl} alt={item.commonName} />
+                      {isExpanded && (
+                        <button className="expand-fullscreen-btn" onClick={(e) => { e.stopPropagation(); setFullscreenImage(item.imageUrl); }} title="View Fullscreen">
+                          <Maximize2 size={18} color="#666" />
+                        </button>
+                      )}
+                    </div>
+                    <div className="card-content-wrapper">
+                      {isExpanded && (
+                        <div className="action-bar">
+                          <button className="action-icon-btn delete-btn" title="Remove from favorites" onClick={(e) => handleRemoveItem(e, item._id)}>
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      )}
+                      <div className="description">
+                        <div className="product-name-item">{item.commonName}</div>
+                        <p className="sort-description">
+                          {isExpanded ? item.description : (item.description?.length > 80 ? `${item.description.substring(0, 80)}...` : item.description)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="empty-msg">
+                {currentSearchQuery ? "No matching favorites found." : "You haven't added any favorites yet."}
+              </p>
+            )}
+          </div>
+        )}
       </section>
+
+      {fullscreenImage && (
+        <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
+          <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
+            <X size={32} color="white" />
+          </button>
+          <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
     </div>
   );
 };

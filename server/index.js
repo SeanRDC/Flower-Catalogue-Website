@@ -103,5 +103,67 @@ app.get('/api/user/:email', async (req, res) => {
   }
 });
 
+app.post('/api/favorites/remove', async (req, res) => {
+  const { email, flowerId } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $pull: { favorites: flowerId } },
+      { new: true }
+    );
+    res.json({ message: 'Removed from favorites', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/favorites/clear', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { favorites: [] } },
+      { new: true }
+    );
+    res.json({ message: 'Cleared all favorites', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/collections/remove', async (req, res) => {
+  const { email, flowerId } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const collectionIndex = user.collections.findIndex(c => c.name === "My Collection");
+      if (collectionIndex > -1) {
+        user.collections[collectionIndex].flowers = user.collections[collectionIndex].flowers.filter(id => id.toString() !== flowerId);
+        await user.save();
+      }
+    }
+    res.json({ message: 'Removed from collections', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/collections/clear', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const collectionIndex = user.collections.findIndex(c => c.name === "My Collection");
+      if (collectionIndex > -1) {
+        user.collections[collectionIndex].flowers = []; // Wipes the folder clean
+        await user.save();
+      }
+    }
+    res.json({ message: 'Cleared all collections', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
