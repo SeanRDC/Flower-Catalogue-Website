@@ -167,6 +167,8 @@
   max-width: 1240px;
   margin: 0 auto 80px;
   padding: 0 20px;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
+  cursor: pointer;
 }
 
 .title {
@@ -204,6 +206,7 @@
   width: 100%;
   height: 200px;
   object-fit: cover;
+  transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s ease;
 }
 
 .description {
@@ -419,5 +422,197 @@
   
   .images-2 img {
     width: 200px;
+  }
+}
+
+/* ==========================================================================
+   SMOOTH EXPANDING GRID ANIMATIONS
+   ========================================================================== */
+
+/* The card container */
+.top-pick {
+  position: relative;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  /* This cubic-bezier creates the buttery smooth sweeping motion */
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.top-pick:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Base Image */
+.images {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ================== EXPANDED STATE ================== */
+
+/* The card spans 2 columns and 2 rows smoothly */
+.top-pick.expanded {
+  grid-column: span 2;
+  grid-row: span 2;
+  cursor: default;
+  transform: none; /* Stops the hover jump while expanded */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Image grows from 200px to 450px */
+.top-pick.expanded .images {
+  height: 450px; 
+}
+
+/* Smooth font scaling */
+.product-name-item {
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-weight: 600;
+  color: #2c2c2c;
+  font-size: 18px;
+  margin-bottom: 8px;
+  transition: font-size 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.top-pick.expanded .product-name-item {
+  font-size: 26px; /* Title swells beautifully */
+}
+
+/* ================== ENTRY ANIMATIONS ================== */
+
+@keyframes fadeSlideDown {
+  0% { opacity: 0; transform: translateY(-15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeScaleIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* The Action Bar (Collections, Favorites, Download) fades in cleanly */
+.card-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.action-bar {
+  display: flex;
+  gap: 15px;
+  padding: 20px 20px 0 20px;
+  align-items: center;
+  animation: fadeSlideDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.action-icon-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon-btn:hover {
+  color: #5a6c3a;
+  transform: translateY(-3px);
+}
+
+.top-pick.expanded .description {
+  padding-top: 15px;
+}
+
+/* The Fullscreen Expand Button fades in over the image */
+.expand-fullscreen-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  animation: fadeScaleIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.expand-fullscreen-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+/* ==========================================================================
+   FULLSCREEN MODAL VIEWER
+   ========================================================================== */
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  cursor: zoom-out;
+  animation: fadeScaleIn 0.3s ease;
+}
+
+.fullscreen-image-view {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  cursor: default;
+}
+
+.close-fullscreen-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  transition: transform 0.3s ease;
+}
+
+.close-fullscreen-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Grid Adjustments */
+@media (max-width: 768px) {
+  .top-pick.expanded {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .top-pick.expanded .images {
+    height: 350px; 
   }
 }

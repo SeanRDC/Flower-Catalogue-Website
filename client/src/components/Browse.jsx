@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import axios from 'axios'; // Restored!
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, X } from 'lucide-react';
 import '../styles/Browse.css';
 
 const MOCK_FLOWERS = [
@@ -54,6 +54,9 @@ const Browse = () => {
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
+  
+  const [expandedId, setExpandedId] = useState(null);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
 
   const browseRef = useRef(null);
   const topPicksRef = useRef(null);
@@ -83,6 +86,7 @@ const Browse = () => {
     }
   }, [currentSearchQuery]);
 
+  /* RESTORED AXIOS BLOCK FOR YOUR BACKEND */
   /* useEffect(() => {
     document.title = 'Browse | Peony';
 
@@ -114,15 +118,12 @@ const Browse = () => {
     if (isMobileSubNavExpanded) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobileSubNavExpanded]);
 
   const scrollTo = (ref, tab) => {
     setActiveTab(tab);
     setIsMobileSubNavExpanded(false);
-    
     setTimeout(() => {
       const yOffset = -120; 
       const element = ref.current;
@@ -131,6 +132,101 @@ const Browse = () => {
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     }, 50);
+  };
+
+  const handleDownload = (e, url, name) => {
+    e.stopPropagation();
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `${name.replace(/\s+/g, '_')}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch(err => console.error('Error downloading image:', err));
+  };
+
+  const handleSaveToAssets = async (e, flowerId, type) => {
+    e.stopPropagation(); 
+    
+    if (!currentUser) {
+      openModal('login');
+      return;
+    }
+
+    try {
+      const endpoint = type === 'favorite' ? '/api/favorites' : '/api/collections';
+      
+      await axios.post(`http://localhost:5000${endpoint}`, {
+        email: currentUser.email, 
+        flowerId: flowerId        
+      });
+      
+      alert(`Successfully added to your ${type}s!`);
+    } catch (err) {
+      console.error(`Failed to save ${type}:`, err);
+      alert('Something went wrong saving your flower.');
+    }
+  };
+
+  const renderFlowerCard = (flower) => {
+    const isExpanded = expandedId === flower._id;
+
+    return (
+      <div 
+        key={flower._id} 
+        className={`top-pick ${isExpanded ? 'expanded' : ''}`}
+        onClick={() => setExpandedId(isExpanded ? null : flower._id)}
+      >
+        <div className="image-wrapper">
+          <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+          {isExpanded && (
+            <button 
+              className="expand-fullscreen-btn" 
+              onClick={(e) => {
+                e.stopPropagation();
+                setFullscreenImage(flower.imageUrl);
+              }}
+              title="View Fullscreen"
+            >
+              <Maximize2 size={18} color="#666" />
+            </button>
+          )}
+        </div>
+
+        <div className="card-content-wrapper">
+          {isExpanded && (
+            <div className="action-bar">
+              <button className="action-icon-btn" title="Add to collections" 
+                onClick={(e) => handleSaveToAssets(e, flower._id, 'collection')}>
+                <ImageIcon size={20} />
+              </button>
+
+              <button className="action-icon-btn" title="Add to favorites" 
+                onClick={(e) => handleSaveToAssets(e, flower._id, 'favorite')}>
+                <Star size={20} />
+              </button>
+              <button className="action-icon-btn" title="Download image" onClick={(e) => handleDownload(e, flower.imageUrl, flower.commonName)}>
+                <Download size={20} />
+              </button>
+            </div>
+          )}
+
+          <div className="description">
+            <div className="product-name-item">{flower.commonName}</div>
+            <p className="sort-description">
+              {isExpanded 
+                ? flower.description 
+                : (flower.description?.length > 80 ? `${flower.description.substring(0, 80)}...` : flower.description)}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const uniqueFamilies = Array.from(new Set(allFlowers.map(f => f.family))).filter(Boolean).slice(0, 3);
@@ -154,11 +250,7 @@ const Browse = () => {
       <div className="desktop-home-page">
         <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
           <div className="vector-container">
-            <img 
-              className="vector" 
-              src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" 
-              alt="Header background" 
-            />
+            <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
             <svg className="wave-svg-clip">
               <defs>
                 <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
@@ -174,10 +266,7 @@ const Browse = () => {
             <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
           </div>
 
-          <div 
-            ref={subNavRef} 
-            className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}
-          >
+          <div ref={subNavRef} className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
             {isMobileSubNavExpanded ? (
               <div className="mobile-nav-links">
                 <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
@@ -185,7 +274,6 @@ const Browse = () => {
                 <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top pick</a>
                 <div className="nav-divider"></div>
                 <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
-                
                 <div className="collapse-icon" onClick={() => setIsMobileSubNavExpanded(false)}>
                   <ChevronUp size={24} color="white" />
                 </div>
@@ -217,19 +305,7 @@ const Browse = () => {
             </div>
           ) : currentSearchQuery ? (
             <div className="frame">
-              {allFlowers.map((flower) => (
-                <div key={flower._id} className="top-pick">
-                  <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
-                  <div className="description">
-                    <div className="product-name-item">{flower.commonName}</div>
-                    <p className="sort-description">
-                      {flower.description?.length > 80 
-                        ? `${flower.description.substring(0, 80)}...` 
-                        : flower.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+              {allFlowers.map(renderFlowerCard)}
             </div>
           ) : (
             <div className="category-grid">
@@ -249,19 +325,7 @@ const Browse = () => {
               <h2 className="title">Top Picks</h2>
               
               <div className="frame">
-                {visiblePicks.map((flower) => (
-                  <div key={flower._id} className="top-pick">
-                    <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
-                    <div className="description">
-                      <div className="product-name-item">{flower.commonName}</div>
-                      <p className="sort-description">
-                        {flower.description?.length > 80 
-                          ? `${flower.description.substring(0, 80)}...` 
-                          : flower.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                {visiblePicks.map(renderFlowerCard)}
               </div>
               
               <button className="show-more" onClick={() => setShowAll((prev) => !prev)}>
@@ -281,6 +345,16 @@ const Browse = () => {
               </div>
             </section>
           </>
+        )}
+
+        {/* FULLSCREEN IMAGE MODAL */}
+        {fullscreenImage && (
+          <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
+            <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
+              <X size={32} color="white" />
+            </button>
+            <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
+          </div>
         )}
       </div>
   );

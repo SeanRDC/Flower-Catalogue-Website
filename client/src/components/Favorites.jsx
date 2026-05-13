@@ -20,7 +20,22 @@ const Favorites = () => {
   useEffect(() => {
     document.title = 'Favorites | Peony';
     window.scrollTo(0, 0);
-  }, []);
+
+    if (currentUser) {
+      axios.get(`http://localhost:5000/api/user/${currentUser.email}`)
+        .then(res => {
+          setItems(res.data.favorites || []);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setLoading(false);
+        });
+    } else {
+      setItems([]);
+      setLoading(false);
+    }
+  }, [currentUser]);
 
   const filteredItems = items.filter(item => 
     item.commonName.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
