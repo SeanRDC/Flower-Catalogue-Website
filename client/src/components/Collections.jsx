@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import '../styles/Browse.css';
 import '../styles/Favorites.css';
 
 const MOCK_COLLECTIONS = [
@@ -9,15 +10,27 @@ const MOCK_COLLECTIONS = [
 
 const Collections = () => {
   const [items, setItems] = useState(MOCK_COLLECTIONS);
+  const location = useLocation();
+  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setCurrentSearchQuery(searchParams.get('search') || '');
+  }, [location.search]);
 
   useEffect(() => {
     document.title = 'Collections | Peony';
     window.scrollTo(0, 0);
   }, []);
 
+  const filteredItems = items.filter(item => 
+    item.commonName.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
+    item.description.toLowerCase().includes(currentSearchQuery.toLowerCase())
+  );
+
   return (
-    <div className="desktop-home-page asset-page">
-      <div className="subpage-hero-header">
+    <div className="desktop-home-page">
+      <div className="browse-hero-header">
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
           <svg className="wave-svg-clip">
@@ -29,24 +42,32 @@ const Collections = () => {
           </svg>
         </div>
         
-        <div className="asset-sub-nav">
-          <Link to="/favorites">Favorites</Link>
-          <Link to="/collections" className="active">Collections</Link>
+        <div className="sub-nav-bar">
+          <Link to="/favorites" className={location.pathname === '/favorites' ? 'active' : ''}>Favorites</Link>
+          <Link to="/collections" className={location.pathname === '/collections' ? 'active' : ''}>Collections</Link>
         </div>
       </div>
 
       <section className="favorite-section">
-        <h2 className="title">My Collections</h2>
+        <h2 className="title">
+          {currentSearchQuery ? `Search Results in Collections for "${currentSearchQuery}"` : "My Collections"}
+        </h2>
         <div className="frame">
-          {items.map((item) => (
-            <div key={item._id} className="top-pick">
-              <img className="images" src={item.imageUrl} alt={item.commonName} />
-              <div className="description">
-                <div className="product-name-item">{item.commonName}</div>
-                <p className="sort-description">{item.description}</p>
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
+              <div key={item._id} className="top-pick">
+                <img className="images" src={item.imageUrl} alt={item.commonName} />
+                <div className="description">
+                  <div className="product-name-item">{item.commonName}</div>
+                  <p className="sort-description">{item.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="empty-msg">
+              {currentSearchQuery ? "No matching collections found." : "You haven't created any collections yet."}
+            </p>
+          )}
         </div>
       </section>
     </div>
