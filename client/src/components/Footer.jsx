@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
 import peonyLogo from '../assets/peony-logo.jpg';
+import { useAuth } from '../context/AuthContext';
 
 const Footer = () => {
+
+  const { currentUser, logout, openModal } = useAuth();
+
   return (
     <footer className="footer-main">
       <div className="footer-content">
@@ -46,8 +50,16 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Quick Access</h3>
           <ul>
-            <li className="footer-link">Sign in</li>
-            <li className="footer-link">Log in</li>
+            {currentUser ? (
+              <li className="footer-link" onClick={logout}>Log out</li>
+            ) : (
+              <>
+                <li className="footer-link" onClick={() => openModal('signup')}>Sign in</li>
+                <li className="footer-link" onClick={() => openModal('login')}>Log in</li>
+              </>
+            )}
+            <li><Link className="footer-link no-underline" to="/support">Privacy Policy</Link></li>
+            <li><Link className="footer-link no-underline" to="/support">Terms of Service</Link></li>
           </ul>
         </div>
 

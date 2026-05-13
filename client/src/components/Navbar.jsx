@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import peonyLogo from '../assets/peony-logo.jpg';
 import '../styles/Navbar.css';
+import { useAuth } from '../context/AuthContext';
 
 /* MOCK DATA FOR NAVBAR DROPDOWN TESTING */
 const MOCK_FLOWERS = [
@@ -153,6 +154,8 @@ const Navbar = () => {
     }
   };
 
+  const { currentUser, logout, openModal } = useAuth();
+
   return (
     <header 
       ref={headerRef} 
@@ -230,7 +233,6 @@ const Navbar = () => {
               <ul>
                 <li className="dropdown-item"><Link to="/favorites" onClick={() => setIsMobileMenuOpen(false)}>Favorites</Link></li>
                 <li className="dropdown-item"><Link to="/collections" onClick={() => setIsMobileMenuOpen(false)}>Collections</Link></li>
-                <li className="dropdown-item"><Link to="/account" onClick={() => setIsMobileMenuOpen(false)}>Account</Link></li>
               </ul>
             </div>
           </li>
@@ -241,8 +243,20 @@ const Navbar = () => {
             </div>
             <div className={`dropdown-menu ${activeDropdown === 'profile' ? 'active' : ''}`}>
               <ul>
-                <li className="dropdown-item"><div onClick={() => setIsMobileMenuOpen(false)}>Sign in</div></li>
-                <li className="dropdown-item"><div onClick={() => setIsMobileMenuOpen(false)}>Log in</div></li>
+                {currentUser ? (
+                  <li className="dropdown-item">
+                    <div onClick={() => { logout(); setIsMobileMenuOpen(false); }}>Log out</div>
+                  </li>
+                ) : (
+                  <>
+                    <li className="dropdown-item">
+                      <div onClick={() => { openModal('signup'); setIsMobileMenuOpen(false); }}>Sign in</div>
+                    </li>
+                    <li className="dropdown-item">
+                      <div onClick={() => { openModal('login'); setIsMobileMenuOpen(false); }}>Log in</div>
+                    </li>
+                  </>
+                )}
                 <li className="dropdown-item"><Link to="/support" onClick={() => setIsMobileMenuOpen(false)}>Help and Support</Link></li>
               </ul>
             </div>

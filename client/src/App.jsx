@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext'; 
+import AuthModal from './components/AuthModal';       
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Browse from './components/Browse';
@@ -12,21 +14,24 @@ import './styles/global.css';
 
 function App() {
   return (
-    <Router>
-      <div className="app-container">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Hero />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/survey" element={<Survey />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/collections" element={<Collections />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="app-container">
+          <Navbar />
+          <AuthModal />
+          <Routes>
+            <Route path="/" element={<Hero />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/survey" element={<Survey />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/collections" element={<Collections />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
