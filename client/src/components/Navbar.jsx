@@ -58,9 +58,8 @@ const Navbar = () => {
   const headerRef = useRef(null);
   const searchContainerRef = useRef(null);
 
-  const isBrowsePage = location.pathname === '/browse';
-  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || 
-  location.pathname === '/support';
+  const isBrowseMode = location.pathname === '/browse' || location.pathname === '/favorites' || location.pathname === '/collections';
+  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || location.pathname === '/support';
   const isAssetPage = location.pathname === '/favorites' || location.pathname === '/collections';
 
   // MOCK DATA FILTERING LOGIC FOR RECOMMENDATIONS
@@ -107,11 +106,17 @@ const Navbar = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/browse?search=${encodeURIComponent(searchQuery.trim())}`);
+    const query = searchQuery.trim();
+    const encoded = encodeURIComponent(query);
+
+    if (location.pathname === '/favorites') {
+      navigate(query ? `/favorites?search=${encoded}` : '/favorites');
+    } else if (location.pathname === '/collections') {
+      navigate(query ? `/collections?search=${encoded}` : '/collections');
     } else {
-      navigate('/browse');
+      navigate(query ? `/browse?search=${encoded}` : '/browse');
     }
+    
     setIsSearchFocused(false);
     setIsMobileMenuOpen(false);
   };
@@ -151,7 +156,7 @@ const Navbar = () => {
   return (
     <header 
       ref={headerRef} 
-      className={`header ${isMobileMenuOpen ? 'mobile-active' : ''} ${isBrowsePage ? 'browse-mode' : ''} ${isScrolled ? 'scrolled' : ''}`}
+      className={`header ${isMobileMenuOpen ? 'mobile-active' : ''} ${isBrowseMode ? 'browse-mode' : ''} ${isScrolled ? 'scrolled' : ''}`}
     >
       <div className="header-left">
         <Link to="/" className="logo-link" onClick={() => setIsMobileMenuOpen(false)}>
