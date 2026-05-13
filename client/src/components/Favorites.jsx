@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import '../styles/Browse.css';
 import '../styles/Favorites.css';
 
 const MOCK_FAVORITES = [
@@ -8,15 +9,27 @@ const MOCK_FAVORITES = [
 
 const Favorites = () => {
   const [items, setItems] = useState(MOCK_FAVORITES);
+  const location = useLocation();
+  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setCurrentSearchQuery(searchParams.get('search') || '');
+  }, [location.search]);
 
   useEffect(() => {
     document.title = 'Favorites | Peony';
     window.scrollTo(0, 0);
   }, []);
 
+  const filteredItems = items.filter(item => 
+    item.commonName.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
+    item.description.toLowerCase().includes(currentSearchQuery.toLowerCase())
+  );
+
   return (
-    <div className="desktop-home-page asset-page asset-page">
-      <div className="subpage-hero-header">
+    <div className="desktop-home-page">
+      <div className="browse-hero-header">
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
           <svg className="wave-svg-clip">
@@ -28,17 +41,20 @@ const Favorites = () => {
           </svg>
         </div>
         
-        <div className="asset-sub-nav">
-          <Link to="/favorites" className="active">Favorites</Link>
-          <Link to="/collections">Collections</Link>
+        <div className="sub-nav-bar">
+          <Link to="/favorites" className={location.pathname === '/favorites' ? 'active' : ''}>Favorites</Link>
+          <Link to="/collections" className={location.pathname === '/collections' ? 'active' : ''}>Collections</Link>
         </div>
       </div>
 
       <section className="favorite-section">
-        <h2 className="title">My Favorites</h2>
+        <h2 className="title">
+          {currentSearchQuery ? `Search Results in Favorites for "${currentSearchQuery}"` : "My Favorites"}
+        </h2>
+        
         <div className="frame">
-          {items.length > 0 ? (
-            items.map((item) => (
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
               <div key={item._id} className="top-pick">
                 <img className="images" src={item.imageUrl} alt={item.commonName} />
                 <div className="description">
@@ -48,7 +64,9 @@ const Favorites = () => {
               </div>
             ))
           ) : (
-            <p className="empty-msg">You haven't added any favorites yet.</p>
+            <p className="empty-msg">
+              {currentSearchQuery ? "No matching favorites found." : "You haven't added any favorites yet."}
+            </p>
           )}
         </div>
       </section>
