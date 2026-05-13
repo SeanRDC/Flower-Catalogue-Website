@@ -168,7 +168,11 @@ const Navbar = () => {
             <form className="search-bar" onSubmit={handleSearchSubmit}>
               <input 
                 type="text" 
-                placeholder="Find a Flower..." 
+                placeholder={
+                  location.pathname === '/favorites' ? "Find a flower in favorites..." : 
+                  location.pathname === '/collections' ? "Find a flower in collections..." : 
+                  "Find a Flower..."
+                }
                 value={searchQuery}
                 autoComplete="off"
                 onChange={(e) => {
