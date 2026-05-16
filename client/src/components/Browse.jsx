@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, 
 import '../styles/Browse.css';
 import { useAuth } from '../context/AuthContext';
 
+/*
 const MOCK_FLOWERS = [
   {
     _id: "1",
@@ -49,6 +50,7 @@ const MOCK_FLOWERS = [
     imageUrl: "https://images.unsplash.com/photo-1528659914406-81622381f9b3?auto=format&fit=crop&w=800&q=80"
   }
 ];
+*/
 
 const Browse = () => {
   const { currentUser, openModal } = useAuth();
@@ -73,6 +75,7 @@ const Browse = () => {
     setCurrentSearchQuery(searchParams.get('search') || '');
   }, [location.search]);
 
+  /*
   useEffect(() => {
     document.title = 'Browse | Peony';
 
@@ -87,7 +90,7 @@ const Browse = () => {
       setAllFlowers(MOCK_FLOWERS);
     }
   }, [currentSearchQuery]);
-
+  */
   useEffect(() => {
     document.title = 'Browse | Peony';
 
