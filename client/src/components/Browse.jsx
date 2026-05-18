@@ -52,6 +52,30 @@ const MOCK_FLOWERS = [
 ];
 */
 
+const LIFECYCLE_CATEGORIES = {
+  Annual: {
+    id: "Annual",
+    name: "Annual",
+    title: "Annual Flowers",
+    description: "Annual flowers complete their entire lifecycle—from seed to bloom to dying—in a single growing season. They are perfect for adding quick, vibrant, and continuous bursts of color to your garden.",
+    imageUrl: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=800&q=80" // Sunflower
+  },
+  Biennial: {
+    id: "Biennial",
+    name: "Biennial",
+    title: "Biennial Flowers",
+    description: "Biennials take two years to complete their lifecycle. In the first year, they grow strong foliage, and in the second year, they bloom beautifully, produce seeds, and naturally fade.",
+    imageUrl: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80" // Hydrangea
+  },
+  Perennial: {
+    id: "Perennial",
+    name: "Perennial",
+    title: "Perennial Flowers",
+    description: "Perennials are the gifts that keep on giving. They live for more than two years, returning each spring from their established root systems to bloom beautifully season after season.",
+    imageUrl: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80" // Peony
+  }
+};
+
 const Browse = () => {
   const { currentUser, openModal } = useAuth();
   const [allFlowers, setAllFlowers] = useState([]);
