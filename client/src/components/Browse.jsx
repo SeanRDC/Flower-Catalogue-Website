@@ -5,53 +5,6 @@ import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, 
 import '../styles/Browse.css';
 import { useAuth } from '../context/AuthContext';
 
-/*
-const MOCK_FLOWERS = [
-  {
-    _id: "1",
-    commonName: "Pink Peony",
-    family: "Paeoniaceae",
-    description: "Lush, full-bodied, and incredibly fragrant. Peonies are a seasonal favorite representing romance and prosperity.",
-    imageUrl: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    _id: "2",
-    commonName: "Red Rose",
-    family: "Rosaceae",
-    description: "A classic symbol of love, known for its deep velvet petals and beautiful, timeless fragrance.",
-    imageUrl: "https://images.unsplash.com/photo-1562690868-60bbe7293e94?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    _id: "3",
-    commonName: "Yellow Sunflower",
-    family: "Asteraceae",
-    description: "Bright, cheerful, and iconic. Sunflowers turn their heads to follow the sun across the summer sky.",
-    imageUrl: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    _id: "4",
-    commonName: "White Tulip",
-    family: "Liliaceae",
-    description: "Elegant and simple, the white tulip represents purity, forgiveness, and the arrival of spring.",
-    imageUrl: "https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    _id: "5",
-    commonName: "Blue Hydrangea",
-    family: "Hydrangeaceae",
-    description: "Known for their massive, lush blooms. The striking blue color is actually determined by the soil's acidity.",
-    imageUrl: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    _id: "6",
-    commonName: "Purple Orchid",
-    family: "Orchidaceae",
-    description: "Exotic, graceful, and delicate. Orchids make a stunning, long-lasting statement in any room.",
-    imageUrl: "https://images.unsplash.com/photo-1528659914406-81622381f9b3?auto=format&fit=crop&w=800&q=80"
-  }
-];
-*/
-
 const LIFECYCLE_CATEGORIES = {
   Annual: {
     id: "Annual",
@@ -78,14 +31,17 @@ const LIFECYCLE_CATEGORIES = {
 
 const Browse = () => {
   const { currentUser, openModal } = useAuth();
+  
+  // State Management
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [allFlowers, setAllFlowers] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
-  
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
 
+  // Refs for smooth scrolling
   const browseRef = useRef(null);
   const topPicksRef = useRef(null);
   const petalsRef = useRef(null);
@@ -94,29 +50,20 @@ const Browse = () => {
   const location = useLocation();
   const [currentSearchQuery, setCurrentSearchQuery] = useState('');
 
+  // Derived State: Filter flowers based on selected lifecycle category
+  const displayedFlowers = selectedCategory 
+    ? allFlowers.filter(flower => flower.lifecycle === selectedCategory)
+    : allFlowers;
+
+  // Track search query from URL
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setCurrentSearchQuery(searchParams.get('search') || '');
   }, [location.search]);
 
-  /*
+  // Fetch Live Data from Render
   useEffect(() => {
-    document.title = 'Browse | Peony';
-
-    if (currentSearchQuery) {
-      const query = currentSearchQuery.toLowerCase();
-      const filteredResults = MOCK_FLOWERS.filter((flower) => 
-        flower.commonName.toLowerCase().includes(query) || 
-        flower.family.toLowerCase().includes(query)
-      );
-      setAllFlowers(filteredResults);
-    } else {
-      setAllFlowers(MOCK_FLOWERS);
-    }
-  }, [currentSearchQuery]);
-  */
-  useEffect(() => {
-    document.title = 'Browse | Peony';
+    document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
 
     const endpoint = currentSearchQuery 
       ? `https://flower-catalogue-website.onrender.com/api/flowers?search=${currentSearchQuery}&page=1&limit=30`
@@ -131,11 +78,11 @@ const Browse = () => {
           setAllFlowers([]);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error('Error fetching flowers:', err));
       
-  }, [currentSearchQuery]);
+  }, [currentSearchQuery, selectedCategory]);
 
-
+  // Handle clicking outside mobile subnav to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (subNavRef.current && !subNavRef.current.contains(event.target)) {
@@ -149,6 +96,7 @@ const Browse = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobileSubNavExpanded]);
 
+  // Navigation handlers
   const scrollTo = (ref, tab) => {
     setActiveTab(tab);
     setIsMobileSubNavExpanded(false);
@@ -162,6 +110,12 @@ const Browse = () => {
     }, 50);
   };
 
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+    scrollTo(browseRef, 'browse');
+  };
+
+  // Asset handlers
   const handleDownload = (e, url, name) => {
     e.stopPropagation();
     fetch(url)
@@ -201,6 +155,7 @@ const Browse = () => {
     }
   };
 
+  // Card UI Component
   const renderFlowerCard = (flower) => {
     const isExpanded = expandedId === flower._id;
 
@@ -238,6 +193,7 @@ const Browse = () => {
                 onClick={(e) => handleSaveToAssets(e, flower._id, 'favorite')}>
                 <Star size={20} />
               </button>
+              
               <button className="action-icon-btn" title="Download image" onClick={(e) => handleDownload(e, flower.imageUrl, flower.commonName)}>
                 <Download size={20} />
               </button>
@@ -257,16 +213,7 @@ const Browse = () => {
     );
   };
 
-  const uniqueFamilies = Array.from(new Set(allFlowers.map(f => f.family))).filter(Boolean).slice(0, 3);
-  const dynamicCategories = uniqueFamilies.map(family => {
-    const representativeFlower = allFlowers.find(f => f.family === family);
-    return {
-      id: family,
-      name: family ? family.replace('ceae', '') : '',
-      imageUrl: representativeFlower?.imageUrl
-    };
-  });
-
+  // Slicing data for secondary sections
   const topPicks = allFlowers.slice(0, 8);
   const visiblePicks = showAll ? allFlowers : topPicks;
   
@@ -275,116 +222,173 @@ const Browse = () => {
     : [...allFlowers, ...allFlowers, ...allFlowers].slice(0, 9);
 
   return (
-      <div className="desktop-home-page">
-        <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
-          <div className="vector-container">
-            <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
-            <svg className="wave-svg-clip">
-              <defs>
-                <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
-                  <path d="M 0,0 L 0,0.75 Q 0.125,0.85 0.25,0.75 Q 0.375,0.65 0.5,0.75 Q 0.625,0.85 0.75,0.75 Q 0.875,0.65 1,0.75 L 1,0 Z" />
-                </clipPath>
-              </defs>
-            </svg>
-          </div>
-          
-          <div className="sub-nav-bar desktop-only">
-            <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
-            <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top picks</a>
-            <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
-          </div>
-
-          <div ref={subNavRef} className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
-            {isMobileSubNavExpanded ? (
-              <div className="mobile-nav-links">
-                <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
-                <div className="nav-divider"></div>
-                <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top pick</a>
-                <div className="nav-divider"></div>
-                <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
-                <div className="collapse-icon" onClick={() => setIsMobileSubNavExpanded(false)}>
-                  <ChevronUp size={24} color="white" />
-                </div>
-              </div>
-            ) : (
-              <div className="mobile-nav-links collapsed-view" onClick={() => setIsMobileSubNavExpanded(true)}>
-                <span className="active-tab-text">
-                  {activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top pick' : 'Petals'}
-                </span>
-                <ChevronDown size={20} color="white" />
-              </div>
-            )}
-          </div>
+    <div className="desktop-home-page">
+      <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
+        <div className="vector-container">
+          <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
+          <svg className="wave-svg-clip">
+            <defs>
+              <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
+                <path d="M 0,0 L 0,0.75 Q 0.125,0.85 0.25,0.75 Q 0.375,0.65 0.5,0.75 Q 0.625,0.85 0.75,0.75 Q 0.875,0.65 1,0.75 L 1,0 Z" />
+              </clipPath>
+            </defs>
+          </svg>
         </div>
 
-        <section className="categories" id="browse" ref={browseRef}>
-          <div className="group-2">
-            <div className="header-1">
-              {currentSearchQuery ? `Search Results for "${currentSearchQuery}"` : "Browse Unlimited Flowers"}
-            </div>
-            <div className="sub-header-1">
-              {currentSearchQuery ? `Showing matching flowers` : "Browse Flowers by Category"}
-            </div>
-          </div>
-          
-          {allFlowers.length === 0 ? (
-            <div style={{textAlign: "center", padding: "50px 0"}}>
-               <h2>No flowers found! Try searching for something else.</h2>
-            </div>
-          ) : currentSearchQuery ? (
-            <div className="frame">
-              {allFlowers.map(renderFlowerCard)}
+        {/* DYNAMIC SUB-NAV BAR (Desktop) */}
+        <div className="sub-nav-bar desktop-only">
+          {!selectedCategory ? (
+            <>
+              <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
+              <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top picks</a>
+              <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
+            </>
+          ) : (
+            <>
+              <a onClick={() => handleCategorySelect(null)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>← All Categories</a>
+              <a onClick={() => handleCategorySelect('Annual')} className={selectedCategory === 'Annual' ? 'active' : ''}>Annual</a>
+              <a onClick={() => handleCategorySelect('Biennial')} className={selectedCategory === 'Biennial' ? 'active' : ''}>Biennial</a>
+              <a onClick={() => handleCategorySelect('Perennial')} className={selectedCategory === 'Perennial' ? 'active' : ''}>Perennial</a>
+            </>
+          )}
+        </div>
+
+        {/* DYNAMIC SUB-NAV BAR (Mobile) */}
+        <div ref={subNavRef} className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
+          {isMobileSubNavExpanded ? (
+            <div className="mobile-nav-links">
+              {!selectedCategory ? (
+                <>
+                  <a onClick={() => scrollTo(browseRef, 'browse')}>Browse</a>
+                  <div className="nav-divider"></div>
+                  <a onClick={() => scrollTo(topPicksRef, 'toppicks')}>Top pick</a>
+                  <div className="nav-divider"></div>
+                  <a onClick={() => scrollTo(petalsRef, 'petals')}>Petals</a>
+                </>
+              ) : (
+                <>
+                  <a onClick={() => handleCategorySelect(null)}>All Categories</a>
+                  <div className="nav-divider"></div>
+                  <a onClick={() => handleCategorySelect('Annual')}>Annual</a>
+                  <div className="nav-divider"></div>
+                  <a onClick={() => handleCategorySelect('Biennial')}>Biennial</a>
+                  <div className="nav-divider"></div>
+                  <a onClick={() => handleCategorySelect('Perennial')}>Perennial</a>
+                </>
+              )}
+              <div className="collapse-icon" onClick={() => setIsMobileSubNavExpanded(false)}>
+                <ChevronUp size={24} color="white" />
+              </div>
             </div>
           ) : (
-            <div className="category-grid">
-              {dynamicCategories.map((cat) => (
-                <div key={cat.id || Math.random()} className="category-item">
-                  <img src={cat.imageUrl} alt={cat.name} loading="lazy" />
-                  <p className="category-text">{cat.name}</p>
-                </div>
-              ))}
+            <div className="mobile-nav-links collapsed-view" onClick={() => setIsMobileSubNavExpanded(true)}>
+              <span className="active-tab-text">
+                {selectedCategory || (activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top pick' : 'Petals')}
+              </span>
+              <ChevronDown size={20} color="white" />
             </div>
           )}
-        </section>
+        </div>
+      </div>
 
-        {!currentSearchQuery && (
+      <section className="categories" id="browse" ref={browseRef}>
+        {/* CASE 1: Category Selected - Show Description + Filtered Grid */}
+        {selectedCategory ? (
+          <div className="category-detail-view">
+            <div className="group-2">
+              <div className="header-1">{LIFECYCLE_CATEGORIES[selectedCategory].title}</div>
+              <div className="sub-header-1" style={{ maxWidth: '750px', margin: '0 auto', lineHeight: '1.6' }}>
+                {LIFECYCLE_CATEGORIES[selectedCategory].description}
+              </div>
+            </div>
+            
+            <div className="frame" style={{ marginTop: '40px' }}>
+              {displayedFlowers.length > 0 ? (
+                displayedFlowers.map(renderFlowerCard)
+              ) : (
+                <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '50px' }}>
+                  <p>No {selectedCategory.toLowerCase()} flowers found in the database.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* CASE 2: No Category Selected - Show Standard Header + (Search Results OR Category Grid) */
           <>
-            <section className="top-picks" id="top-picks" ref={topPicksRef}>
-              <h2 className="title">Top Picks</h2>
-              
-              <div className="frame">
-                {visiblePicks.map(renderFlowerCard)}
+            <div className="group-2">
+              <div className="header-1">
+                {currentSearchQuery ? `Search Results for "${currentSearchQuery}"` : "Browse Unlimited Flowers"}
               </div>
-              
-              <button className="show-more" onClick={() => setShowAll((prev) => !prev)}>
-                <span className="text-wrapper-11">{showAll ? 'Show less' : 'Show more'}</span>
-              </button>
-            </section>
+              <div className="sub-header-1">
+                {currentSearchQuery ? `Showing matching flowers` : "Browse Flowers by Lifecycle"}
+              </div>
+            </div>
 
-            <section className="share" id="petals" ref={petalsRef}>
-              <div className="title-2">
-                <div className="title-3">Diverse flowers for everyone</div>
-                <div className="title-4">#Petals</div>
+            {allFlowers.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "50px 0" }}>
+                <h2>No flowers found! Try searching for something else.</h2>
               </div>
-              <div className="images-2">
-                {petalsImages.map((flower, index) => (
-                  <img key={`${flower._id}-${index}`} src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+            ) : currentSearchQuery ? (
+              <div className="frame">
+                {displayedFlowers.map(renderFlowerCard)}
+              </div>
+            ) : (
+              /* THE 3 LIFECYCLE CARDS */
+              <div className="category-grid">
+                {Object.values(LIFECYCLE_CATEGORIES).map((cat) => (
+                  <div 
+                    key={cat.id} 
+                    className="category-item" 
+                    onClick={() => handleCategorySelect(cat.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img src={cat.imageUrl} alt={cat.name} loading="lazy" />
+                    <p className="category-text">{cat.name}</p>
+                  </div>
                 ))}
               </div>
-            </section>
+            )}
           </>
         )}
+      </section>
 
-        {/* FULLSCREEN IMAGE MODAL */}
-        {fullscreenImage && (
-          <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
-            <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
-              <X size={32} color="white" />
+      {/* Only show Top Picks and Petals if NO category is selected and NO search is active */}
+      {!selectedCategory && !currentSearchQuery && (
+        <>
+          <section className="top-picks" id="top-picks" ref={topPicksRef}>
+            <h2 className="title">Top Picks</h2>
+            <div className="frame">
+              {visiblePicks.map(renderFlowerCard)}
+            </div>
+            <button className="show-more" onClick={() => setShowAll((prev) => !prev)}>
+              <span className="text-wrapper-11">{showAll ? 'Show less' : 'Show more'}</span>
             </button>
-            <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
-          </div>
-        )}
-      </div>
+          </section>
+
+          <section className="share" id="petals" ref={petalsRef}>
+            <div className="title-2">
+              <div className="title-3">Diverse flowers for everyone</div>
+              <div className="title-4">#Petals</div>
+            </div>
+            <div className="images-2">
+              {petalsImages.map((flower, index) => (
+                <img key={`${flower._id}-${index}`} src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* FULLSCREEN IMAGE MODAL */}
+      {fullscreenImage && (
+        <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
+          <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
+            <X size={32} color="white" />
+          </button>
+          <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
+    </div>
   );
 };
 
