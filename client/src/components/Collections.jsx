@@ -27,7 +27,7 @@ const Collections = () => {
     window.scrollTo(0, 0);
 
     if (currentUser) {
-      axios.get(`http://localhost:5000/api/user/${currentUser.email}`)
+      axios.get(`https://flower-catalogue-website.onrender.com/api/user/${currentUser.email}`)
         .then(res => {
           setItems(res.data.collections[0]?.flowers || []);
           setLoading(false);
@@ -45,7 +45,7 @@ const Collections = () => {
   const handleRemoveItem = async (e, flowerId) => {
     e.stopPropagation(); 
     try {
-      await axios.post('http://localhost:5000/api/collections/remove', {
+      await axios.post('https://flower-catalogue-website.onrender.com/api/collections/remove', {
         email: currentUser.email,
         flowerId: flowerId
       });
@@ -60,7 +60,7 @@ const Collections = () => {
     if (!window.confirm("Are you sure you want to empty your entire collection?")) return;
     
     try {
-      await axios.post('http://localhost:5000/api/collections/clear', { email: currentUser.email });
+      await axios.post('https://flower-catalogue-website.onrender.com/api/collections/clear', { email: currentUser.email });
       setItems([]); 
     } catch (err) {
       console.error("Failed to clear collections", err);

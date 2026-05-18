@@ -95,8 +95,8 @@ const Browse = () => {
     document.title = 'Browse | Peony';
 
     const endpoint = currentSearchQuery 
-      ? `http://localhost:5000/api/flowers?search=${currentSearchQuery}&page=1&limit=30`
-      : `http://localhost:5000/api/flowers?page=1&limit=30`;
+      ? `https://flower-catalogue-website.onrender.com/api/flowers?search=${currentSearchQuery}&page=1&limit=30`
+      : `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=30`;
 
     axios
       .get(endpoint)
@@ -165,7 +165,7 @@ const Browse = () => {
     try {
       const endpoint = type === 'favorite' ? '/api/favorites' : '/api/collections';
       
-      await axios.post(`http://localhost:5000${endpoint}`, {
+      await axios.post(`https://flower-catalogue-website.onrender.com${endpoint}`, {
         email: currentUser.email, 
         flowerId: flowerId        
       });

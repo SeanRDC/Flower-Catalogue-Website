@@ -7,7 +7,7 @@ const Browse = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/flowers?page=1&limit=50')
+    fetch('https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=50')
       .then(res => res.json())
       .then(data => {
         setFlowers(data.flowers);

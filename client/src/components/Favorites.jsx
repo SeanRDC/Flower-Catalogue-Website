@@ -27,7 +27,7 @@ const Favorites = () => {
     window.scrollTo(0, 0);
 
     if (currentUser) {
-      axios.get(`http://localhost:5000/api/user/${currentUser.email}`)
+      axios.get(`https://flower-catalogue-website.onrender.com/api/user/${currentUser.email}`)
         .then(res => {
           setItems(res.data.favorites || []);
           setLoading(false);
@@ -45,7 +45,7 @@ const Favorites = () => {
   const handleRemoveItem = async (e, flowerId) => {
     e.stopPropagation();
     try {
-      await axios.post('http://localhost:5000/api/favorites/remove', {
+      await axios.post('https://flower-catalogue-website.onrender.com/api/favorites/remove', {
         email: currentUser.email,
         flowerId: flowerId
       });
@@ -60,7 +60,7 @@ const Favorites = () => {
     if (!window.confirm("Are you sure you want to remove all your favorite flowers?")) return;
     
     try {
-      await axios.post('http://localhost:5000/api/favorites/clear', { email: currentUser.email });
+      await axios.post('https://flower-catalogue-website.onrender.com/api/favorites/clear', { email: currentUser.email });
       setItems([]);
     } catch (err) {
       console.error("Failed to clear favorites", err);
