@@ -31,10 +31,11 @@ const LIFECYCLE_CATEGORIES = {
 
 const Browse = () => {
   const { currentUser, openModal } = useAuth();
+  const navigate = useNavigate();
   
   // State Management
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [allFlowers, setAllFlowers] = useState([]);
+  const searchParams = new URLSearchParams(useLocation().search);
+  const selectedCategory = searchParams.get('category');
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
@@ -111,9 +112,13 @@ const Browse = () => {
   };
 
   const handleCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-    scrollTo(browseRef, 'browse');
-  };
+  if (categoryId) {
+    navigate(`/browse?category=${categoryId}`);
+  } else {
+    navigate(`/browse`);
+  }
+  scrollTo(browseRef, 'browse');
+};
 
   // Asset handlers
   const handleDownload = (e, url, name) => {
