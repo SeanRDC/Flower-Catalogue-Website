@@ -56,7 +56,7 @@ const Browse = () => {
   
   // Derived State
   const displayedFlowers = selectedCategory 
-    ? allFlowers.filter(flower => flower.lifecycle === selectedCategory)
+    ? allFlowers.filter(flower => flower.lifecycle.toLowerCase() === selectedCategory.toLowerCase())
     : allFlowers;
 
   // Track search query from URL
