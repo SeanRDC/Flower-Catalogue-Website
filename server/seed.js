@@ -4,6 +4,7 @@ import Flower from './models/Flower.js';
 
 dotenv.config();
 
+// database connection
 const rawFlowerData = [
   // --- ROSES (1-10) ---
   ["Juliet Rose", "Rosa 'Ausjameson'", "Rosaceae", "An exquisite, fully double peach rose with neatly arranged petals.", "Perennial"],
