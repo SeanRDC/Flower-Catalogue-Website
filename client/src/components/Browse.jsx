@@ -30,17 +30,23 @@ const LIFECYCLE_CATEGORIES = {
 };
 
 const Browse = () => {
-  const { currentUser, openModal } = useAuth();
+ const { currentUser, openModal } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation(); // Define location once at the top
   
-  // State Management
-  const searchParams = new URLSearchParams(useLocation().search);
+  // 1. URL State
+  const searchParams = new URLSearchParams(location.search);
   const selectedCategory = searchParams.get('category');
+  
+  // React State
+  const [allFlowers, setAllFlowers] = useState([]);
+  
   const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
 
   // Refs for smooth scrolling
   const browseRef = useRef(null);
@@ -48,10 +54,7 @@ const Browse = () => {
   const petalsRef = useRef(null);
   const subNavRef = useRef(null); 
   
-  const location = useLocation();
-  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
-
-  // Derived State: Filter flowers based on selected lifecycle category
+  // Derived State
   const displayedFlowers = selectedCategory 
     ? allFlowers.filter(flower => flower.lifecycle === selectedCategory)
     : allFlowers;
