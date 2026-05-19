@@ -105,12 +105,13 @@ const Browse = () => {
   const scrollTo = (ref, tab) => {
     setActiveTab(tab);
     setIsMobileSubNavExpanded(false);
+    
     setTimeout(() => {
-      const yOffset = -120; 
-      const element = ref.current;
-      if (element) {
-        const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+      if (ref.current) {
+        ref.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
       }
     }, 50);
   };
