@@ -1,0 +1,24 @@
+.progressive-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #e2e5de;
+}
+
+.progressive-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
+}
+
+.progressive-img.loading {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.progressive-img.loaded {
+  opacity: 1;
+  filter: blur(0);
+}

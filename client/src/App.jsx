@@ -14,6 +14,7 @@ import Collections from './components/Collections';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
 import NotFound from './components/NotFound';
+import ScrollToTop from './components/ScrollToTop';
 import './styles/global.css'; 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="app-container">
+          <ScrollToTop />
           <Navbar />
           <AuthModal />
           <Routes>
