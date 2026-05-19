@@ -55,21 +55,19 @@ const Browse = () => {
   const subNavRef = useRef(null); 
   
   // Derived State
-  const displayedFlowers = selectedCategory 
-  ? allFlowers.filter(flower => {
-      if (!flower.lifecycle) return false; 
-      
-      return flower.lifecycle.trim().toLowerCase() === selectedCategory.trim().toLowerCase();
-    })
-  : allFlowers;
+  const displayedFlowers = allFlowers.filter(flower => {
 
-  // Track search query from URL
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    setCurrentSearchQuery(searchParams.get('search') || '');
-  }, [location.search]);
+    const matchesCategory = selectedCategory 
+      ? flower.lifecycle?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
+      : true;
+    const matchesSearch = currentSearchQuery
+      ? flower.commonName?.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
+        flower.description?.toLowerCase().includes(currentSearchQuery.toLowerCase())
+      : true;
 
-  // Fetch Live Data from Render
+    return matchesCategory && matchesSearch;
+  });
+
   // Fetch Live Data from Render
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
