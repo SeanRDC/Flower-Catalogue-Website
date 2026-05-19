@@ -110,7 +110,6 @@ const Browse = () => {
       if (ref.current) {
         const yOffset = -120; 
         const element = ref.current;
-        
         const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
 
         window.scrollTo({ 
@@ -118,7 +117,7 @@ const Browse = () => {
           behavior: 'smooth' 
         });
       }
-    }, 100);
+    }, 450);
   };
 
   const handleCategorySelect = (categoryId) => {
