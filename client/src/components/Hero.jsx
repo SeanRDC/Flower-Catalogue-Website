@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Hero.css'; 
-import heroImage from '../public/heroimage.jpg';
+import heroImage from '../heroimage.jpg';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
