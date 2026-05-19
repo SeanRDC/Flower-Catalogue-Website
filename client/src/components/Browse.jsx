@@ -71,9 +71,8 @@ const Browse = () => {
   // Fetch Live Data from Render
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
-    const endpoint = currentSearchQuery 
-      ? `https://flower-catalogue-website.onrender.com/api/flowers?search=${currentSearchQuery}&page=1&limit=250`
-      : `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=250`;
+
+    const endpoint = `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=250`;
 
     axios
       .get(endpoint)
@@ -86,7 +85,7 @@ const Browse = () => {
       })
       .catch((err) => console.error('Error fetching flowers:', err));
       
-  }, [currentSearchQuery, selectedCategory]);
+  }, []);
 
   // Handle clicking outside mobile subnav to close it
   useEffect(() => {

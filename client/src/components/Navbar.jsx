@@ -4,6 +4,7 @@ import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import peonyLogo from '../assets/peony-logo.jpg';
 import '../styles/Navbar.css';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -11,6 +12,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   
   const navigate = useNavigate();
@@ -33,6 +36,27 @@ const Navbar = () => {
   } else if (currentCategory) {
     searchPlaceholder = `Search ${currentCategory.toLowerCase()}s...`; 
   }
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.trim().length < 2) {
+        setSuggestions([]);
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const res = await axios.get(`https://flower-catalogue-website.onrender.com/api/flowers?search=${searchQuery}&limit=5`);
+        setSuggestions(res.data.flowers || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,12 +137,47 @@ const Navbar = () => {
                   setIsSearchFocused(true);
                 }}
                 onFocus={() => setIsSearchFocused(true)}
-                onClick={() => setIsSearchFocused(true)}
               />
               <button type="submit" className="search-button">
                 <Search size={18} color="#666" />
               </button>
             </form>
+
+            {/* LIVE AUTOCOMPLETE DROPDOWN */}
+            {isSearchFocused && searchQuery.length >= 2 && (
+              <div className="search-dropdown">
+                {isSearching ? (
+                  <div className="search-dropdown-message">Searching database...</div>
+                ) : suggestions.length > 0 ? (
+                  <ul className="search-dropdown-list">
+                    {suggestions.map(flower => (
+                      <li 
+                        key={flower._id}
+                        className="search-dropdown-item"
+                        onMouseDown={(e) => {
+                          e.preventDefault(); 
+                          setSearchQuery(flower.commonName);
+                          navigate(`/browse?search=${encodeURIComponent(flower.commonName)}`);
+                          setIsSearchFocused(false);
+                        }}
+                      >
+                         <img 
+                           src={flower.imageUrl} 
+                           alt={flower.commonName} 
+                           className="search-dropdown-img" 
+                         />
+                         <div className="search-dropdown-text">
+                           <span className="search-dropdown-title">{flower.commonName}</span>
+                           <span className="search-dropdown-subtitle">{flower.lifecycle}</span>
+                         </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="search-dropdown-message">No matches found</div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
