@@ -416,10 +416,13 @@ const Browse = () => {
               <div className="title-3">Diverse flowers for everyone</div>
               <div className="title-4">#Petals</div>
             </div>
-            <div className="images-2">
-              {petalsImages.map((flower, index) => (
-                <img key={`${flower._id}-${index}`} src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
-              ))}
+            
+            <div className="petals-marquee-container">
+              <div className="petals-track">
+                {[...petalsImages, ...petalsImages].map((flower, index) => (
+                  <img key={`petal-${index}`} src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+                ))}
+              </div>
             </div>
           </section>
         </>

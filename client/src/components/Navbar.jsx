@@ -84,19 +84,23 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const query = searchQuery.trim();
-    const encoded = encodeURIComponent(query);
+
+    if (!query) {
+      navigate(currentCategory ? `/browse?category=${currentCategory}` : '/browse');
+      setIsSearchFocused(false);
+      return;
+    }
 
     if (location.pathname === '/favorites') {
-      navigate(query ? `/favorites?search=${encoded}` : '/favorites');
+      navigate(`/favorites?search=${encodeURIComponent(query)}`);
     } else if (location.pathname === '/collections') {
-      navigate(query ? `/collections?search=${encoded}` : '/collections');
+      navigate(`/collections?search=${encodeURIComponent(query)}`);
     } else {
       const params = new URLSearchParams();
       if (currentCategory) params.set('category', currentCategory);
-      if (query) params.set('search', encoded);
+      params.set('search', query); 
       
-      const paramString = params.toString();
-      navigate(paramString ? `/browse?${paramString}` : '/browse');
+      navigate(`/browse?${params.toString()}`);
     }
     
     setIsSearchFocused(false);

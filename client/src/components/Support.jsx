@@ -20,7 +20,6 @@ const Support = () => {
         </p>
         
         <div className="support-actions">
-          {/* Opens the user's default email client automatically */}
           <a href="mailto:support@peony.com" className="support-email-link">
             support@peony.com
           </a>
