@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext'; 
+import { AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';       
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -18,6 +19,7 @@ import ScrollToTop from './components/ScrollToTop';
 import './styles/global.css'; 
 
 function App() {
+  const location = useLocation();
 // Backend ping
   useEffect(() => {
     fetch('https://flower-catalogue-website.onrender.com/api/flowers?limit=1')
@@ -32,18 +34,20 @@ function App() {
           <ScrollToTop />
           <Navbar />
           <AuthModal />
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/survey" element={<Survey />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />   
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Hero />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/survey" element={<Survey />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />   
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AnimatePresence>
           <Footer />
         </div>
       </Router>

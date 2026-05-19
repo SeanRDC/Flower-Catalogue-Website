@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import '../styles/Legal.css';
 
@@ -8,7 +9,7 @@ const Terms = () => {
   }, []);
 
   return (
-    <div className="legal-container">
+    <motion.div className="legal-container">
       <div className="legal-content">
         <div className="legal-header">
           <h1 className="legal-title">Terms of Service</h1>
@@ -37,7 +38,7 @@ const Terms = () => {
           <p>If you have any questions regarding these terms, please contact us via our <a href="/support">Support page</a>. Operated by Sean Rhani Dela Cruz.</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

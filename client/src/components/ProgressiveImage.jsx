@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import '../styles/ProgressiveImage.css';
 

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -73,7 +74,7 @@ const Favorites = () => {
   );
 
   return (
-    <div className="desktop-home-page asset-page">
+    <motion.div className="desktop-home-page asset-page">
       <div className="browse-hero-header">
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
@@ -163,7 +164,7 @@ const Favorites = () => {
           <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import '../styles/Legal.css';
 
@@ -8,7 +9,7 @@ const Privacy = () => {
   }, []);
 
   return (
-    <div className="legal-container">
+    <motion.div className="legal-container">
       <div className="legal-content">
         <div className="legal-header">
           <h1 className="legal-title">Privacy Policy</h1>
@@ -46,7 +47,7 @@ const Privacy = () => {
           <p>If you have questions or comments about this Privacy Policy, please reach out to us on our <a href="/support">Support page</a>.</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

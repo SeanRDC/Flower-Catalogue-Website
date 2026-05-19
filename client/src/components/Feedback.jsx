@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import '../styles/Feedback.css';
 
@@ -18,7 +19,7 @@ const Feedback = () => {
   };
 
   return (
-    <div className="desktop-home-page short-header-page">
+    <motion.div className="desktop-home-page short-header-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
           <img 
@@ -52,7 +53,7 @@ const Feedback = () => {
           <button type="submit" className="submit-btn">Submit</button>
         </form>
       </main>
-    </div>
+    </motion.div>
   );
 };
 

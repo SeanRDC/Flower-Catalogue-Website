@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -257,7 +258,7 @@ const Browse = () => {
     : [...allFlowers, ...allFlowers, ...allFlowers].slice(0, 9);
 
   return (
-    <div className="desktop-home-page">
+    <motion.div className="desktop-home-page">
       <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
         <div className="vector-container">
           <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
@@ -439,7 +440,7 @@ const Browse = () => {
           <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

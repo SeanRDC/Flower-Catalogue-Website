@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Support.css';
@@ -9,7 +10,7 @@ const Support = () => {
   }, []);
 
   return (
-    <div className="support-container">
+    <motion.div className="support-container">
       <div className="support-content">
         <h1 className="support-title">How can we help?</h1>
         
@@ -31,7 +32,7 @@ const Support = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
