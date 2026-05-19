@@ -56,8 +56,12 @@ const Browse = () => {
   
   // Derived State
   const displayedFlowers = selectedCategory 
-    ? allFlowers.filter(flower => flower.lifecycle.toLowerCase() === selectedCategory.toLowerCase())
-    : allFlowers;
+  ? allFlowers.filter(flower => {
+      if (!flower.lifecycle) return false; 
+      
+      return flower.lifecycle.trim().toLowerCase() === selectedCategory.trim().toLowerCase();
+    })
+  : allFlowers;
 
   // Track search query from URL
   useEffect(() => {
@@ -66,12 +70,12 @@ const Browse = () => {
   }, [location.search]);
 
   // Fetch Live Data from Render
+  // Fetch Live Data from Render
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
-
     const endpoint = currentSearchQuery 
-      ? `https://flower-catalogue-website.onrender.com/api/flowers?search=${currentSearchQuery}&page=1&limit=30`
-      : `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=30`;
+      ? `https://flower-catalogue-website.onrender.com/api/flowers?search=${currentSearchQuery}&page=1&limit=250`
+      : `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=250`;
 
     axios
       .get(endpoint)
