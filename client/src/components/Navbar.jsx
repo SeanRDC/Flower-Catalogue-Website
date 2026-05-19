@@ -143,7 +143,6 @@ const Navbar = () => {
               </button>
             </form>
 
-            {/* LIVE AUTOCOMPLETE DROPDOWN */}
             {isSearchFocused && searchQuery.length >= 2 && (
               <div className="search-dropdown">
                 {isSearching ? (
