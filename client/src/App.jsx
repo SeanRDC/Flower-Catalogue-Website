@@ -11,6 +11,9 @@ import Footer from './components/Footer';
 import Support from './components/Support';
 import Favorites from './components/Favorites';
 import Collections from './components/Collections';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
+import NotFound from './components/NotFound';
 import './styles/global.css'; 
 
 function App() {
@@ -35,6 +38,9 @@ function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/collections" element={<Collections />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />   
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </div>

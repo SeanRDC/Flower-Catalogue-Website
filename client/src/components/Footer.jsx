@@ -90,8 +90,8 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="footer-bottom-left">@Sean Rhani Dela Cruz</div>
         <div className="terms-conditions">
-          <div><Link className="footer-link no-underline" to="/support">Terms</Link></div>
-          <div><Link className="footer-link no-underline" to="/support">Privacy</Link></div>
+          <div><Link className="footer-link no-underline" to="/terms">Terms</Link></div>
+          <div><Link className="footer-link no-underline" to="/privacy">Privacy</Link></div>
           <div>SiteMap</div>
           <div><strong>© 2026 Peony</strong></div>
         </div>
