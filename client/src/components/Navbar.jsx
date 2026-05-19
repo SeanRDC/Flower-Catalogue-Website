@@ -25,7 +25,8 @@ const Navbar = () => {
   const currentCategory = searchParams.get('category');
 
   const isBrowseMode = location.pathname === '/browse' || location.pathname === '/favorites' || location.pathname === '/collections';
-  const isSpecialPage = location.pathname === '/feedback' || location.pathname === '/survey' || location.pathname === '/support';
+  const specialPages = ['/feedback', '/survey', '/support', '/terms', '/privacy', '/NotFound'];
+  const isSpecialPage = specialPages.includes(location.pathname);
   
   // DYNAMIC PLACEHOLDER LOGIC
   let searchPlaceholder = "Find a Flower...";
