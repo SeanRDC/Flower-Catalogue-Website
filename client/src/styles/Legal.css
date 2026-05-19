@@ -18,6 +18,7 @@
   padding: 60px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  margin-top: 20px;
 }
 
 .legal-header {
@@ -87,6 +88,7 @@
   
   .legal-content {
     padding: 30px 20px;
+    margin-top: 45px;
   }
 
   .legal-title {
