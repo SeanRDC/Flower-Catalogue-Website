@@ -34,9 +34,10 @@ const Browse = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Define location once at the top
   
-  // 1. URL State
+  // URL State
   const searchParams = new URLSearchParams(location.search);
   const selectedCategory = searchParams.get('category');
+  const currentSearchQuery = searchParams.get('search') || '';
   
   // React State
   const [allFlowers, setAllFlowers] = useState([]);
@@ -46,8 +47,7 @@ const Browse = () => {
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
-  const [currentSearchQuery, setCurrentSearchQuery] = useState('');
-
+  
   // Refs for smooth scrolling
   const browseRef = useRef(null);
   const topPicksRef = useRef(null);
@@ -334,14 +334,22 @@ const Browse = () => {
             </div>
 
             {allFlowers.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "50px 0" }}>
-                <h2>No flowers found! Try searching for something else.</h2>
+              <div className="loading-state">
+                <h2>Loading database...</h2>
               </div>
             ) : currentSearchQuery ? (
               <div className="frame">
-                {displayedFlowers.map(renderFlowerCard)}
+                {displayedFlowers.length > 0 ? (
+                  displayedFlowers.map(renderFlowerCard)
+                ) : (
+                  <div className="no-results-container">
+                    <h2 className="no-results-title">No flowers match "{currentSearchQuery}"</h2>
+                    <p className="no-results-text">Try searching for a different flower name, color, or lifecycle.</p>
+                  </div>
+                )}
               </div>
             ) : (
+
               /* THE 3 LIFECYCLE CARDS */
               <div className="category-grid">
                 {Object.values(LIFECYCLE_CATEGORIES).map((cat) => (

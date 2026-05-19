@@ -321,6 +321,36 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+.loading-state {
+  text-align: center;
+  padding: 50px 0;
+  grid-column: 1 / -1;
+}
+
+.no-results-container {
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results-title {
+  color: #555;
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.no-results-text {
+  color: #888;
+  font-size: 16px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
 /* ==========================================================================
    RESPONSIVENESS (Sub-nav stays desktop until mobile)
    ========================================================================== */
