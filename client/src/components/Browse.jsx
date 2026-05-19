@@ -105,15 +105,20 @@ const Browse = () => {
   const scrollTo = (ref, tab) => {
     setActiveTab(tab);
     setIsMobileSubNavExpanded(false);
-    
+
     setTimeout(() => {
       if (ref.current) {
-        ref.current.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
+        const yOffset = -120; 
+        const element = ref.current;
+        
+        const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+
+        window.scrollTo({ 
+          top: y, 
+          behavior: 'smooth' 
         });
       }
-    }, 50);
+    }, 100);
   };
 
   const handleCategorySelect = (categoryId) => {
