@@ -13,6 +13,13 @@ import Collections from './components/Collections';
 import './styles/global.css'; 
 
 function App() {
+// Backend ping
+  useEffect(() => {
+    fetch('https://flower-catalogue-website.onrender.com/api/flowers?limit=1')
+      .then(() => console.log('Backend successfully awakened!'))
+      .catch((err) => console.log('Waking backend...', err));
+  }, []);
+
   return (
     <AuthProvider>
       <Router>
