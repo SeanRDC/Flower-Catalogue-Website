@@ -60,8 +60,6 @@ const Footer = () => {
                 <li className="footer-link" onClick={() => openModal('login')}>Log in</li>
               </>
             )}
-            <li><Link className="footer-link no-underline" to="/support">Privacy Policy</Link></li>
-            <li><Link className="footer-link no-underline" to="/support">Terms of Service</Link></li>
           </ul>
         </div>
 
@@ -83,7 +81,7 @@ const Footer = () => {
             <li>
               <a className="footer-mail" href="mailto:delacruzseanrhani@gmail.com">delacruzseanrhani@gmail.com</a>
             </li>
-            <li className="address-text">115 Purok 3, Strawberry St. San Francisco, Mabalacat City, Pampanga</li>
+            <li className="address-text">Philippines</li>
           </ul>
         </div>
 
@@ -92,8 +90,8 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="footer-bottom-left">@Sean Rhani Dela Cruz</div>
         <div className="terms-conditions">
-          <div>Terms</div>
-          <div>Privacy</div>
+          <div><Link className="footer-link no-underline" to="/support">Terms</Link></div>
+          <div><Link className="footer-link no-underline" to="/support">Privacy</Link></div>
           <div>SiteMap</div>
           <div><strong>© 2026 Peony</strong></div>
         </div>
