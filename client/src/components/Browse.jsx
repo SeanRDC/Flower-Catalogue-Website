@@ -5,6 +5,30 @@ import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, 
 import '../styles/Browse.css';
 import { useAuth } from '../context/AuthContext';
 
+const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+const customSmoothScroll = (targetPosition, duration = 600) => {
+  const startPosition = window.scrollY;
+  const distance = targetPosition - startPosition;
+  let startTime = null;
+
+  const animation = (currentTime) => {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const progress = Math.min(timeElapsed / duration, 1); 
+
+    const ease = easeInOutCubic(progress);
+    
+    window.scrollTo(0, startPosition + distance * ease);
+
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  };
+
+  requestAnimationFrame(animation);
+};
+
 const LIFECYCLE_CATEGORIES = {
   Annual: {
     id: "Annual",
@@ -110,14 +134,11 @@ const Browse = () => {
       if (ref.current) {
         const yOffset = -120; 
         const element = ref.current;
-        const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+        const targetY = element.getBoundingClientRect().top + window.scrollY + yOffset;
 
-        window.scrollTo({ 
-          top: y, 
-          behavior: 'smooth' 
-        });
+        customSmoothScroll(targetY, 600);
       }
-    }, 450);
+    }, 50);
   };
 
   const handleCategorySelect = (categoryId) => {
