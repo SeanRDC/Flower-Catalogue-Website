@@ -364,8 +364,10 @@ const Browse = () => {
             </div>
 
             {allFlowers.length === 0 ? (
-              <div className="loading-state">
-                <h2>Loading database...</h2>
+              <div className="frame">
+                {[...Array(8)].map((_, index) => (
+                  <div key={index} className="skeleton-card"></div>
+                ))}
               </div>
             ) : currentSearchQuery ? (
               <div className="frame">
