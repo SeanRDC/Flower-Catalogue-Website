@@ -244,60 +244,64 @@ const Browse = () => {
           </svg>
         </div>
 
-        {/* DYNAMIC SUB-NAV BAR (Desktop) */}
-        <div className="sub-nav-bar desktop-only">
-          {!selectedCategory ? (
-            <>
-              <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
-              <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top picks</a>
-              <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
-            </>
-          ) : (
-            <>
-              <a onClick={() => handleCategorySelect(null)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>← All Categories</a>
-              <a onClick={() => handleCategorySelect('Annual')} className={selectedCategory === 'Annual' ? 'active' : ''}>Annual</a>
-              <a onClick={() => handleCategorySelect('Biennial')} className={selectedCategory === 'Biennial' ? 'active' : ''}>Biennial</a>
-              <a onClick={() => handleCategorySelect('Perennial')} className={selectedCategory === 'Perennial' ? 'active' : ''}>Perennial</a>
-            </>
-          )}
-        </div>
-
-        {/* DYNAMIC SUB-NAV BAR (Mobile) */}
-        <div ref={subNavRef} className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
-          {isMobileSubNavExpanded ? (
-            <div className="mobile-nav-links">
+        {!currentSearchQuery && (
+          <>
+            {/* DYNAMIC SUB-NAV BAR (Desktop) */}
+            <div className="sub-nav-bar desktop-only">
               {!selectedCategory ? (
                 <>
-                  <a onClick={() => scrollTo(browseRef, 'browse')}>Browse</a>
-                  <div className="nav-divider"></div>
-                  <a onClick={() => scrollTo(topPicksRef, 'toppicks')}>Top pick</a>
-                  <div className="nav-divider"></div>
-                  <a onClick={() => scrollTo(petalsRef, 'petals')}>Petals</a>
+                  <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
+                  <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top picks</a>
+                  <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
                 </>
               ) : (
                 <>
-                  <a onClick={() => handleCategorySelect(null)}>All Categories</a>
-                  <div className="nav-divider"></div>
-                  <a onClick={() => handleCategorySelect('Annual')}>Annual</a>
-                  <div className="nav-divider"></div>
-                  <a onClick={() => handleCategorySelect('Biennial')}>Biennial</a>
-                  <div className="nav-divider"></div>
-                  <a onClick={() => handleCategorySelect('Perennial')}>Perennial</a>
+                  <a onClick={() => handleCategorySelect(null)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>← All Categories</a>
+                  <a onClick={() => handleCategorySelect('Annual')} className={selectedCategory === 'Annual' ? 'active' : ''}>Annual</a>
+                  <a onClick={() => handleCategorySelect('Biennial')} className={selectedCategory === 'Biennial' ? 'active' : ''}>Biennial</a>
+                  <a onClick={() => handleCategorySelect('Perennial')} className={selectedCategory === 'Perennial' ? 'active' : ''}>Perennial</a>
                 </>
               )}
-              <div className="collapse-icon" onClick={() => setIsMobileSubNavExpanded(false)}>
-                <ChevronUp size={24} color="white" />
-              </div>
             </div>
-          ) : (
-            <div className="mobile-nav-links collapsed-view" onClick={() => setIsMobileSubNavExpanded(true)}>
-              <span className="active-tab-text">
-                {selectedCategory || (activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top pick' : 'Petals')}
-              </span>
-              <ChevronDown size={20} color="white" />
+
+            {/* DYNAMIC SUB-NAV BAR (Mobile) */}
+            <div ref={subNavRef} className={`sub-nav-bar mobile-only ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
+              {isMobileSubNavExpanded ? (
+                <div className="mobile-nav-links">
+                  {!selectedCategory ? (
+                    <>
+                      <a onClick={() => scrollTo(browseRef, 'browse')}>Browse</a>
+                      <div className="nav-divider"></div>
+                      <a onClick={() => scrollTo(topPicksRef, 'toppicks')}>Top pick</a>
+                      <div className="nav-divider"></div>
+                      <a onClick={() => scrollTo(petalsRef, 'petals')}>Petals</a>
+                    </>
+                  ) : (
+                    <>
+                      <a onClick={() => handleCategorySelect(null)}>All Categories</a>
+                      <div className="nav-divider"></div>
+                      <a onClick={() => handleCategorySelect('Annual')}>Annual</a>
+                      <div className="nav-divider"></div>
+                      <a onClick={() => handleCategorySelect('Biennial')}>Biennial</a>
+                      <div className="nav-divider"></div>
+                      <a onClick={() => handleCategorySelect('Perennial')}>Perennial</a>
+                    </>
+                  )}
+                  <div className="collapse-icon" onClick={() => setIsMobileSubNavExpanded(false)}>
+                    <ChevronUp size={24} color="white" />
+                  </div>
+                </div>
+              ) : (
+                <div className="mobile-nav-links collapsed-view" onClick={() => setIsMobileSubNavExpanded(true)}>
+                  <span className="active-tab-text">
+                    {selectedCategory || (activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top pick' : 'Petals')}
+                  </span>
+                  <ChevronDown size={20} color="white" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       <section className="categories" id="browse" ref={browseRef}>
@@ -369,7 +373,6 @@ const Browse = () => {
         )}
       </section>
 
-      {/* Only show Top Picks and Petals if NO category is selected and NO search is active */}
       {!selectedCategory && !currentSearchQuery && (
         <>
           <section className="top-picks" id="top-picks" ref={topPicksRef}>
