@@ -4,12 +4,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import Flower from './models/Flower.js';
 import User from './models/User.js';
+import authRoutes from './routes/auth.js';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/auth', authRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB Atlas'))
@@ -155,7 +158,7 @@ app.post('/api/collections/clear', async (req, res) => {
     if (user) {
       const collectionIndex = user.collections.findIndex(c => c.name === "My Collection");
       if (collectionIndex > -1) {
-        user.collections[collectionIndex].flowers = []; // Wipes the folder clean
+        user.collections[collectionIndex].flowers = []; 
         await user.save();
       }
     }
