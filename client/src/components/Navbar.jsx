@@ -9,6 +9,7 @@ import axios from 'axios';
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,6 +83,17 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Helper
+  const closeMobileMenu = () => {
+    setIsClosing(true);
+    setIsMobileMenuOpen(false);
+    setActiveDropdown(null); 
+    
+    setTimeout(() => {
+      setIsClosing(false);
+    }, 400);
+  };
+
   // SMART SEARCH SUBMIT LOGIC
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -90,6 +102,7 @@ const Navbar = () => {
     if (!query) {
       navigate(currentCategory ? `/browse?category=${currentCategory}` : '/browse');
       setIsSearchFocused(false);
+      closeMobileMenu();
       return;
     }
 
@@ -114,8 +127,12 @@ const Navbar = () => {
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    setActiveDropdown(null);
+    if (isMobileMenuOpen) {
+      closeMobileMenu();
+    } else {
+      setIsMobileMenuOpen(true);
+      setActiveDropdown(null);
+    }
   };
 
   const { currentUser, openModal } = useAuth();
@@ -123,10 +140,10 @@ const Navbar = () => {
   return (
     <header 
       ref={headerRef} 
-      className={`header ${isMobileMenuOpen ? 'mobile-active' : ''} ${isBrowseMode ? 'browse-mode' : ''} ${isNewsfeedMode ? 'newsfeed-header' : ''} ${isScrolled ? 'scrolled' : ''}`}
+      className={`header ${(isMobileMenuOpen || isClosing) ? 'mobile-active' : ''} ${isBrowseMode ? 'browse-mode' : ''} ${isNewsfeedMode ? 'newsfeed-header' : ''} ${isScrolled ? 'scrolled' : ''}`}
     >
       <div className="header-left">
-        <Link to="/" className="logo-link" onClick={() => setIsMobileMenuOpen(false)}>
+        <Link to="/" className="logo-link" onClick={closeMobileMenu}>
           <img className="peony-logo-nav" src={peonyLogo} alt="Peony logo" />
         </Link>
         
@@ -194,7 +211,7 @@ const Navbar = () => {
       <nav className={`nav-bar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <ul className="nav-list">
           <li className="nav-item full-width-click">
-            <Link className="home-link" to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+            <Link className="home-link" to="/" onClick={closeMobileMenu}>Home</Link>
           </li>
           
           <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('assets')}>
@@ -204,8 +221,8 @@ const Navbar = () => {
             </div>
             <div className={`dropdown-menu ${activeDropdown === 'assets' ? 'active' : ''}`}>
               <ul>
-                <li className="dropdown-item"><Link to="/favorites" onClick={() => setIsMobileMenuOpen(false)}>Favorites</Link></li>
-                <li className="dropdown-item"><Link to="/collections" onClick={() => setIsMobileMenuOpen(false)}>Collections</Link></li>
+                <li className="dropdown-item"><Link to="/favorites" onClick={closeMobileMenu}>Favorites</Link></li>
+                <li className="dropdown-item"><Link to="/collections" onClick={closeMobileMenu}>Collections</Link></li>
               </ul>
             </div>
           </li>
@@ -233,7 +250,7 @@ const Navbar = () => {
                     </li>
                   </>
                 )}
-                <li className="dropdown-item"><Link to="/support" onClick={() => setIsMobileMenuOpen(false)}>Help and Support</Link></li>
+                <li className="dropdown-item"><Link to="/support" onClick={closeMobileMenu}>Help and Support</Link></li>
               </ul>
             </div>
           </li>
