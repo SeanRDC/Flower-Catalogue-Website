@@ -1,13 +1,9 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { OAuth2Client } from 'google-auth-library';
 import User from '../models/User.js';
 
 const router = express.Router();
 const otpStore = new Map();
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -32,10 +28,10 @@ router.post('/send-otp', async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Your Peony Verification Code',
+      subject: 'Your Verification Code',
       html: `
         <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
-          <h2>Welcome to Peony!</h2>
+          <h2>Welcome!</h2>
           <p>Your verification code is:</p>
           <h1 style="color: #5a6c3a; letter-spacing: 5px; font-size: 36px;">${otp}</h1>
           <p>This code will expire in 5 minutes.</p>
@@ -51,7 +47,7 @@ router.post('/send-otp', async (req, res) => {
 });
 
 router.post('/verify-otp', async (req, res) => {
-  const { email, password, otp } = req.body;
+  const { email, otp } = req.body;
   const storedData = otpStore.get(email);
 
   if (!storedData) return res.status(400).json({ message: 'No OTP requested for this email' });
@@ -61,56 +57,8 @@ router.post('/verify-otp', async (req, res) => {
   }
   if (storedData.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
 
-  try {
-    otpStore.delete(email);
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({ email, password: hashedPassword });
-    await newUser.save();
-
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.status(201).json({ message: 'Account created', token, user: { id: newUser._id, email: newUser.email } });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error creating account' });
-  }
-});
-
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid email or password' });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(200).json({ message: 'Login successful', token, user: { id: user._id, email: user.email } });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during login' });
-  }
-});
-
-router.post('/google', async (req, res) => {
-  const { email } = req.body; 
-  try {
-    let user = await User.findOne({ email });
-    
-    if (!user) {
-      user = new User({
-        email,
-        password: await bcrypt.hash(Math.random().toString(36), 10)
-      });
-      await user.save();
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.status(200).json({ message: 'Google sync successful', token, user: { id: user._id, email: user.email } });
-  } catch (error) {
-    res.status(500).json({ message: 'Google Auth Error' });
-  }
+  otpStore.delete(email);
+  res.status(200).json({ message: 'OTP Verified' });
 });
 
 export default router;

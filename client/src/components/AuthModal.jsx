@@ -5,7 +5,7 @@ import axios from 'axios';
 import '../styles/modal.css'; 
 
 const AuthModal = () => {
-  const { isModalOpen, closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser } = useAuth();
+  const { isModalOpen, closeModal, modalMode, setModalMode, signup, login, signInWithGoogle, logout, currentUser } = useAuth();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,26 +18,6 @@ const AuthModal = () => {
 
   if (!isModalOpen) return null;
 
-  if (modalMode === 'logout') {
-    return (
-      <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <button className="close-btn" onClick={closeModal}>
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
-          <h2 className="modal-title">Sign Out</h2>
-          <p className="modal-subtitle" style={{ marginBottom: '25px' }}>
-            Are you sure you want to log out of <br/><strong>{currentUser?.email}</strong>?
-          </p>
-          <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
-            <button className="modal-continue-btn" style={{ background: '#f5f5f5', color: '#333', border: '1px solid #ddd' }} onClick={closeModal}>Cancel</button>
-            <button className="modal-continue-btn" style={{ background: '#d32f2f' }} onClick={() => { logout(); closeModal(); }}>Yes, Log Out</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const isSignUp = modalMode === 'signup';
 
   const handleSubmit = async (e) => {
@@ -49,17 +29,14 @@ const AuthModal = () => {
     setIsLoading(true);
     try {
       if (isSignUp) {
-        
         await axios.post('https://flower-catalogue-website.onrender.com/api/auth/send-otp', { email });
         setShowOtp(true);
       } else {
-        
-        const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/login', { email, password });
-        login(res.data.user, res.data.token); 
+        await login(email, password); 
         closeModal();
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      setError(err.response?.data?.message || err.message.replace('Firebase: ', ''));
     } finally {
       setIsLoading(false);
     }
@@ -70,12 +47,14 @@ const AuthModal = () => {
     setError('');
     setIsLoading(true);
     try {
-      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, password, otp });
-      login(res.data.user, res.data.token);
+      await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, otp });
+      
+      await signup(email, password);
+      
       setShowOtp(false);
       closeModal();
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid OTP');
+      setError(err.response?.data?.message || err.message.replace('Firebase: ', ''));
     } finally {
       setIsLoading(false);
     }
@@ -83,17 +62,12 @@ const AuthModal = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const firebaseResult = await signInWithGoogle(); 
-      if (firebaseResult?.user?.email) {
-         const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/google', { email: firebaseResult.user.email });
-         login(res.data.user, res.data.token);
-      }
+      await signInWithGoogle();
       closeModal();
     } catch (err) {
       setError('Failed to sign in with Google.');
     }
   };
-
   return (
     <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
