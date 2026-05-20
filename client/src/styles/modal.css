@@ -186,3 +186,28 @@
   cursor: pointer; 
   font-weight: 700; 
 }
+
+.otp-input {
+  height: 60px;
+  background-color: #f9f9f9;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c2c2c;
+  text-align: center;
+  letter-spacing: 12px;
+  margin-bottom: 5px;
+}
+
+.otp-input:focus {
+  background-color: white;
+  border-color: #5a6c3a;
+  box-shadow: 0 0 0 4px rgba(90, 108, 58, 0.1);
+}
+
+.otp-input::placeholder {
+  color: #ccc;
+  letter-spacing: 12px;
+}
