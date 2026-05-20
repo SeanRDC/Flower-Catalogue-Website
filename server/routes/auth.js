@@ -15,15 +15,6 @@ const transporter = nodemailer.createTransport({
 
 router.post('/send-otp', async (req, res) => {
   const { email } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists. Please log in.' });
-    }
-
-    const otp = Math.router.post('/send-otp', async (req, res) => {
-  const { email } = req.body;
   console.log(`\n[AUTH] 1. Initiating OTP request for: ${email}`);
 
   try {
