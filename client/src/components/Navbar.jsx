@@ -23,8 +23,9 @@ const Navbar = () => {
 
   const searchParams = new URLSearchParams(location.search);
   const currentCategory = searchParams.get('category');
+  const isNewsfeedMode = searchParams.get('view') === 'all';
 
-  const isBrowseMode = location.pathname === '/browse' || location.pathname === '/favorites' || location.pathname === '/collections';
+  const isBrowseMode = (location.pathname === '/browse' && !isNewsfeedMode) || location.pathname === '/favorites' || location.pathname === '/collections';
   const specialPages = ['/feedback', '/survey', '/support', '/terms', '/privacy', '/NotFound'];
   const isSpecialPage = specialPages.includes(location.pathname);
   
@@ -122,7 +123,7 @@ const Navbar = () => {
   return (
     <header 
       ref={headerRef} 
-      className={`header ${isMobileMenuOpen ? 'mobile-active' : ''} ${isBrowseMode ? 'browse-mode' : ''} ${isScrolled ? 'scrolled' : ''}`}
+      className={`header ${isMobileMenuOpen ? 'mobile-active' : ''} ${isBrowseMode ? 'browse-mode' : ''} ${isNewsfeedMode ? 'newsfeed-header' : ''} ${isScrolled ? 'scrolled' : ''}`}
     >
       <div className="header-left">
         <Link to="/" className="logo-link" onClick={() => setIsMobileMenuOpen(false)}>

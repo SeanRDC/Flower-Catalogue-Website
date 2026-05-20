@@ -341,6 +341,24 @@ const Browse = () => {
         </div>
       )} 
 
+      {isNewsfeedMode && (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '140px', zIndex: 0 }}>
+          <img 
+            src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" 
+            alt="Header background" 
+            style={{ width: '100%', height: '100%', objectFit: 'cover', clipPath: 'url(#wave-clip)' }} 
+          />
+          
+          <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+            <defs>
+              <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
+                <path d="M 0,0 L 0,0.75 Q 0.125,0.85 0.25,0.75 Q 0.375,0.65 0.5,0.75 Q 0.625,0.85 0.75,0.75 Q 0.875,0.65 1,0.75 L 1,0 Z" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      )}
+
       {!isNewsfeedMode && (
         <section className="categories" id="browse" ref={browseRef}>
           {selectedCategory ? (
