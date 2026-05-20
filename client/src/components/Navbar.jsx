@@ -86,7 +86,7 @@ const Navbar = () => {
   // Helper
   const closeMobileMenu = () => {
     setIsClosing(true);
-    closeMobileMenu();
+    setIsMobileMenuOpen(false);
     setActiveDropdown(null); 
     
     setTimeout(() => {
@@ -236,38 +236,21 @@ const Navbar = () => {
               <ul>
                 {currentUser ? (
                   <li className="dropdown-item">
-                    <div onClick={(e) => { 
-                      e.preventDefault();
-                      e.stopPropagation();
-                      closeMobileMenu();
-                      setTimeout(() => openModal('logout'), 150);
-                    }}>
+                    <div onClick={() => { openModal('logout'); closeMobileMenu(); }}>
                       Log out ({currentUser.email})
                     </div>
                   </li>
                 ) : (
                   <>
                     <li className="dropdown-item">
-                      <div onClick={(e) => { 
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMobileMenu();
-                        setTimeout(() => openModal('signup'), 150); 
-                      }}>Sign in</div>
+                      <div onClick={() => { openModal('signup'); closeMobileMenu(); }}>Sign in</div>
                     </li>
                     <li className="dropdown-item">
-                      <div onClick={(e) => { 
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMobileMenu();
-                        setTimeout(() => openModal('login'), 150); 
-                      }}>Log in</div>
+                      <div onClick={() => { openModal('login'); closeMobileMenu(); }}>Log in</div>
                     </li>
                   </>
                 )}
-                <li className="dropdown-item">
-                  <Link to="/support" onClick={closeMobileMenu}>Help and Support</Link>
-                </li>
+                <li className="dropdown-item"><Link to="/support" onClick={closeMobileMenu}>Help and Support</Link></li>
               </ul>
             </div>
           </li>
