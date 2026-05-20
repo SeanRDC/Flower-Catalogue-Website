@@ -72,7 +72,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
-        setIsMobileMenuOpen(false);
+        closeMobileMenu();
         setActiveDropdown(null);
       }
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
@@ -86,7 +86,7 @@ const Navbar = () => {
   // Helper
   const closeMobileMenu = () => {
     setIsClosing(true);
-    setIsMobileMenuOpen(false);
+    closeMobileMenu();
     setActiveDropdown(null); 
     
     setTimeout(() => {
@@ -119,7 +119,7 @@ const Navbar = () => {
     }
     
     setIsSearchFocused(false);
-    setIsMobileMenuOpen(false);
+    closeMobileMenu();
   };
 
   const toggleDropdown = (menu) => {
@@ -214,15 +214,47 @@ const Navbar = () => {
             <Link className="home-link" to="/" onClick={closeMobileMenu}>Home</Link>
           </li>
           
-          <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('assets')}>
+          <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('profile')}>
             <div className="nav-item-content">
-              <span>Assets</span>
-              <ChevronDown size={16} className={`chevron-icon ${activeDropdown === 'assets' ? 'rotate' : ''}`} />
+              <span>Profile</span>
+              <ChevronDown size={16} className={`chevron-icon ${activeDropdown === 'profile' ? 'rotate' : ''}`} />
             </div>
-            <div className={`dropdown-menu ${activeDropdown === 'assets' ? 'active' : ''}`}>
+            <div className={`dropdown-menu ${activeDropdown === 'profile' ? 'active' : ''}`}>
               <ul>
-                <li className="dropdown-item"><Link to="/favorites" onClick={closeMobileMenu}>Favorites</Link></li>
-                <li className="dropdown-item"><Link to="/collections" onClick={closeMobileMenu}>Collections</Link></li>
+                {currentUser ? (
+                  <li className="dropdown-item">
+                    <div onClick={(e) => { 
+                      e.preventDefault();
+                      e.stopPropagation(); // Stops the ghost click
+                      closeMobileMenu();
+                      setTimeout(() => openModal('logout'), 150); // Waits for the menu to close first
+                    }}>
+                      Log out ({currentUser.email})
+                    </div>
+                  </li>
+                ) : (
+                  <>
+                    <li className="dropdown-item">
+                      <div onClick={(e) => { 
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMobileMenu();
+                        setTimeout(() => openModal('signup'), 150); 
+                      }}>Sign in</div>
+                    </li>
+                    <li className="dropdown-item">
+                      <div onClick={(e) => { 
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMobileMenu();
+                        setTimeout(() => openModal('login'), 150); 
+                      }}>Log in</div>
+                    </li>
+                  </>
+                )}
+                <li className="dropdown-item">
+                  <Link to="/support" onClick={closeMobileMenu}>Help and Support</Link>
+                </li>
               </ul>
             </div>
           </li>
