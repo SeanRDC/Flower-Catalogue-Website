@@ -214,6 +214,19 @@ const Navbar = () => {
             <Link className="home-link" to="/" onClick={closeMobileMenu}>Home</Link>
           </li>
           
+          <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('assets')}>
+            <div className="nav-item-content">
+              <span>Assets</span>
+              <ChevronDown size={16} className={`chevron-icon ${activeDropdown === 'assets' ? 'rotate' : ''}`} />
+            </div>
+            <div className={`dropdown-menu ${activeDropdown === 'assets' ? 'active' : ''}`}>
+              <ul>
+                <li className="dropdown-item"><Link to="/favorites" onClick={closeMobileMenu}>Favorites</Link></li>
+                <li className="dropdown-item"><Link to="/collections" onClick={closeMobileMenu}>Collections</Link></li>
+              </ul>
+            </div>
+          </li>
+          
           <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('profile')}>
             <div className="nav-item-content">
               <span>Profile</span>
@@ -225,9 +238,9 @@ const Navbar = () => {
                   <li className="dropdown-item">
                     <div onClick={(e) => { 
                       e.preventDefault();
-                      e.stopPropagation(); // Stops the ghost click
+                      e.stopPropagation();
                       closeMobileMenu();
-                      setTimeout(() => openModal('logout'), 150); // Waits for the menu to close first
+                      setTimeout(() => openModal('logout'), 150);
                     }}>
                       Log out ({currentUser.email})
                     </div>
@@ -255,34 +268,6 @@ const Navbar = () => {
                 <li className="dropdown-item">
                   <Link to="/support" onClick={closeMobileMenu}>Help and Support</Link>
                 </li>
-              </ul>
-            </div>
-          </li>
-          
-          <li className="nav-item dropdown-trigger full-width-click" onClick={() => toggleDropdown('profile')}>
-            <div className="nav-item-content">
-              <span>Profile</span>
-              <ChevronDown size={16} className={`chevron-icon ${activeDropdown === 'profile' ? 'rotate' : ''}`} />
-            </div>
-            <div className={`dropdown-menu ${activeDropdown === 'profile' ? 'active' : ''}`}>
-              <ul>
-                {currentUser ? (
-                  <li className="dropdown-item">
-                    <div onClick={() => { openModal('logout'); closeMobileMenu(); }}>
-                      Log out ({currentUser.email})
-                    </div>
-                  </li>
-                ) : (
-                  <>
-                    <li className="dropdown-item">
-                      <div onClick={() => { openModal('signup'); closeMobileMenu(); }}>Sign in</div>
-                    </li>
-                    <li className="dropdown-item">
-                      <div onClick={() => { openModal('login'); closeMobileMenu(); }}>Log in</div>
-                    </li>
-                  </>
-                )}
-                <li className="dropdown-item"><Link to="/support" onClick={closeMobileMenu}>Help and Support</Link></li>
               </ul>
             </div>
           </li>
