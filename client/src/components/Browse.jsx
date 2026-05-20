@@ -197,14 +197,17 @@ const Browse = () => {
   };
 
   // Card UI Component
-  const renderFlowerCard = (flower) => {
+  const renderFlowerCard = (flower, index) => {
     const isExpanded = expandedId === flower._id;
+    
+    const cascadeDelay = index >= 8 ? ((index - 8) % 12) * 0.05 : 0;
 
     return (
       <div 
         key={flower._id} 
         className={`top-pick ${isExpanded ? 'expanded' : ''}`}
         onClick={() => setExpandedId(isExpanded ? null : flower._id)}
+        style={{ animationDelay: `${cascadeDelay}s` }}
       >
         <div className="image-wrapper">
           <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
@@ -351,7 +354,7 @@ const Browse = () => {
               
               <div className="frame" style={{ marginTop: '40px' }}>
                 {displayedFlowers.length > 0 ? (
-                  displayedFlowers.map(renderFlowerCard)
+                  displayedFlowers.map((flower, index) => renderFlowerCard(flower, index))
                 ) : (
                   <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '50px' }}>
                     <p>No {selectedCategory.toLowerCase()} flowers found in the database.</p>
@@ -380,7 +383,7 @@ const Browse = () => {
               ) : currentSearchQuery ? (
                 <div className="frame">
                   {displayedFlowers.length > 0 ? (
-                    displayedFlowers.map(renderFlowerCard)
+                    displayedFlowers.map((flower, index) => renderFlowerCard(flower, index))
                   ) : (
                     <div className="no-results-container">
                       <h2 className="no-results-title">No flowers match "{currentSearchQuery}"</h2>
@@ -425,7 +428,7 @@ const Browse = () => {
             </div>
           ) : currentSearchQuery ? (
             <div className="frame">
-              {displayedFlowers.length > 0 ? displayedFlowers.map(renderFlowerCard) : (
+              {displayedFlowers.length > 0 ? displayedFlowers.map((flower, index) => renderFlowerCard(flower, index)) : (
                 <div className="no-results-container">
                   <h2 className="no-results-title">No flowers match "{currentSearchQuery}"</h2>
                   <p className="no-results-text">Try searching for a different flower name, color, or lifecycle.</p>
@@ -434,12 +437,12 @@ const Browse = () => {
             </div>
           ) : isNewsfeedMode ? (
             <div className="frame">
-              {allFlowers.map(renderFlowerCard)}
+              {allFlowers.map((flower, index) => renderFlowerCard(flower, index))}
             </div>
           ) : (
             <>
               <div className="frame">
-                {displayedFlowers.slice(0, topPicksLimit).map(renderFlowerCard)}
+                {displayedFlowers.slice(0, topPicksLimit).map((flower, index) => renderFlowerCard(flower, index))}
               </div>
               
               {topPicksLimit < 20 && displayedFlowers.length > 8 ? (
