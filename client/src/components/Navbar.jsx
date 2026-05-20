@@ -236,17 +236,17 @@ const Navbar = () => {
               <ul>
                 {currentUser ? (
                   <li className="dropdown-item">
-                    <div onClick={() => { openModal('logout'); setIsMobileMenuOpen(false); }}>
+                    <div onClick={() => { openModal('logout'); closeMobileMenu(); }}>
                       Log out ({currentUser.email})
                     </div>
                   </li>
                 ) : (
                   <>
                     <li className="dropdown-item">
-                      <div onClick={() => { openModal('signup'); setIsMobileMenuOpen(false); }}>Sign in</div>
+                      <div onClick={() => { openModal('signup'); closeMobileMenu(); }}>Sign in</div>
                     </li>
                     <li className="dropdown-item">
-                      <div onClick={() => { openModal('login'); setIsMobileMenuOpen(false); }}>Log in</div>
+                      <div onClick={() => { openModal('login'); closeMobileMenu(); }}>Log in</div>
                     </li>
                   </>
                 )}
