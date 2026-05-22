@@ -72,13 +72,24 @@ const Navbar = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
-        closeMobileMenu();
-        setActiveDropdown(null);
+        
+        setActiveDropdown((prev) => prev ? null : prev);
+  
+        setIsMobileMenuOpen((prev) => {
+          if (prev) {
+            setIsClosing(true);
+            setTimeout(() => setIsClosing(false), 400);
+            return false;
+          }
+          return prev;
+        });
       }
+
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
-        setIsSearchFocused(false);
+        setIsSearchFocused((prev) => prev ? false : prev);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
