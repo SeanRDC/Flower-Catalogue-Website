@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -53,7 +54,6 @@ export const AuthProvider = ({ children }) => {
         );
 
         const email = userInfo.data.email;
-
         const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/google', { email });
         
         login(res.data.user, res.data.token);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       console.log('Google Login Failed');
       alert('Google login was cancelled or failed.');
     }
-});
+  });
 
   if (loading) return null; 
 

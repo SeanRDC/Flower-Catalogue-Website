@@ -34,7 +34,7 @@ router.post('/send-otp', async (req, res) => {
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; border-radius: 10px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #5a6c3a; margin: 0; font-size: 28px; letter-spacing: 2px;">PEONY</h1>
-            <p style="color: #666; font-size: 16px; margin-top: 5px;">Botanical Catalogue</p>
+            <p style="color: #666; font-size: 16px; margin-top: 5px;">Flower Catalogue</p>
           </div>
           <div style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
             <h2 style="color: #333; margin-top: 0;">Verify your email</h2>

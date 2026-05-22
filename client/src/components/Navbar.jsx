@@ -236,21 +236,30 @@ const Navbar = () => {
               <ul>
                 {currentUser ? (
                   <li className="dropdown-item">
-                    <div onClick={() => { openModal('logout'); closeMobileMenu(); }}>
+                    <div onClick={(e) => { 
+                      e.preventDefault();
+                      e.stopPropagation();
+                      closeMobileMenu();
+                      setTimeout(() => openModal('logout'), 150); 
+                    }}>
                       Log out ({currentUser.email})
                     </div>
                   </li>
                 ) : (
-                  <>
-                    <li className="dropdown-item">
-                      <div onClick={() => { openModal('signup'); closeMobileMenu(); }}>Sign in</div>
-                    </li>
-                    <li className="dropdown-item">
-                      <div onClick={() => { openModal('login'); closeMobileMenu(); }}>Log in</div>
-                    </li>
-                  </>
+                  <li className="dropdown-item">
+                    <div onClick={(e) => { 
+                      e.preventDefault();
+                      e.stopPropagation();
+                      closeMobileMenu();
+                      setTimeout(() => openModal('login'), 150); 
+                    }}>
+                      Log In / Sign Up
+                    </div>
+                  </li>
                 )}
-                <li className="dropdown-item"><Link to="/support" onClick={closeMobileMenu}>Help and Support</Link></li>
+                <li className="dropdown-item">
+                  <Link to="/support" onClick={closeMobileMenu}>Help and Support</Link>
+                </li>
               </ul>
             </div>
           </li>
