@@ -67,14 +67,18 @@ const AuthModal = () => {
     setError('');
     setIsLoading(true);
     try {
-      await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, otp });
+      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { 
+        email, 
+        password, 
+        otp 
+      });
       
-      await signup(email, password);
+      login(res.data.user, res.data.token);
       
       setShowOtp(false);
       closeModal();
     } catch (err) {
-      setError(err.response?.data?.message || err.message.replace('Firebase: ', ''));
+      setError(err.response?.data?.message || 'Failed to verify OTP and create account');
     } finally {
       setIsLoading(false);
     }

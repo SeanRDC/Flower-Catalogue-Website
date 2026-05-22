@@ -1,5 +1,7 @@
 import express from 'express';
 import { Resend } from 'resend';
+import jwt from 'jsonwebtoeken';
+import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 
 const router = express.Router();
@@ -53,7 +55,7 @@ router.post('/send-otp', async (req, res) => {
 });
 
 router.post('/verify-otp', async (req, res) => {
-  const { email, otp } = req.body;
+  const { email, password, otp } = req.body; 
   const storedData = otpStore.get(email);
 
   if (!storedData) return res.status(400).json({ message: 'No OTP requested for this email' });
@@ -63,8 +65,29 @@ router.post('/verify-otp', async (req, res) => {
   }
   if (storedData.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
 
-  otpStore.delete(email);
-  res.status(200).json({ message: 'OTP Verified' });
+  try {
+    otpStore.delete(email);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      email,
+      password: hashedPassword
+    });
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    res.status(201).json({ 
+      message: 'Account created successfully',
+      token,
+      user: { id: newUser._id, email: newUser.email, favorites: [], collections: [] }
+    });
+  } catch (error) {
+    console.error("MongoDB Save Error:", error);
+    res.status(500).json({ message: 'Server error creating account' });
+  }
 });
 
 export default router;
