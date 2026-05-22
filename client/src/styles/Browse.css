@@ -4,6 +4,21 @@
   flex-direction: column;
   background-color: #f5f5f5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  opacity: 0;
+  animation: pageFadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes pageFadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.chevron-icon {
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotate {
+  transform: rotate(180deg);
 }
 
 .browse-hero-header {
@@ -219,8 +234,6 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
-  
   animation: fadeSlideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -517,11 +530,6 @@
   .petals-track img:nth-child(4n+4) { width: 160px; height: 240px; }
 }
 
-/* ==========================================================================
-   SMOOTH EXPANDING GRID ANIMATIONS
-   ========================================================================== */
-
-/* The card container */
 .top-pick {
   position: relative;
   width: 100%;
@@ -531,8 +539,7 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  /* This cubic-bezier creates the buttery smooth sweeping motion */
-  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .top-pick:hover {
@@ -545,45 +552,36 @@
   width: 100%;
 }
 
-/* Base Image */
 .images {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  transition: height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ================== EXPANDED STATE ================== */
-
-/* The card spans 2 columns and 2 rows smoothly */
 .top-pick.expanded {
   grid-column: span 2;
   grid-row: span 2;
   cursor: default;
-  transform: none; /* Stops the hover jump while expanded */
+  transform: none;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* Image grows from 200px to 450px */
 .top-pick.expanded .images {
   height: 450px; 
 }
 
-/* Smooth font scaling */
 .product-name-item {
   font-family: 'Open Sans', Helvetica, sans-serif;
   font-weight: 600;
   color: #2c2c2c;
   font-size: 18px;
   margin-bottom: 8px;
-  transition: font-size 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .top-pick.expanded .product-name-item {
-  font-size: 26px; /* Title swells beautifully */
+  font-size: 26px;
 }
 
-/* ================== ENTRY ANIMATIONS ================== */
 
 @keyframes fadeSlideDown {
   0% { opacity: 0; transform: translateY(-15px); }
@@ -595,7 +593,6 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* The Action Bar (Collections, Favorites, Download) fades in cleanly */
 .card-content-wrapper {
   display: flex;
   flex-direction: column;
@@ -631,7 +628,6 @@
   padding-top: 15px;
 }
 
-/* The Fullscreen Expand Button fades in over the image */
 .expand-fullscreen-btn {
   position: absolute;
   top: 15px;
