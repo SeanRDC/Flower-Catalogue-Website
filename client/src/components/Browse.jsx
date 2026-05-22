@@ -117,12 +117,18 @@ const Browse = () => {
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
 
-    const endpoint = `https://flower-catalogue-website.onrender.com/api/flowers?page=1&limit=250`;
+    let query = `page=1&limit=250`;
+    if (activeFilters['Color']) query += `&color=${encodeURIComponent(activeFilters['Color'])}`;
+    if (activeFilters['Petal Shape']) query += `&petalShape=${encodeURIComponent(activeFilters['Petal Shape'])}`;
+    if (activeFilters['Type']) query += `&type=${encodeURIComponent(activeFilters['Type'])}`;
+    if (activeFilters['Symbolism']) query += `&symbolism=${encodeURIComponent(activeFilters['Symbolism'])}`;
+
+    const endpoint = `https://flower-catalogue-website.onrender.com/api/flowers?${query}`;
 
     axios
       .get(endpoint)
       .then((res) => {
-        if (res.data?.flowers?.length) {
+        if (res.data?.flowers) {
           setAllFlowers(res.data.flowers);
         } else {
           setAllFlowers([]);
@@ -130,9 +136,8 @@ const Browse = () => {
       })
       .catch((err) => console.error('Error fetching flowers:', err));
       
-  }, []);
+  }, [activeFilters]);
 
-  // Handle clicking outside mobile subnav to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (subNavRef.current && !subNavRef.current.contains(event.target)) {

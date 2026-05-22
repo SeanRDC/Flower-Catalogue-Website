@@ -23,22 +23,32 @@ app.get('/api/flowers', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
-    const search = req.query.search || '';
+    
+    const { search, color, petalShape, type, symbolism } = req.query;
+    
     let query = {};
+
     if (search) {
-      query = {
-        $or: [
-          { commonName: { $regex: search, $options: 'i' } },
-          { scientificName: { $regex: search, $options: 'i' } },
-          { family: { $regex: search, $options: 'i' } }
-        ]
-      };
+      query.$or = [
+        { commonName: { $regex: search, $options: 'i' } },
+        { scientificName: { $regex: search, $options: 'i' } },
+        { family: { $regex: search, $options: 'i' } }
+      ];
     }
+
+    if (color) query.color = color;
+    if (petalShape) query.petalShape = petalShape;
+    if (type) query.type = type;
+    if (symbolism) query.symbolism = symbolism;
 
     const flowers = await Flower.find(query).skip(skip).limit(limit);
     const total = await Flower.countDocuments(query);
 
-    res.json({ flowers, totalPages: Math.ceil(total / limit), currentPage: page });
+    res.json({ 
+      flowers, 
+      totalPages: Math.ceil(total / limit), 
+      currentPage: page 
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

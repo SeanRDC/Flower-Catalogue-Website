@@ -4,6 +4,35 @@ import Flower from './models/Flower.js';
 
 dotenv.config();
 
+const getMetadata = (name, family) => {
+  const data = { color: "Various", petalShape: "Rounded", type: family, symbolism: "General" };
+  if (name.includes("Rose")) { data.type = "Rose"; data.petalShape = "Ruffled"; }
+  if (name.includes("Peony")) { data.type = "Peony"; data.petalShape = "Ruffled"; }
+  if (name.includes("Lily")) { data.type = "Lily"; data.petalShape = "Pointed"; }
+  if (name.includes("Orchid")) { data.type = "Orchid"; data.petalShape = "Spider-like"; }
+  if (name.includes("Red")) data.color = "Red";
+  if (name.includes("White")) data.color = "White";
+  if (name.includes("Yellow")) data.color = "Yellow";
+  return data;
+};
+
+const finalFlowerCollection = rawFlowerData.map(flower => {
+  const meta = getMetadata(flower[0], flower[2]);
+  return {
+    commonName: flower[0],
+    scientificName: flower[1],
+    family: flower[2],
+    description: flower[3],
+    lifecycle: flower[4],
+    imageUrl: "/heroimage.jpg",
+    color: meta.color,
+    petalShape: meta.petalShape,
+    type: meta.type,
+    symbolism: meta.symbolism,
+    tags: ["catalogue", flower[2].toLowerCase(), flower[4].toLowerCase()]
+  };
+});
+
 // database connection
 const rawFlowerData = [
   // --- ROSES (1-10) ---
