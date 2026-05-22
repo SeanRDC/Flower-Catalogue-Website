@@ -360,7 +360,15 @@ const Browse = () => {
       )} 
 
       {isNewsfeedMode && (
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '140px', zIndex: 0 }}>
+        <div style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '140px', 
+          zIndex: 20,
+          filter: 'drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15))'
+        }}>
           <img 
             src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" 
             alt="Header background" 
@@ -374,6 +382,16 @@ const Browse = () => {
               </clipPath>
             </defs>
           </svg>
+        </div>
+      )}
+
+      {isNewsfeedMode && (
+        <div style={{ 
+          position: 'relative', 
+          zIndex: 10,
+          marginTop: '80px'
+        }}>
+          <FilterBar onFilterSelect={handleFiltersUpdated} />
         </div>
       )}
 
@@ -452,13 +470,10 @@ const Browse = () => {
       {!selectedCategory && !currentSearchQuery && (
         <>
           <section className="top-picks" id="top-picks" ref={topPicksRef}>
-          <div className="title" style={{ marginTop: isNewsfeedMode ? '120px' : '0' }}>
+          
+          <div className="title" style={{ marginTop: '0px', marginBottom: '40px' }}>
             {isNewsfeedMode ? 'Complete Catalog' : (selectedCategory ? `${selectedCategory} Flowers` : 'Top picks for you')}
           </div>
-
-          {isNewsfeedMode && (
-            <FilterBar onFilterSelect={handleFiltersUpdated} />
-          )}
 
           {allFlowers.length === 0 ? (
             <div className="frame">
