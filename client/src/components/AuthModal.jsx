@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/modal.css'; 
 
 const AuthModal = () => {
-  const { isModalOpen, closeModal, modalMode, setModalMode, signup, login, signInWithGoogle, logout, currentUser } = useAuth();
+  const { isModalOpen, closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser } = useAuth();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +15,24 @@ const AuthModal = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [timeLeft, setTimeLeft] = useState(300);
+
+  useEffect(() => {
+    let timer;
+    if (showOtp && timeLeft > 0) {
+      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+    } else if (timeLeft === 0) {
+      setError('OTP has expired. Please try signing up again.');
+    }
+    return () => clearInterval(timer);
+  }, [showOtp, timeLeft]);
+
+  const formatTime = () => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
 
   if (!isModalOpen) return null;
 
@@ -51,12 +69,14 @@ const AuthModal = () => {
       if (isSignUp) {
         await axios.post('https://flower-catalogue-website.onrender.com/api/auth/send-otp', { email });
         setShowOtp(true);
+        setTimeLeft(300);
       } else {
-        await login(email, password); 
+        const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/login', { email, password });
+        login(res.data.user, res.data.token); 
         closeModal();
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message.replace('Firebase: ', ''));
+      setError(err.response?.data?.message || 'Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -65,20 +85,19 @@ const AuthModal = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    if (timeLeft === 0) return setError('OTP has expired.');
+    
     setIsLoading(true);
     try {
-      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { 
-        email, 
-        password, 
-        otp 
-      });
+      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, password, otp });
       
       login(res.data.user, res.data.token);
       
       setShowOtp(false);
       closeModal();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to verify OTP and create account');
+      setError(err.response?.data?.message || 'Invalid OTP');
     } finally {
       setIsLoading(false);
     }
@@ -96,16 +115,19 @@ const AuthModal = () => {
     <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={closeModal} aria-label="Close modal">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
         </button>
 
         {showOtp ? (
           <>
             <h2 className="modal-title">Check your email</h2>
-            <p className="modal-subtitle">We sent a 6-digit code to <strong>{email}</strong></p>
+            <p className="modal-subtitle" style={{ marginBottom: '15px' }}>
+              We sent a 6-digit code to <strong>{email}</strong>
+            </p>
+            
+            <div style={{ textAlign: 'center', marginBottom: '20px', color: timeLeft <= 60 ? '#d32f2f' : '#5a6c3a', fontWeight: 'bold', fontSize: '18px' }}>
+              {formatTime()}
+            </div>
+
             {error && <div className="modal-error-msg">{error}</div>}
             
             <form className="modal-form" onSubmit={handleOtpSubmit}>
@@ -118,13 +140,14 @@ const AuthModal = () => {
                 className="modal-input otp-input"
                 autoFocus
                 required
+                disabled={timeLeft === 0}
               />
-              <button type="submit" className="modal-continue-btn" disabled={isLoading || otp.length < 6}>
+              <button type="submit" className="modal-continue-btn" disabled={isLoading || otp.length < 6 || timeLeft === 0}>
                 {isLoading ? 'Verifying...' : 'Verify & Create Account'}
               </button>
             </form>
             <p className="modal-toggle-text">
-              <span onClick={() => setShowOtp(false)}>Wrong email? Go back</span>
+              <span onClick={() => { setShowOtp(false); setTimeLeft(300); }}>Wrong email? Go back</span>
             </p>
           </>
         ) : (
