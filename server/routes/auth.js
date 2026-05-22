@@ -27,15 +27,27 @@ router.post('/send-otp', async (req, res) => {
     console.log(`[AUTH] 2. Bypassing SMTP. Sending via Resend API...`);
 
     const { data, error } = await resend.emails.send({
-      from: 'Peony <onboarding@resend.dev>', // Resend's default testing address
+      from: 'Peony <onboarding@resend.dev>', 
       to: email,
       subject: 'Your Peony Verification Code',
       html: `
-        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
-          <h2>Welcome!</h2>
-          <p>Your verification code is:</p>
-          <h1 style="color: #5a6c3a; letter-spacing: 5px; font-size: 36px;">${otp}</h1>
-          <p>This code will expire in 5 minutes.</p>
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; border-radius: 10px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #5a6c3a; margin: 0; font-size: 28px; letter-spacing: 2px;">PEONY</h1>
+            <p style="color: #666; font-size: 16px; margin-top: 5px;">Botanical Catalogue</p>
+          </div>
+          <div style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+            <h2 style="color: #333; margin-top: 0;">Verify your email</h2>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 30px;">
+              Thank you for joining Peony! Please use the verification code below to complete your registration. This code will expire in exactly 5 minutes.
+            </p>
+            <div style="background-color: #f4f6f1; padding: 20px; border-radius: 6px; display: inline-block; margin-bottom: 30px; border: 1px solid #e0e5d5;">
+              <h1 style="color: #5a6c3a; letter-spacing: 12px; font-size: 42px; margin: 0; font-weight: bold; padding-left: 12px;">${otp}</h1>
+            </div>
+            <p style="color: #999; font-size: 14px; margin-bottom: 0;">
+              If you didn't request this code, you can safely ignore this email.
+            </p>
+          </div>
         </div>
       `
     });
