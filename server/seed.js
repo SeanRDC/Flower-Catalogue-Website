@@ -16,23 +16,6 @@ const getMetadata = (name, family) => {
   return data;
 };
 
-const finalFlowerCollection = rawFlowerData.map(flower => {
-  const meta = getMetadata(flower[0], flower[2]);
-  return {
-    commonName: flower[0],
-    scientificName: flower[1],
-    family: flower[2],
-    description: flower[3],
-    lifecycle: flower[4],
-    imageUrl: "/heroimage.jpg",
-    color: meta.color,
-    petalShape: meta.petalShape,
-    type: meta.type,
-    symbolism: meta.symbolism,
-    tags: ["catalogue", flower[2].toLowerCase(), flower[4].toLowerCase()]
-  };
-});
-
 // database connection
 const rawFlowerData = [
   // --- ROSES (1-10) ---
@@ -276,15 +259,22 @@ const rawFlowerData = [
   ["Purple Verbena", "Verbena bonariensis", "Verbenaceae", "Tall, wiry, see-through stems topped with tight, vibrant clusters of tiny magenta-purple flowers.", "Perennial"]
 ];
 
-const finalFlowerCollection = rawFlowerData.map(flower => ({
-  commonName: flower[0],
-  scientificName: flower[1],
-  family: flower[2],
-  description: flower[3],
-  lifecycle: flower[4],
-  imageUrl: "/heroimage.jpg",
-  tags: ["catalogue", flower[2].toLowerCase(), flower[4].toLowerCase()]
-}));
+const finalFlowerCollection = rawFlowerData.map(flower => {
+  const meta = getMetadata(flower[0], flower[2]);
+  return {
+    commonName: flower[0],
+    scientificName: flower[1],
+    family: flower[2],
+    description: flower[3],
+    lifecycle: flower[4],
+    imageUrl: "/heroimage.jpg",
+    color: meta.color,
+    petalShape: meta.petalShape,
+    type: meta.type,
+    symbolism: meta.symbolism,
+    tags: ["catalogue", flower[2].toLowerCase(), flower[4].toLowerCase()]
+  };
+});
 
 const seedDatabase = async () => {
   try {
