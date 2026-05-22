@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, X } from 'lucide-react';
 import '../styles/Browse.css';
 import { useAuth } from '../context/AuthContext';
+import FilterBar from '../components/FilterBar';
 
 const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -74,6 +75,12 @@ const Browse = () => {
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
+
+  const [activeFilters, setActiveFilters] = useState({});
+  
+  const handleFiltersUpdated = (selectedFilters) => {
+    setActiveFilters(selectedFilters);
+  };
   
   // Refs for smooth scrolling
   const browseRef = useRef(null);
@@ -83,16 +90,27 @@ const Browse = () => {
   
   // Derived State
   const displayedFlowers = allFlowers.filter(flower => {
-
     const matchesCategory = selectedCategory 
       ? flower.lifecycle?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
       : true;
+      
     const matchesSearch = currentSearchQuery
       ? flower.commonName?.toLowerCase().includes(currentSearchQuery.toLowerCase()) || 
         flower.description?.toLowerCase().includes(currentSearchQuery.toLowerCase())
       : true;
 
-    return matchesCategory && matchesSearch;
+    let matchesFilters = true;
+    if (activeFilters) {
+      if (activeFilters['Color'] && !flower.color?.toLowerCase().includes(activeFilters['Color'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Color'].toLowerCase())) matchesFilters = false;
+      
+      if (activeFilters['Petal Shape'] && !flower.petalShape?.toLowerCase().includes(activeFilters['Petal Shape'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Petal Shape'].toLowerCase())) matchesFilters = false;
+      
+      if (activeFilters['Type'] && !flower.type?.toLowerCase().includes(activeFilters['Type'].toLowerCase()) && !flower.commonName?.toLowerCase().includes(activeFilters['Type'].toLowerCase())) matchesFilters = false;
+      
+      if (activeFilters['Symbolism'] && !flower.symbolism?.toLowerCase().includes(activeFilters['Symbolism'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Symbolism'].toLowerCase())) matchesFilters = false;
+    }
+
+    return matchesCategory && matchesSearch && matchesFilters;
   });
 
   // Fetch Live Data from Render
@@ -438,6 +456,10 @@ const Browse = () => {
             {isNewsfeedMode ? 'Complete Catalog' : (selectedCategory ? `${selectedCategory} Flowers` : 'Top picks for you')}
           </div>
 
+          {isNewsfeedMode && (
+            <FilterBar onFilterSelect={handleFiltersUpdated} />
+          )}
+
           {allFlowers.length === 0 ? (
             <div className="frame">
               {[...Array(8)].map((_, index) => (
@@ -455,7 +477,12 @@ const Browse = () => {
             </div>
           ) : isNewsfeedMode ? (
             <div className="frame">
-              {allFlowers.map((flower, index) => renderFlowerCard(flower, index))}
+              {displayedFlowers.length > 0 ? displayedFlowers.map((flower, index) => renderFlowerCard(flower, index)) : (
+                <div className="no-results-container" style={{ gridColumn: '1/-1', textAlign: 'center', padding: '50px' }}>
+                  <h2 className="no-results-title">No flowers match these filters</h2>
+                  <button className="show-more" onClick={() => setActiveFilters({})}>Clear Filters</button>
+                </div>
+              )}
             </div>
           ) : (
             <>

@@ -1,0 +1,123 @@
+.filter-system-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 40px;
+}
+
+/* ========================================= */
+/* TOP TIER: Main Green Bar                  */
+/* ========================================= */
+.main-filter-bar {
+  background-color: #a4ad88;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  gap: 30px;
+}
+
+.filter-label {
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 40px;
+}
+
+.filter-tab-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  padding: 5px 0;
+}
+
+.filter-tab-btn:hover {
+  opacity: 0.8;
+}
+
+.filter-tab-btn.has-selection {
+  font-weight: 700;
+  border-bottom: 2px solid white;
+}
+
+.filter-chevron {
+  transition: transform 0.3s ease;
+}
+
+.filter-chevron.rotate {
+  transform: rotate(180deg);
+}
+
+/* ========================================= */
+/* BOTTOM TIER: Brown Sub-Options Bar        */
+/* ========================================= */
+.sub-filter-bar {
+  background-color: #8c766e;
+  overflow: hidden;
+}
+
+.sub-filter-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  padding: 15px 40px;
+  flex-wrap: wrap;
+}
+
+.sub-option-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.sub-option-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sub-option-btn.selected {
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================= */
+/* MOBILE RESPONSIVENESS                     */
+/* ========================================= */
+@media (max-width: 768px) {
+  .main-filter-bar {
+    padding: 0 20px;
+    gap: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .filter-tabs {
+    gap: 20px;
+  }
+
+  .sub-filter-options {
+    gap: 20px;
+    justify-content: flex-start;
+    padding: 15px 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
