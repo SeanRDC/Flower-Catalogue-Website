@@ -5,36 +5,35 @@ import axios from 'axios';
 import '../styles/modal.css'; 
 
 const AuthModal = () => {
-  const { isModalOpen, closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser, alertContent } = useAuth();
+  const { isModalOpen, closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser, showAlert, alertContent } = useAuth();
+  
+  const [step, setStep] = useState(1); 
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState(''); 
   const [error, setError] = useState('');
-  const [successMsg, setSuccessMsg] = useState(''); 
   const [agreed, setAgreed] = useState(false);
   
-  const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [timeLeft, setTimeLeft] = useState(300);
 
   useEffect(() => {
     let timer;
-    if (showOtp && timeLeft > 0) {
+    if (step === 2 && timeLeft > 0) {
       timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    } else if (timeLeft === 0 && showOtp) {
+    } else if (timeLeft === 0 && step === 2) {
       setError('OTP has expired. Please try again.');
     }
     return () => clearInterval(timer);
-  }, [showOtp, timeLeft]);
+  }, [step, timeLeft]);
 
   useEffect(() => {
     setError('');
-    setSuccessMsg('');
-    setShowOtp(false);
+    setStep(1);
     setOtp('');
+    setNewPassword('');
   }, [modalMode]);
 
   const formatTime = () => {
@@ -44,6 +43,25 @@ const AuthModal = () => {
   };
 
   if (!isModalOpen) return null;
+
+  if (modalMode === 'alert') {
+    return (
+      <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="close-btn" onClick={closeModal}>
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          <h2 className="modal-title">{alertContent.title}</h2>
+          <p className="modal-subtitle" style={{ marginBottom: '25px' }}>
+            {alertContent.message}
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+            <button className="modal-continue-btn" style={{ width: '100%' }} onClick={closeModal}>Awesome</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (modalMode === 'logout') {
     return (
@@ -65,32 +83,12 @@ const AuthModal = () => {
     );
   }
 
-  if (modalMode === 'alert') {
-  return (
-    <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={closeModal}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-        <h2 className="modal-title">{alertContent.title}</h2>
-        <p className="modal-subtitle" style={{ marginBottom: '25px' }}>
-          {alertContent.message}
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-          <button className="modal-continue-btn" style={{ width: '100%' }} onClick={closeModal}>OK</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
   const isSignUp = modalMode === 'signup';
   const isForgotPw = modalMode === 'forgotPassword';
 
-  const handleSubmit = async (e) => {
+  const handleInitialSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccessMsg('');
 
     if (isSignUp && !agreed) return setError('You must agree to the Terms and Privacy Policy.');
 
@@ -98,16 +96,16 @@ const AuthModal = () => {
     try {
       if (isSignUp) {
         await axios.post('https://flower-catalogue-website.onrender.com/api/auth/send-otp', { email });
-        setShowOtp(true);
+        setStep(2);
         setTimeLeft(300);
       } else if (isForgotPw) {
         await axios.post('https://flower-catalogue-website.onrender.com/api/auth/forgot-password-otp', { email });
-        setShowOtp(true);
+        setStep(2);
         setTimeLeft(300);
       } else {
         const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/login', { email, password });
         login(res.data.user, res.data.token); 
-        closeModal();
+        showAlert('Welcome Back!', 'You have successfully logged in to Peony.');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
@@ -121,21 +119,34 @@ const AuthModal = () => {
     setError('');
     
     if (timeLeft === 0) return setError('OTP has expired.');
+
+    if (isForgotPw) {
+      setStep(3);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, password, otp });
+      login(res.data.user, res.data.token);
+      showAlert('Welcome to Peony!', 'Your account has been created successfully.');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid OTP');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
     
     setIsLoading(true);
     try {
-      if (isForgotPw) {
-        await axios.post('https://flower-catalogue-website.onrender.com/api/auth/reset-password', { email, otp, newPassword });
-        setModalMode('login');
-        setSuccessMsg('Password successfully reset! Please log in.');
-      } else {
-        const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, password, otp });
-        login(res.data.user, res.data.token);
-        closeModal();
-      }
-      setShowOtp(false);
+      await axios.post('https://flower-catalogue-website.onrender.com/api/auth/reset-password', { email, otp, newPassword });
+      showAlert('Password Reset', 'Your password was updated successfully! You can now log in.');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid OTP');
+      setError(err.response?.data?.message || 'Failed to reset password. OTP may be invalid.');
     } finally {
       setIsLoading(false);
     }
@@ -144,7 +155,7 @@ const AuthModal = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      closeModal();
+      showAlert('Welcome!', 'Successfully logged in with Google.');
     } catch (err) {
       setError('Failed to sign in with Google.');
     }
@@ -157,7 +168,34 @@ const AuthModal = () => {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
-        {showOtp ? (
+        {step === 3 ? (
+          <>
+            <h2 className="modal-title">Create New Password</h2>
+            <p className="modal-subtitle" style={{ marginBottom: '15px' }}>
+              Enter a secure new password for your account.
+            </p>
+            
+            {error && <div className="modal-error-msg">{error}</div>}
+            
+            <form className="modal-form" onSubmit={handleResetPasswordSubmit}>
+              <input 
+                type="password" 
+                className="modal-input" 
+                placeholder="Enter new password" 
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)} 
+                required 
+              />
+              <button type="submit" className="modal-continue-btn" disabled={isLoading}>
+                {isLoading ? 'Updating...' : 'Save New Password'}
+              </button>
+            </form>
+            <p className="modal-toggle-text">
+              <span onClick={() => setStep(2)}>Go back</span>
+            </p>
+          </>
+        ) : step === 2 ? (
+          
           <>
             <h2 className="modal-title">Check your email</h2>
             <p className="modal-subtitle" style={{ marginBottom: '15px' }}>
@@ -182,28 +220,16 @@ const AuthModal = () => {
                 required
                 disabled={timeLeft === 0}
               />
-
-              {isForgotPw && (
-                <input 
-                  type="password" 
-                  className="modal-input" 
-                  placeholder="Enter your new password" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
-                  required 
-                  disabled={timeLeft === 0}
-                />
-              )}
-
               <button type="submit" className="modal-continue-btn" disabled={isLoading || otp.length < 6 || timeLeft === 0}>
-                {isLoading ? 'Verifying...' : (isForgotPw ? 'Reset Password' : 'Verify & Create Account')}
+                {isLoading ? 'Verifying...' : (isForgotPw ? 'Next Step' : 'Verify & Create Account')}
               </button>
             </form>
             <p className="modal-toggle-text">
-              <span onClick={() => { setShowOtp(false); setTimeLeft(300); }}>Go back</span>
+              <span onClick={() => { setStep(1); setTimeLeft(300); }}>Wrong email? Go back</span>
             </p>
           </>
         ) : (
+
           <>
             <h2 className="modal-title">
               {isSignUp ? 'Sign up for free' : (isForgotPw ? 'Reset Password' : 'Welcome back')}
@@ -213,9 +239,8 @@ const AuthModal = () => {
             </p>
 
             {error && <div className="modal-error-msg">{error}</div>}
-            {successMsg && <div className="modal-success-msg">{successMsg}</div>}
 
-            <form className="modal-form" onSubmit={handleSubmit}>
+            <form className="modal-form" onSubmit={handleInitialSubmit}>
               <input 
                 type="email" 
                 className="modal-input" 
@@ -226,7 +251,7 @@ const AuthModal = () => {
               />
               
               {!isForgotPw && (
-                <div style={{ width: '100%', position: 'relative' }}>
+                <>
                   <input 
                     type="password" 
                     className="modal-input" 
@@ -235,14 +260,14 @@ const AuthModal = () => {
                     onChange={(e) => setPassword(e.target.value)} 
                     required 
                   />
-                  {!isSignUp && !isForgotPw && (
+                  {!isSignUp && (
                     <div className="forgot-pw-container">
                       <span className="forgot-pw-link" onClick={() => setModalMode('forgotPassword')}>
                         Forgot password?
                       </span>
                     </div>
                   )}
-                </div>
+                </>
               )}
 
               {isSignUp && (
