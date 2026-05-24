@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const imageDictionary = {
-  // ROSES
+  // --- ROSES (1-10) ---
   "Juliet Rose": "https://images.pexels.com/photos/7252509/pexels-photo-7252509.jpeg",
   "Black Magic Rose": "https://images.pexels.com/photos/1020494/pexels-photo-1020494.jpeg",
   "Avalanche Rose": "https://images.pexels.com/photos/35013384/pexels-photo-35013384.jpeg",
@@ -21,7 +21,7 @@ const imageDictionary = {
   "Queen Elizabeth Rose": "https://images.pexels.com/photos/4840738/pexels-photo-4840738.jpeg",
   "Double Delight Rose": "https://images.pexels.com/photos/12268701/pexels-photo-12268701.jpeg",
 
-  // PEONIES
+  // --- PEONIES (11-20) ---
   "Coral Charm Peony": "https://images.pexels.com/photos/8192941/pexels-photo-8192941.jpeg",
   "Sarah Bernhardt Peony": "https://images.pexels.com/photos/12507420/pexels-photo-12507420.jpeg",
   "Festiva Maxima Peony": "https://images.pexels.com/photos/37712002/pexels-photo-37712002.jpeg",
@@ -33,7 +33,7 @@ const imageDictionary = {
   "Duchesse de Nemours Peony": "https://images.pexels.com/photos/9304812/pexels-photo-9304812.jpeg",
   "Pink Hawaiian Coral Peony": "https://images.pexels.com/photos/12000146/pexels-photo-12000146.jpeg",
 
-  // LILIES AND CALLAS
+  // --- LILIES AND CALLAS (21-30) ---
   "White Oriental Lily": "https://images.unsplash.com/photo-1652892342350-f907023f2406?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   "Stargazer Lily": "https://images.pexels.com/photos/9985918/pexels-photo-9985918.jpeg",
   "Tiger Lily": "https://images.pexels.com/photos/5009411/pexels-photo-5009411.jpeg",
@@ -45,7 +45,7 @@ const imageDictionary = {
   "Picasso Calla Lily": "https://www.gardenia.net/wp-content/uploads/2023/05/zantedeschia-picasso-calla-lily.webp",
   "Garnet Glow Calla Lily": "https://search.shelmerdine.com/Content/Images/Photos/F675-14.jpg",
 
-  // ORCHIDS
+  // --- ORCHIDS (31-40) ---
   "White Phalaenopsis Orchid": "https://images.pexels.com/photos/18378607/pexels-photo-18378607.jpeg",
   "Green Cymbidium Orchid":"https://images.pexels.com/photos/7367456/pexels-photo-7367456.jpeg",
   "Vanda Blue Orchid": "https://images.pexels.com/photos/20598151/pexels-photo-20598151.jpeg",
@@ -57,7 +57,7 @@ const imageDictionary = {
   "Vanilla Orchid": "https://d384u2mq2suvbq.cloudfront.net/public/spree/products/6127/large/vanilla-orchid-web.webp",
   "Spider Orchid": "https://images.pexels.com/photos/36715884/pexels-photo-36715884.jpeg",
 
-  // DAHLIAS
+  // --- DAHLIAS (41-50) ---
   "Burgundy Dahlia": "https://images.pexels.com/photos/18013163/pexels-photo-18013163.jpeg",
   "Café au Lait Dahlia": "https://images.pexels.com/photos/33742916/pexels-photo-33742916.jpeg",
   "Bishop of Llandaff Dahlia": "https://images.pexels.com/photos/18247768/pexels-photo-18247768.jpeg",
