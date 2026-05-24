@@ -235,10 +235,12 @@ const AuthModal = () => {
                     onChange={(e) => setPassword(e.target.value)} 
                     required 
                   />
-                  {!isSignUp && (
-                    <span className="forgot-pw-link" onClick={() => setModalMode('forgotPassword')}>
-                      Forgot password?
-                    </span>
+                  {!isSignUp && !isForgotPw && (
+                    <div className="forgot-pw-container">
+                      <span className="forgot-pw-link" onClick={() => setModalMode('forgotPassword')}>
+                        Forgot password?
+                      </span>
+                    </div>
                   )}
                 </div>
               )}
