@@ -13,9 +13,9 @@ const FilterBar = ({ onFilterSelect }) => {
   });
 
   const filterCategories = {
-    Color: ['Red', 'Pink', 'White', 'Yellow', 'Purple', 'Blue', 'Orange'],
+    Color: ['Red', 'Pink', 'White', 'Yellow', 'Purple', 'Blue', 'Orange', 'Green'],
     'Petal Shape': ['Rounded', 'Pointed', 'Ruffled', 'Spider-like'],
-    Type: ['Rose', 'Lily', 'Tulip', 'Orchid', 'Daisy', 'Peony'],
+    Type: ['Rose', 'Lily', 'Tulip', 'Orchid', 'Daisy', 'Peony', 'Carnation', 'Other'],
     Symbolism: ['Love', 'Purity', 'Friendship', 'Strength', 'Peace', 'Joy']
   };
 

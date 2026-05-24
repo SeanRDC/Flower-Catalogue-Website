@@ -1,22 +1,71 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Flower from './models/Flower.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
 
-const getMetadata = (name, family) => {
-  const data = { color: "Various", petalShape: "Rounded", type: family, symbolism: "General" };
-  if (name.includes("Rose")) { data.type = "Rose"; data.petalShape = "Ruffled"; }
-  if (name.includes("Peony")) { data.type = "Peony"; data.petalShape = "Ruffled"; }
-  if (name.includes("Lily")) { data.type = "Lily"; data.petalShape = "Pointed"; }
-  if (name.includes("Orchid")) { data.type = "Orchid"; data.petalShape = "Spider-like"; }
-  if (name.includes("Red")) data.color = "Red";
-  if (name.includes("White")) data.color = "White";
-  if (name.includes("Yellow")) data.color = "Yellow";
-  return data;
+const imageDictionary = {
+  "Juliet Rose": "https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=800",
+  "Black Magic Rose": "https://images.unsplash.com/photo-1548094891-04e4c274bc36?auto=format&fit=crop&w=800",
+  "Golden Sunflower": "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=800",
+  "White Oriental Lily": "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800",
+  "Blue Hydrangea": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800",
 };
 
-// database connection
+const extractTruthfulData = (name, family, description) => {
+  const lowerName = name.toLowerCase();
+  const lowerDesc = description.toLowerCase();
+  const lowerFamily = family.toLowerCase();
+
+  let color = "White";
+  let petalShape = "Rounded";
+  let type = "Other";
+  let symbolism = "Joy";
+  
+  if (lowerDesc.includes("red") || lowerName.includes("red") || lowerDesc.includes("crimson") || lowerDesc.includes("burgundy") || lowerDesc.includes("scarlet") || lowerDesc.includes("mahogany")) color = "Red";
+  else if (lowerDesc.includes("pink") || lowerName.includes("pink") || lowerDesc.includes("magenta") || lowerDesc.includes("blush") || lowerDesc.includes("rose ") || lowerDesc.includes("fuchsia") || lowerDesc.includes("coral")) color = "Pink";
+  else if (lowerDesc.includes("yellow") || lowerName.includes("yellow") || lowerDesc.includes("gold") || lowerDesc.includes("lemon")) color = "Yellow";
+  else if (lowerDesc.includes("purple") || lowerName.includes("purple") || lowerDesc.includes("violet") || lowerDesc.includes("lilac") || lowerDesc.includes("lavender") || lowerDesc.includes("plum") || lowerName.includes("black")) color = "Purple";
+  else if (lowerDesc.includes("blue") || lowerName.includes("blue") || lowerDesc.includes("sky")) color = "Blue";
+  else if (lowerDesc.includes("orange") || lowerName.includes("orange") || lowerDesc.includes("peach") || lowerDesc.includes("apricot") || lowerDesc.includes("copper")) color = "Orange";
+  else if (lowerDesc.includes("green") || lowerName.includes("green") || lowerDesc.includes("chartreuse") || lowerDesc.includes("lime")) color = "Green";
+  else if (lowerDesc.includes("white") || lowerName.includes("white") || lowerDesc.includes("ivory") || lowerDesc.includes("cream")) color = "White";
+
+  if (lowerName.includes("rose") || lowerName.includes("peony") || lowerName.includes("carnation") || lowerName.includes("ranunculus") || lowerName.includes("parrot") || lowerDesc.includes("ruffled") || lowerDesc.includes("double") || lowerDesc.includes("tissue")) {
+    petalShape = "Ruffled";
+  } else if (lowerName.includes("lily") || lowerName.includes("tulip") || lowerDesc.includes("pointed") || lowerDesc.includes("star") || lowerDesc.includes("trumpet") || lowerDesc.includes("spire")) {
+    petalShape = "Pointed";
+  } else if (lowerName.includes("orchid") || lowerName.includes("spider") || lowerName.includes("thistle") || lowerDesc.includes("spidery") || lowerFamily.includes("proteaceae")) {
+    petalShape = "Spider-like";
+  } else {
+    petalShape = "Rounded";
+  }
+
+  if (lowerName.includes("rose") || lowerFamily.includes("rosaceae")) type = "Rose";
+  else if (lowerName.includes("lily") || lowerFamily.includes("liliaceae") || lowerFamily.includes("araceae")) type = "Lily";
+  else if (lowerName.includes("tulip")) type = "Tulip";
+  else if (lowerName.includes("orchid") || lowerFamily.includes("orchidaceae")) type = "Orchid";
+  else if (lowerName.includes("daisy") || lowerName.includes("sunflower") || lowerFamily.includes("asteraceae")) type = "Daisy";
+  else if (lowerName.includes("peony") || lowerFamily.includes("paeoniaceae")) type = "Peony";
+  else if (lowerName.includes("carnation") || lowerFamily.includes("caryophyllaceae")) type = "Carnation";
+  else type = "Other";
+
+  if (type === "Rose" || color === "Red" || lowerName.includes("romantic")) symbolism = "Love";
+  else if (color === "White" || type === "Lily") symbolism = "Purity";
+  else if (color === "Yellow" || type === "Daisy" || lowerName.includes("sunflower")) symbolism = "Joy";
+  else if (type === "Orchid" || lowerName.includes("gladiolus") || lowerDesc.includes("sturdy")) symbolism = "Strength";
+  else if (color === "Blue" || color === "Purple") symbolism = "Peace";
+  else symbolism = "Friendship";
+
+  const imageUrl = imageDictionary[name] || "/heroimage.jpg";
+
+  return { color, petalShape, type, symbolism, imageUrl };
+};
+
 const rawFlowerData = [
   // --- ROSES (1-10) ---
   ["Juliet Rose", "Rosa 'Ausjameson'", "Rosaceae", "An exquisite, fully double peach rose with neatly arranged petals.", "Perennial"],
@@ -260,14 +309,14 @@ const rawFlowerData = [
 ];
 
 const finalFlowerCollection = rawFlowerData.map(flower => {
-  const meta = getMetadata(flower[0], flower[2]);
+  const meta = extractTruthfulData(flower[0], flower[2], flower[3]);
   return {
     commonName: flower[0],
     scientificName: flower[1],
     family: flower[2],
     description: flower[3],
     lifecycle: flower[4],
-    imageUrl: "/heroimage.jpg",
+    imageUrl: meta.imageUrl,
     color: meta.color,
     petalShape: meta.petalShape,
     type: meta.type,
@@ -278,6 +327,8 @@ const finalFlowerCollection = rawFlowerData.map(flower => {
 
 const seedDatabase = async () => {
   try {
+    if (!process.env.MONGO_URI) throw new Error("MONGO_URI is missing in your .env file!");
+    
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB...");
     
@@ -285,7 +336,7 @@ const seedDatabase = async () => {
     console.log("Cleared old database...");
     
     await Flower.insertMany(finalFlowerCollection);
-    console.log(`Success! Seeded EXACTLY ${finalFlowerCollection.length} flowers with lifecycle data!`);
+    console.log(`Success! Seeded EXACTLY ${finalFlowerCollection.length} uniquely classified flowers!`);
     
     mongoose.connection.close();
   } catch (error) {
