@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import '../styles/Feedback.css';
+import { useAuth } from '../context/AuthContext';
 
 const Feedback = () => {
   const [feedbackText, setFeedbackText] = useState('');
+  const { showAlert } = useAuth();
 
   useEffect(() => {
     document.title = 'Feedback | Peony';
@@ -13,7 +15,7 @@ const Feedback = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (feedbackText.trim()) {
-      alert("Thank you for your feedback! We appreciate your thoughts.");
+      showAlert('Feedback Sent', 'Thank you for your feedback! We appreciate your thoughts.');
       setFeedbackText('');
     }
   };
