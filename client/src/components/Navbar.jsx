@@ -160,7 +160,10 @@ const Navbar = () => {
         
         {!isSpecialPage && (
           <div className="search-container" ref={searchContainerRef}>
-            <form className="search-bar" onSubmit={handleSearchSubmit}>
+            <form 
+              className={`search-bar ${isSearchFocused && searchQuery.length >= 2 && !isSearching && suggestions.length === 0 ? 'not-found-outline' : ''}`} 
+              onSubmit={handleSearchSubmit}
+            >
               <input 
                 type="text" 
                 placeholder={searchPlaceholder}

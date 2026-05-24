@@ -355,6 +355,10 @@ const Browse = () => {
         </div>
       )} 
 
+      {currentSearchQuery && (
+        <div style={{ height: '160px', width: '100%', display: 'block' }}></div>
+      )}
+
       {isNewsfeedMode && (
         <div style={{ 
           position: 'absolute', 
@@ -415,14 +419,16 @@ const Browse = () => {
           ) : (
             /* CASE 2: No Category Selected - Show Standard Header + (Search Results OR Category Grid) */
             <>
-              <div className="group-2">
-                <div className="header-1">
-                  {currentSearchQuery ? `Search Results for "${currentSearchQuery}"` : "Browse Unlimited Flowers"}
+              {(!currentSearchQuery || displayedFlowers.length > 0) && (
+                <div className="group-2">
+                  <div className="header-1">
+                    {currentSearchQuery ? `Search Results for "${currentSearchQuery}"` : "Browse Unlimited Flowers"}
+                  </div>
+                  <div className="sub-header-1">
+                    {currentSearchQuery ? `Showing matching flowers` : "Browse Flowers by Lifecycle"}
+                  </div>
                 </div>
-                <div className="sub-header-1">
-                  {currentSearchQuery ? `Showing matching flowers` : "Browse Flowers by Lifecycle"}
-                </div>
-              </div>
+              )}
 
               {isLoading ? (
                 <div className="frame">
