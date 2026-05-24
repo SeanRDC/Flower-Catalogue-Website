@@ -34,24 +34,38 @@ router.post('/send-otp', async (req, res) => {
       to: email,
       subject: 'Your Peony Verification Code',
       html: `
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; border-radius: 10px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #5a6c3a; margin: 0; font-size: 28px; letter-spacing: 2px;">PEONY</h1>
-            <p style="color: #666; font-size: 16px; margin-top: 5px;">Flower Catalogue</p>
-          </div>
-          <div style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
-            <h2 style="color: #333; margin-top: 0;">Verify your email</h2>
-            <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 30px;">
-              Thank you for joining Peony! Please use the verification code below to complete your registration. This code will expire in exactly 5 minutes.
-            </p>
-            <div style="background-color: #f4f6f1; padding: 20px; border-radius: 6px; display: inline-block; margin-bottom: 30px; border: 1px solid #e0e5d5;">
-              <h1 style="color: #5a6c3a; letter-spacing: 12px; font-size: 42px; margin: 0; font-weight: bold; padding-left: 12px;">${otp}</h1>
+        <!DOCTYPE html>
+        <html>
+        <body style="background-color: #f4f7f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px 0;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+            
+            <div style="background-color: #5a6c3a; padding: 35px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 6px; font-weight: 400; text-transform: uppercase;">PEONY</h1>
             </div>
-            <p style="color: #999; font-size: 14px; margin-bottom: 0;">
-              If you didn't request this code, you can safely ignore this email.
-            </p>
+            
+            <div style="padding: 40px 40px; text-align: center;">
+              <h2 style="color: #2c3e50; margin-top: 0; font-size: 22px; font-weight: 600;">Welcome to the Catalogue</h2>
+              <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 35px;">
+                We are thrilled to have you! To complete your registration and unlock full access to save your favorite blooms, please use the verification code below.
+              </p>
+              
+              <div style="background-color: #f8faf7; border: 2px dashed #5a6c3a; border-radius: 8px; padding: 25px; margin: 0 auto 35px auto; max-width: 280px;">
+                <p style="margin: 0; font-size: 11px; color: #5a6c3a; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px;">Your Verification Code</p>
+                <h1 style="color: #2c3e50; font-size: 42px; margin: 15px 0 0 0; letter-spacing: 12px; font-weight: 700; padding-left: 12px;">${otp}</h1>
+              </div>
+              
+              <p style="color: #888888; font-size: 14px; line-height: 1.5;">
+                This code will expire in exactly <strong>5 minutes</strong>.<br>If you didn't request this, you can safely ignore this email.
+              </p>
+            </div>
+            
+            <div style="background-color: #fcfcfc; border-top: 1px solid #eeeeee; padding: 25px; text-align: center;">
+              <p style="color: #aaaaaa; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Peony Flower Catalogue. All rights reserved.</p>
+            </div>
+            
           </div>
-        </div>
+        </body>
+        </html>
       `
     });
 
@@ -153,7 +167,6 @@ router.post('/forgot-password-otp', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      // Return 404 so the frontend knows the email doesn't exist
       return res.status(404).json({ message: 'No account found with this email' });
     }
 
@@ -165,24 +178,38 @@ router.post('/forgot-password-otp', async (req, res) => {
       to: email,
       subject: 'Reset Your Peony Password',
       html: `
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; border-radius: 10px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #5a6c3a; margin: 0; font-size: 28px; letter-spacing: 2px;">PEONY</h1>
-            <p style="color: #666; font-size: 16px; margin-top: 5px;">Flower Catalogue</p>
-          </div>
-          <div style="background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
-            <h2 style="color: #333; margin-top: 0;">Reset your password</h2>
-            <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 30px;">
-              We received a request to reset your password. Please use the verification code below to securely change it. This code will expire in exactly 5 minutes.
-            </p>
-            <div style="background-color: #f4f6f1; padding: 20px; border-radius: 6px; display: inline-block; margin-bottom: 30px; border: 1px solid #e0e5d5;">
-              <h1 style="color: #5a6c3a; letter-spacing: 12px; font-size: 42px; margin: 0; font-weight: bold; padding-left: 12px;">${otp}</h1>
+        <!DOCTYPE html>
+        <html>
+        <body style="background-color: #f4f7f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px 0;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+            
+            <div style="background-color: #5a6c3a; padding: 35px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 6px; font-weight: 400; text-transform: uppercase;">PEONY</h1>
             </div>
-            <p style="color: #999; font-size: 14px; margin-bottom: 0;">
-              If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
-            </p>
+            
+            <div style="padding: 40px 40px; text-align: center;">
+              <h2 style="color: #2c3e50; margin-top: 0; font-size: 22px; font-weight: 600;">Secure Password Reset</h2>
+              <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 35px;">
+                We received a request to reset the password for your account. Please use the secure verification code below to proceed.
+              </p>
+              
+              <div style="background-color: #f8faf7; border: 2px dashed #5a6c3a; border-radius: 8px; padding: 25px; margin: 0 auto 35px auto; max-width: 280px;">
+                <p style="margin: 0; font-size: 11px; color: #5a6c3a; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px;">Your Reset Code</p>
+                <h1 style="color: #2c3e50; font-size: 42px; margin: 15px 0 0 0; letter-spacing: 12px; font-weight: 700; padding-left: 12px;">${otp}</h1>
+              </div>
+              
+              <p style="color: #888888; font-size: 14px; line-height: 1.5;">
+                This code will expire in exactly <strong>5 minutes</strong>.<br>If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
+              </p>
+            </div>
+            
+            <div style="background-color: #fcfcfc; border-top: 1px solid #eeeeee; padding: 25px; text-align: center;">
+              <p style="color: #aaaaaa; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Peony Flower Catalogue. All rights reserved.</p>
+            </div>
+            
           </div>
-        </div>
+        </body>
+        </html>
       `
     });
 
@@ -215,7 +242,8 @@ router.post('/reset-password', async (req, res) => {
   if (storedData.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
 
   try {
-    otpStore.delete(email);
+    otpStore.delete(email); 
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
