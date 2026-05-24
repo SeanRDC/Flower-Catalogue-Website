@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import '../styles/Survey.css';
+import { useAuth } from '../context/AuthContext';
+
 
 const surveyQuestions = [
   { id: 'q1', text: "1. The website is easy to navigate." },
@@ -16,6 +18,7 @@ const surveyQuestions = [
 const Survey = () => {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState('');
+  const { showAlert } = useAuth();
 
   useEffect(() => {
     document.title = 'Survey | Peony';
@@ -33,7 +36,7 @@ const Survey = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Survey submitted! Thank you for helping us improve Peony.");
+    showAlert('Survey Complete', 'Survey submitted! Thank you for helping us improve Peony.');
     handleClear();
   };
 
