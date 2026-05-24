@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('login'); 
   const [loading, setLoading] = useState(true);
+  const [alertContent, setAlertContent] = useState({ title: '', message: '' });
 
   useEffect(() => {
     const savedUser = localStorage.getItem('peony_user');
@@ -42,7 +43,15 @@ export const AuthProvider = ({ children }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setTimeout(() => setModalMode('login'), 300); 
+    setTimeout(() => {
+      setModalMode('login');
+      setAlertContent({ title: '', message: '' }); 
+    }, 300); 
+  };
+
+  const showAlert = (title, message) => {
+    setAlertContent({ title, message });
+    openModal('alert');
   };
 
   const signInWithGoogle = useGoogleLogin({
@@ -59,12 +68,12 @@ export const AuthProvider = ({ children }) => {
         login(res.data.user, res.data.token);
       } catch (error) {
         console.error('Google Sign-In Error:', error);
-        alert('Failed to sync Google account with database.');
+        showAlert('Sign-In Error', 'Failed to sync Google account with database.'); // Updated
       }
     },
     onError: () => {
       console.log('Google Login Failed');
-      alert('Google login was cancelled or failed.');
+      showAlert('Sign-In Cancelled', 'Google login was cancelled or failed.'); // Updated
     }
   });
 
@@ -80,7 +89,9 @@ export const AuthProvider = ({ children }) => {
       modalMode, 
       setModalMode,
       openModal, 
-      closeModal 
+      closeModal,
+      showAlert,      
+      alertContent    
     }}>
       {children}
     </AuthContext.Provider>
