@@ -9,11 +9,11 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const imageDictionary = {
-  "Juliet Rose": "https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=800",
-  "Black Magic Rose": "https://images.unsplash.com/photo-1548094891-04e4c274bc36?auto=format&fit=crop&w=800",
+  "Juliet Rose": "https://plus.unsplash.com/premium_photo-1663962390198-cf3edf2817b2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "Black Magic Rose": "https://images.pexels.com/photos/1020494/pexels-photo-1020494.jpeg",
   "Golden Sunflower": "https://images.unsplash.com/photo-1632484939225-31d800aedfb2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "White Oriental Lily": "https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=800https://flowermag.com/wp-content/uploads/2018/02/casa-blanca-lilies-1000x665.jpg",
-  "Blue Hydrangea": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=800",
+  "White Oriental Lily": "https://images.unsplash.com/photo-1652892342350-f907023f2406?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "Blue Hydrangea": "https://images.unsplash.com/photo-1530447416112-3cc6b05008e8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 };
 
 const extractTruthfulData = (name, family, description) => {
