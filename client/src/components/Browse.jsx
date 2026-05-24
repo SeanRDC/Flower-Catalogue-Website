@@ -56,7 +56,7 @@ const LIFECYCLE_CATEGORIES = {
 };
 
 const Browse = () => {
- const { currentUser, openModal } = useAuth();
+ const { currentUser, openModal, showAlert } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -203,10 +203,10 @@ const Browse = () => {
         flowerId: flowerId        
       });
       
-      alert(`Successfully added to your ${type}s!`);
+      showAlert('Success!', `Successfully added to your ${type}s!`);
     } catch (err) {
       console.error(`Failed to save ${type}:`, err);
-      alert('Something went wrong saving your flower.');
+      showAlert('Error', 'Something went wrong saving your flower.');
     }
   };
 
