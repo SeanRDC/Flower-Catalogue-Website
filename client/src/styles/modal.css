@@ -212,10 +212,14 @@
   letter-spacing: 12px;
 }
 
+.forgot-pw-container {
+  width: 100%;
+  text-align: right;
+  margin-top: -5px;
+  margin-bottom: 5px;
+}
+
 .forgot-pw-link {
-  position: absolute;
-  right: 10px;
-  top: -22px;
   font-size: 13px;
   color: #5a6c3a;
   cursor: pointer;
