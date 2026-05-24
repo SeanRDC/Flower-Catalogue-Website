@@ -215,8 +215,8 @@
 .forgot-pw-container {
   width: 100%;
   text-align: right;
-  margin-top: -5px;
-  margin-bottom: 5px;
+  margin-top: 0px;      
+  margin-bottom: -10px;
 }
 
 .forgot-pw-link {
