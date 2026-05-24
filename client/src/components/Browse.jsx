@@ -77,6 +77,7 @@ const Browse = () => {
   const [fullscreenImage, setFullscreenImage] = useState(null);
 
   const [activeFilters, setActiveFilters] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   
   const handleFiltersUpdated = (selectedFilters) => {
     setActiveFilters(selectedFilters);
@@ -99,24 +100,14 @@ const Browse = () => {
         flower.description?.toLowerCase().includes(currentSearchQuery.toLowerCase())
       : true;
 
-    let matchesFilters = true;
-    if (activeFilters) {
-      if (activeFilters['Color'] && !flower.color?.toLowerCase().includes(activeFilters['Color'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Color'].toLowerCase())) matchesFilters = false;
-      
-      if (activeFilters['Petal Shape'] && !flower.petalShape?.toLowerCase().includes(activeFilters['Petal Shape'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Petal Shape'].toLowerCase())) matchesFilters = false;
-      
-      if (activeFilters['Type'] && !flower.type?.toLowerCase().includes(activeFilters['Type'].toLowerCase()) && !flower.commonName?.toLowerCase().includes(activeFilters['Type'].toLowerCase())) matchesFilters = false;
-      
-      if (activeFilters['Symbolism'] && !flower.symbolism?.toLowerCase().includes(activeFilters['Symbolism'].toLowerCase()) && !flower.description?.toLowerCase().includes(activeFilters['Symbolism'].toLowerCase())) matchesFilters = false;
-    }
-
-    return matchesCategory && matchesSearch && matchesFilters;
+    return matchesCategory && matchesSearch;
   });
 
   // Fetch Live Data from Render
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
-
+    
+    setIsLoading(true);
     let query = `page=1&limit=250`;
     if (activeFilters['Color']) query += `&color=${encodeURIComponent(activeFilters['Color'])}`;
     if (activeFilters['Petal Shape']) query += `&petalShape=${encodeURIComponent(activeFilters['Petal Shape'])}`;
@@ -128,13 +119,13 @@ const Browse = () => {
     axios
       .get(endpoint)
       .then((res) => {
-        if (res.data?.flowers) {
-          setAllFlowers(res.data.flowers);
-        } else {
-          setAllFlowers([]);
-        }
+        setAllFlowers(res.data?.flowers || []);
+        setIsLoading(false);
       })
-      .catch((err) => console.error('Error fetching flowers:', err));
+      .catch((err) => {
+        console.error('Error fetching flowers:', err);
+        setIsLoading(false);
+      });
       
   }, [activeFilters]);
 
@@ -433,7 +424,7 @@ const Browse = () => {
                 </div>
               </div>
 
-              {allFlowers.length === 0 ? (
+              {isLoading ? (
                 <div className="frame">
                   {[...Array(8)].map((_, index) => (
                     <div key={index} className="skeleton-card"></div>
@@ -480,7 +471,7 @@ const Browse = () => {
             {isNewsfeedMode ? 'Complete Catalog' : (selectedCategory ? `${selectedCategory} Flowers` : 'Top picks for you')}
           </div>
 
-          {allFlowers.length === 0 ? (
+          {isLoading ? (
             <div className="frame">
               {[...Array(8)].map((_, index) => (
                 <div key={index} className="skeleton-card"></div>
