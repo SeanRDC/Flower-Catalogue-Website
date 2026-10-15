@@ -4,7 +4,7 @@ import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import peonyLogo from '../assets/peony-logo.webp';
 import '../styles/Navbar.css';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import { apiClient } from '../api/client';
 import ProgressiveImage from './ProgressiveImage';
 
 const Navbar = () => {
@@ -42,24 +42,31 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+    const query = searchQuery.trim();
+    if (query.length < 2) return;
+
+    const controller = new AbortController();
     const fetchSuggestions = async () => {
-      if (searchQuery.trim().length < 2) {
-        setSuggestions([]);
-        return;
-      }
       setIsSearching(true);
       try {
-        const res = await axios.get(`https://flower-catalogue-website.onrender.com/api/flowers?search=${searchQuery}&limit=5`);
+        const res = await apiClient.get('/flowers', {
+          params: { search: query, limit: 5 },
+          signal: controller.signal,
+        });
         setSuggestions(res.data.flowers || []);
       } catch (err) {
-        console.error(err);
+        if (!controller.signal.aborted) console.error(err);
       } finally {
-        setIsSearching(false);
+        if (!controller.signal.aborted) setIsSearching(false);
       }
     };
 
+    // Debounce typing, and drop responses for queries the user has moved past
     const timeoutId = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(timeoutId);
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [searchQuery]);
 
   useEffect(() => {

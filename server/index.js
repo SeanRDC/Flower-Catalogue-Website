@@ -5,178 +5,218 @@ import dotenv from 'dotenv';
 import Flower from './models/Flower.js';
 import User from './models/User.js';
 import authRoutes from './routes/auth.js';
+import { requireAuth } from './middleware/auth.js';
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// Optionally restrict which sites may call the API, e.g.
+// CLIENT_ORIGIN=https://flower-catalogue-website.vercel.app,http://localhost:5173
+const allowedOrigins = process.env.CLIENT_ORIGIN?.split(',').map((o) => o.trim()).filter(Boolean);
+app.use(cors(allowedOrigins?.length ? { origin: allowedOrigins } : undefined));
+app.use(express.json({ limit: '20kb' }));
 
 app.use('/api/auth', authRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('Could not connect to MongoDB:', err));
+// Keep retrying instead of giving up after one failed attempt, so a brief
+// Atlas outage during a cold start doesn't leave the server broken.
+const connectWithRetry = () => {
+  mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 10000 })
+    .then(() => console.log('Connected to MongoDB Atlas'))
+    .catch((err) => {
+      console.error('Could not connect to MongoDB, retrying in 10s:', err.message);
+      setTimeout(connectWithRetry, 10000);
+    });
+};
+connectWithRetry();
+
+app.get('/api/health', (req, res) => {
+  const dbConnected = mongoose.connection.readyState === 1;
+  res.status(dbConnected ? 200 : 503).json({ status: dbConnected ? 'ok' : 'database unavailable' });
+});
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const MAX_PAGE_SIZE = 250;
+const DEFAULT_COLLECTION = 'My Collection';
 
 app.get('/api/flowers', async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit) || 20, 1), MAX_PAGE_SIZE);
     const skip = (page - 1) * limit;
-    
-    const { search, color, petalShape, type, symbolism } = req.query;
-    
-    let query = {};
 
-    if (search) {
+    const { search, color, petalShape, type, symbolism } = req.query;
+
+    const query = {};
+
+    if (typeof search === 'string' && search.trim()) {
+      const pattern = { $regex: escapeRegex(search.trim().slice(0, 100)), $options: 'i' };
       query.$or = [
-        { commonName: { $regex: search, $options: 'i' } },
-        { scientificName: { $regex: search, $options: 'i' } },
-        { family: { $regex: search, $options: 'i' } }
+        { commonName: pattern },
+        { scientificName: pattern },
+        { family: pattern }
       ];
     }
 
-    if (color) query.color = color;
-    if (petalShape) query.petalShape = petalShape;
-    if (type) query.type = type;
-    if (symbolism) query.symbolism = symbolism;
+    if (typeof color === 'string' && color) query.color = color;
+    if (typeof petalShape === 'string' && petalShape) query.petalShape = petalShape;
+    if (typeof type === 'string' && type) query.type = type;
+    if (typeof symbolism === 'string' && symbolism) query.symbolism = symbolism;
 
-    const flowers = await Flower.find(query).skip(skip).limit(limit);
-    const total = await Flower.countDocuments(query);
+    const [flowers, total] = await Promise.all([
+      Flower.find(query).select('-__v -tags').skip(skip).limit(limit).lean(),
+      Flower.countDocuments(query),
+    ]);
 
-    res.json({ 
-      flowers, 
-      totalPages: Math.ceil(total / limit), 
-      currentPage: page 
+    res.set('Cache-Control', 'public, max-age=300');
+    res.json({
+      flowers,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Fetch flowers error:', error);
+    res.status(500).json({ error: 'Could not load flowers' });
   }
 });
 
-app.post('/api/favorites', async (req, res) => {
-  const { email, flowerId } = req.body;
+// ==========================================
+// USER ASSETS (favorites & collections) — all require a valid login token
+// ==========================================
+const userRouter = express.Router();
+userRouter.use(requireAuth);
+
+const validFlowerId = (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.body.flowerId)) {
+    return res.status(400).json({ message: 'Invalid flower id' });
+  }
+  next();
+};
+
+const toPublicUser = (user) => ({
+  id: user._id,
+  email: user.email,
+  favorites: user.favorites,
+  collections: user.collections,
+});
+
+userRouter.get('/user/me', async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate(
-      { email }, 
-      { $addToSet: { favorites: flowerId } },
-      { new: true, upsert: true }
-    );
-    res.json({ message: 'Added to favorites', user });
+    const user = await User.findById(req.userId)
+      .select('-password')
+      .populate('favorites', '-__v -tags')
+      .populate('collections.flowers', '-__v -tags')
+      .lean();
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Drop references to flowers that no longer exist (e.g. after a reseed)
+    user.favorites = user.favorites.filter(Boolean);
+    user.collections.forEach((c) => { c.flowers = c.flowers.filter(Boolean); });
+
+    res.json(toPublicUser(user));
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Fetch user error:', error);
+    res.status(500).json({ message: 'Could not load your saved flowers' });
   }
 });
 
-app.post('/api/collections', async (req, res) => {
-  const { email, flowerId } = req.body;
-  const defaultCollectionName = "My Collection";
-  
+userRouter.post('/favorites', validFlowerId, async (req, res) => {
   try {
-    let user = await User.findOne({ email });
-    
-    if (!user) {
-      user = new User({ 
-        email, 
-        favorites: [], 
-        collections: [{ name: defaultCollectionName, flowers: [flowerId] }] 
-      });
-      await user.save();
-      return res.json({ message: 'Added to collections', user });
-    }
-
-    const collectionIndex = user.collections.findIndex(c => c.name === defaultCollectionName);
-    
-    if (collectionIndex > -1) {
-      if (!user.collections[collectionIndex].flowers.includes(flowerId)) {
-         user.collections[collectionIndex].flowers.push(flowerId);
-         await user.save();
-      }
-    } else {
-      user.collections.push({ name: defaultCollectionName, flowers: [flowerId] });
-      await user.save();
-    }
-    
-    res.json({ message: 'Added to collections', user });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/user/:email', async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.params.email })
-      .populate('favorites')
-      .populate('collections.flowers');
-      
-    if (!user) return res.json({ favorites: [], collections: [] });
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/favorites/remove', async (req, res) => {
-  const { email, flowerId } = req.body;
-  try {
-    const user = await User.findOneAndUpdate(
-      { email },
-      { $pull: { favorites: flowerId } },
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { $addToSet: { favorites: req.body.flowerId } },
       { new: true }
-    );
-    res.json({ message: 'Removed from favorites', user });
+    ).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Added to favorites', user: toPublicUser(user) });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Add favorite error:', error);
+    res.status(500).json({ message: 'Could not save favorite' });
   }
 });
 
-app.post('/api/favorites/clear', async (req, res) => {
-  const { email } = req.body;
+userRouter.post('/favorites/remove', validFlowerId, async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate(
-      { email },
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { $pull: { favorites: req.body.flowerId } },
+      { new: true }
+    ).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Removed from favorites', user: toPublicUser(user) });
+  } catch (error) {
+    console.error('Remove favorite error:', error);
+    res.status(500).json({ message: 'Could not remove favorite' });
+  }
+});
+
+userRouter.post('/favorites/clear', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.userId,
       { $set: { favorites: [] } },
       { new: true }
-    );
-    res.json({ message: 'Cleared all favorites', user });
+    ).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Cleared all favorites', user: toPublicUser(user) });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Clear favorites error:', error);
+    res.status(500).json({ message: 'Could not clear favorites' });
   }
 });
 
-app.post('/api/collections/remove', async (req, res) => {
-  const { email, flowerId } = req.body;
+userRouter.post('/collections', validFlowerId, async (req, res) => {
+  const { flowerId } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (user) {
-      const collectionIndex = user.collections.findIndex(c => c.name === "My Collection");
-      if (collectionIndex > -1) {
-        user.collections[collectionIndex].flowers = user.collections[collectionIndex].flowers.filter(id => id.toString() !== flowerId);
-        await user.save();
-      }
+    const user = await User.findById(req.userId).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const collection = user.collections.find((c) => c.name === DEFAULT_COLLECTION);
+    if (!collection) {
+      user.collections.push({ name: DEFAULT_COLLECTION, flowers: [flowerId] });
+    } else if (!collection.flowers.some((id) => id.toString() === flowerId)) {
+      collection.flowers.push(flowerId);
     }
-    res.json({ message: 'Removed from collections', user });
+    await user.save();
+
+    res.json({ message: 'Added to collections', user: toPublicUser(user) });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Add to collection error:', error);
+    res.status(500).json({ message: 'Could not save to collection' });
   }
 });
 
-app.post('/api/collections/clear', async (req, res) => {
-  const { email } = req.body;
+userRouter.post('/collections/remove', validFlowerId, async (req, res) => {
   try {
-    const user = await User.findOne({ email });
-    if (user) {
-      const collectionIndex = user.collections.findIndex(c => c.name === "My Collection");
-      if (collectionIndex > -1) {
-        user.collections[collectionIndex].flowers = []; 
-        await user.save();
-      }
-    }
-    res.json({ message: 'Cleared all collections', user });
+    const user = await User.findOneAndUpdate(
+      { _id: req.userId, 'collections.name': DEFAULT_COLLECTION },
+      { $pull: { 'collections.$.flowers': req.body.flowerId } },
+      { new: true }
+    ).select('-password');
+    res.json({ message: 'Removed from collections', user: user && toPublicUser(user) });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Remove from collection error:', error);
+    res.status(500).json({ message: 'Could not remove from collection' });
   }
 });
+
+userRouter.post('/collections/clear', async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: req.userId, 'collections.name': DEFAULT_COLLECTION },
+      { $set: { 'collections.$.flowers': [] } },
+      { new: true }
+    ).select('-password');
+    res.json({ message: 'Cleared all collections', user: user && toPublicUser(user) });
+  } catch (error) {
+    console.error('Clear collection error:', error);
+    res.status(500).json({ message: 'Could not clear collection' });
+  }
+});
+
+app.use('/api', userRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

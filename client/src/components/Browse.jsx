@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download } from 'lucide-react';
 import '../styles/Browse.css';
+import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import FilterBar from '../components/FilterBar';
-import { headerImageProps, optimizeImage } from "../utils/image";
-import ProgressiveImage from "./ProgressiveImage";
+import { headerImageProps } from '../utils/image';
+import ProgressiveImage from './ProgressiveImage';
+import FullscreenImage from './FullscreenImage';
 
 const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -64,7 +65,9 @@ const Browse = () => {
   
   // URL State
   const searchParams = new URLSearchParams(location.search);
-  const selectedCategory = searchParams.get('category');
+  // Ignore unknown categories (e.g. a mistyped ?category= link) instead of crashing
+  const categoryParam = searchParams.get('category');
+  const selectedCategory = LIFECYCLE_CATEGORIES[categoryParam] ? categoryParam : null;
   const currentSearchQuery = searchParams.get('search') || '';
   const isNewsfeedMode = searchParams.get('view') === 'all';
   
@@ -72,14 +75,15 @@ const Browse = () => {
   const [allFlowers, setAllFlowers] = useState([]);
   const [topPicksLimit, setTopPicksLimit] = useState(8);
   
-  const [showAll, setShowAll] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
   const [isMobileSubNavExpanded, setIsMobileSubNavExpanded] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
 
   const [activeFilters, setActiveFilters] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
+  const [loadedQuery, setLoadedQuery] = useState(null);
+  const [loadError, setLoadError] = useState(false);
   
   const handleFiltersUpdated = (selectedFilters) => {
     setActiveFilters(selectedFilters);
@@ -105,31 +109,41 @@ const Browse = () => {
     return matchesCategory && matchesSearch;
   });
 
-  // Fetch Live Data from Render
   useEffect(() => {
     document.title = selectedCategory ? `${selectedCategory}s | Peony` : 'Browse | Peony';
-    
-    setIsLoading(true);
-    let query = `page=1&limit=250`;
-    if (activeFilters['Color']) query += `&color=${encodeURIComponent(activeFilters['Color'])}`;
-    if (activeFilters['Petal Shape']) query += `&petalShape=${encodeURIComponent(activeFilters['Petal Shape'])}`;
-    if (activeFilters['Type']) query += `&type=${encodeURIComponent(activeFilters['Type'])}`;
-    if (activeFilters['Symbolism']) query += `&symbolism=${encodeURIComponent(activeFilters['Symbolism'])}`;
+  }, [selectedCategory]);
 
-    const endpoint = `https://flower-catalogue-website.onrender.com/api/flowers?${query}`;
+  // Fetch Live Data from Render
+  const params = new URLSearchParams({ page: 1, limit: 250 });
+  if (activeFilters['Color']) params.set('color', activeFilters['Color']);
+  if (activeFilters['Petal Shape']) params.set('petalShape', activeFilters['Petal Shape']);
+  if (activeFilters['Type']) params.set('type', activeFilters['Type']);
+  if (activeFilters['Symbolism']) params.set('symbolism', activeFilters['Symbolism']);
+  const queryString = params.toString();
+  const requestKey = `${queryString}#${retryCount}`;
+  const isLoading = loadedQuery !== requestKey;
 
-    axios
-      .get(endpoint)
+  useEffect(() => {
+    // Cancel the previous request when filters change so a slow, outdated
+    // response can't overwrite newer results.
+    const controller = new AbortController();
+
+    apiClient
+      .get(`/flowers?${queryString}`, { signal: controller.signal })
       .then((res) => {
         setAllFlowers(res.data?.flowers || []);
-        setIsLoading(false);
+        setLoadError(false);
+        setLoadedQuery(requestKey);
       })
       .catch((err) => {
+        if (controller.signal.aborted) return;
         console.error('Error fetching flowers:', err);
-        setIsLoading(false);
+        setLoadError(true);
+        setLoadedQuery(requestKey);
       });
-      
-  }, [activeFilters]);
+
+    return () => controller.abort();
+  }, [queryString, requestKey]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -175,8 +189,11 @@ const Browse = () => {
   // Asset handlers
   const handleDownload = (e, url, name) => {
     e.stopPropagation();
-    fetch(url)
-      .then(response => response.blob())
+    fetch(url, { referrerPolicy: 'no-referrer' })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.blob();
+      })
       .then(blob => {
         const blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -185,8 +202,13 @@ const Browse = () => {
         document.body.appendChild(a);
         a.click();
         a.remove();
+        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
       })
-      .catch(err => console.error('Error downloading image:', err));
+      .catch(err => {
+        // Some image hosts block cross-origin downloads; open the image instead
+        console.error('Error downloading image:', err);
+        window.open(url, '_blank', 'noopener,noreferrer');
+      });
   };
 
   const handleSaveToAssets = async (e, flowerId, type) => {
@@ -198,17 +220,16 @@ const Browse = () => {
     }
 
     try {
-      const endpoint = type === 'favorite' ? '/api/favorites' : '/api/collections';
-      
-      await axios.post(`https://flower-catalogue-website.onrender.com${endpoint}`, {
-        email: currentUser.email, 
-        flowerId: flowerId        
-      });
-      
+      const endpoint = type === 'favorite' ? '/favorites' : '/collections';
+      await apiClient.post(endpoint, { flowerId });
+
       showAlert('Success!', `Successfully added to your ${type}s!`);
     } catch (err) {
       console.error(`Failed to save ${type}:`, err);
-      showAlert('Error', 'Something went wrong saving your flower.');
+      // A 401 already re-opens the login modal via the API client
+      if (err.response?.status !== 401) {
+        showAlert('Error', 'Something went wrong saving your flower.');
+      }
     }
   };
 
@@ -232,9 +253,10 @@ const Browse = () => {
               className="expand-fullscreen-btn" 
               onClick={(e) => {
                 e.stopPropagation();
-                setFullscreenImage(flower.imageUrl);
+                setFullscreenImage(flower);
               }}
               title="View Fullscreen"
+              aria-label="View fullscreen"
             >
               <Maximize2 size={18} color="#666" />
             </button>
@@ -244,17 +266,17 @@ const Browse = () => {
         <div className="card-content-wrapper">
           {isExpanded && (
             <div className="action-bar">
-              <button className="action-icon-btn" title="Add to collections" 
+              <button className="action-icon-btn" title="Add to collections" aria-label="Add to collections"
                 onClick={(e) => handleSaveToAssets(e, flower._id, 'collection')}>
                 <ImageIcon size={20} />
               </button>
 
-              <button className="action-icon-btn" title="Add to favorites" 
+              <button className="action-icon-btn" title="Add to favorites" aria-label="Add to favorites"
                 onClick={(e) => handleSaveToAssets(e, flower._id, 'favorite')}>
                 <Star size={20} />
               </button>
               
-              <button className="action-icon-btn" title="Download image" onClick={(e) => handleDownload(e, flower.imageUrl, flower.commonName)}>
+              <button className="action-icon-btn" title="Download image" aria-label="Download image" onClick={(e) => handleDownload(e, flower.imageUrl, flower.commonName)}>
                 <Download size={20} />
               </button>
             </div>
@@ -273,10 +295,25 @@ const Browse = () => {
     );
   };
 
+  const renderSkeletons = () => (
+    <div className="frame">
+      {[...Array(8)].map((_, index) => (
+        <div key={index} className="skeleton-card"></div>
+      ))}
+    </div>
+  );
+
+  const renderLoadError = () => (
+    <div className="no-results-container">
+      <h2 className="no-results-title">We couldn't load the flowers</h2>
+      <p className="no-results-text">The catalogue server may be waking up. Please try again in a moment.</p>
+      <button className="show-more" onClick={() => setRetryCount((c) => c + 1)}>
+        <div className="text-wrapper-11">Try again</div>
+      </button>
+    </div>
+  );
+
   // Slicing data for secondary sections
-  const topPicks = allFlowers.slice(0, 8);
-  const visiblePicks = showAll ? allFlowers : topPicks;
-  
   const petalsImages = allFlowers.length > 8 
     ? allFlowers.slice(8, 17) 
     : [...allFlowers, ...allFlowers, ...allFlowers].slice(0, 9);
@@ -407,15 +444,21 @@ const Browse = () => {
                 </div>
               </div>
               
-              <div className="frame" style={{ marginTop: '40px' }}>
-                {displayedFlowers.length > 0 ? (
-                  displayedFlowers.map((flower, index) => renderFlowerCard(flower, index))
-                ) : (
-                  <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '50px' }}>
-                    <p>No {selectedCategory.toLowerCase()} flowers found in the database.</p>
-                  </div>
-                )}
-              </div>
+              {isLoading ? (
+                <div style={{ marginTop: '40px' }}>{renderSkeletons()}</div>
+              ) : loadError ? (
+                renderLoadError()
+              ) : (
+                <div className="frame" style={{ marginTop: '40px' }}>
+                  {displayedFlowers.length > 0 ? (
+                    displayedFlowers.map((flower, index) => renderFlowerCard(flower, index))
+                  ) : (
+                    <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '50px' }}>
+                      <p>No {selectedCategory.toLowerCase()} flowers found in the database.</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ) : (
             /* CASE 2: No Category Selected - Show Standard Header + (Search Results OR Category Grid) */
@@ -431,12 +474,10 @@ const Browse = () => {
                 </div>
               )}
 
-              {isLoading ? (
-                <div className="frame">
-                  {[...Array(8)].map((_, index) => (
-                    <div key={index} className="skeleton-card"></div>
-                  ))}
-                </div>
+              {currentSearchQuery && isLoading ? (
+                renderSkeletons()
+              ) : currentSearchQuery && loadError ? (
+                renderLoadError()
               ) : currentSearchQuery ? (
                 <div className="frame">
                   {displayedFlowers.length > 0 ? (
@@ -479,11 +520,9 @@ const Browse = () => {
           </div>
 
           {isLoading ? (
-            <div className="frame">
-              {[...Array(8)].map((_, index) => (
-                <div key={index} className="skeleton-card"></div>
-              ))}
-            </div>
+            renderSkeletons()
+          ) : loadError ? (
+            renderLoadError()
           ) : currentSearchQuery ? (
             <div className="frame">
               {displayedFlowers.length > 0 ? displayedFlowers.map((flower, index) => renderFlowerCard(flower, index)) : (
@@ -545,12 +584,11 @@ const Browse = () => {
 
       {/* FULLSCREEN IMAGE MODAL */}
       {fullscreenImage && (
-        <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
-          <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
-            <X size={32} color="white" />
-          </button>
-          <img src={optimizeImage(fullscreenImage, 1600)} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
-        </div>
+        <FullscreenImage
+          src={fullscreenImage.imageUrl}
+          alt={fullscreenImage.commonName}
+          onClose={() => setFullscreenImage(null)}
+        />
       )}
     </motion.div>
   );

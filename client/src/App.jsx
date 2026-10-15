@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { API_BASE_URL } from './api/client';
 import { AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
@@ -46,7 +47,8 @@ const AnimatedRoutes = () => {
 function App() {
 
   useEffect(() => {
-    fetch('https://flower-catalogue-website.onrender.com/api/flowers?limit=1')
+    // Wake the free-tier Render backend early so the first real request is fast
+    fetch(`${API_BASE_URL}/api/health`)
       .then(() => console.log('Backend successfully awakened!'))
       .catch((err) => console.log('Waking backend...', err));
   }, []);

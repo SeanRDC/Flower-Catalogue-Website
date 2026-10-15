@@ -8,9 +8,14 @@ const userSchema = new mongoose.Schema({
     trim: true,       
     lowercase: true   
   },
-  password: { 
-    type: String, 
-    required: true 
+  // Not set for accounts created through Google sign-in
+  password: {
+    type: String
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
   },
   favorites: [{ 
     type: mongoose.Schema.Types.ObjectId, 

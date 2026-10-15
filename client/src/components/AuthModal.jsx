@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../api/client';
 import '../styles/modal.css'; 
 
 const AuthModal = () => {
@@ -95,15 +95,15 @@ const AuthModal = () => {
     setIsLoading(true);
     try {
       if (isSignUp) {
-        await axios.post('https://flower-catalogue-website.onrender.com/api/auth/send-otp', { email });
+        await apiClient.post('/auth/send-otp', { email });
         setStep(2);
         setTimeLeft(300);
       } else if (isForgotPw) {
-        await axios.post('https://flower-catalogue-website.onrender.com/api/auth/forgot-password-otp', { email });
+        await apiClient.post('/auth/forgot-password-otp', { email });
         setStep(2);
         setTimeLeft(300);
       } else {
-        const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/login', { email, password });
+        const res = await apiClient.post('/auth/login', { email, password });
         login(res.data.user, res.data.token); 
         showAlert('Welcome Back!', 'You have successfully logged in to Peony.');
       }
@@ -127,7 +127,7 @@ const AuthModal = () => {
 
     setIsLoading(true);
     try {
-      const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/verify-otp', { email, password, otp });
+      const res = await apiClient.post('/auth/verify-otp', { email, password, otp });
       login(res.data.user, res.data.token);
       showAlert('Welcome to Peony!', 'Your account has been created successfully.');
     } catch (err) {
@@ -143,7 +143,7 @@ const AuthModal = () => {
     
     setIsLoading(true);
     try {
-      await axios.post('https://flower-catalogue-website.onrender.com/api/auth/reset-password', { email, otp, newPassword });
+      await apiClient.post('/auth/reset-password', { email, otp, newPassword });
       showAlert('Password Reset', 'Your password was updated successfully! You can now log in.');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to reset password. OTP may be invalid.');
@@ -152,13 +152,10 @@ const AuthModal = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-      showAlert('Welcome!', 'Successfully logged in with Google.');
-    } catch (err) {
-      setError('Failed to sign in with Google.');
-    }
+  // Opens the Google popup; the result is handled in AuthContext.
+  const handleGoogleSignIn = () => {
+    setError('');
+    signInWithGoogle();
   };
 
   return (
@@ -181,9 +178,11 @@ const AuthModal = () => {
               <input 
                 type="password" 
                 className="modal-input" 
-                placeholder="Enter new password" 
+                placeholder="Enter new password (min. 6 characters)" 
                 value={newPassword} 
                 onChange={(e) => setNewPassword(e.target.value)} 
+                minLength={6}
+                autoComplete="new-password"
                 required 
               />
               <button type="submit" className="modal-continue-btn" disabled={isLoading}>
@@ -255,9 +254,11 @@ const AuthModal = () => {
                   <input 
                     type="password" 
                     className="modal-input" 
-                    placeholder="Enter your password" 
+                    placeholder={isSignUp ? "Create a password (min. 6 characters)" : "Enter your password"} 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
+                    minLength={isSignUp ? 6 : undefined}
+                    autoComplete={isSignUp ? "new-password" : "current-password"}
                     required 
                   />
                   {!isSignUp && (
@@ -274,7 +275,7 @@ const AuthModal = () => {
                 <div className="terms-container">
                   <input type="checkbox" id="terms" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
                   <label htmlFor="terms">
-                    I agree to the <Link to="/support" onClick={closeModal}>Terms of Service</Link> and <Link to="/support" onClick={closeModal}>Privacy Policy</Link>.
+                    I agree to the <Link to="/terms" onClick={closeModal}>Terms of Service</Link> and <Link to="/privacy" onClick={closeModal}>Privacy Policy</Link>.
                   </label>
                 </div>
               )}

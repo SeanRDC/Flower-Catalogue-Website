@@ -1,39 +1,42 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import { apiClient, setUnauthorizedHandler, TOKEN_KEY, USER_KEY } from '../api/client';
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('login'); 
-  const [loading, setLoading] = useState(true);
-  const [alertContent, setAlertContent] = useState({ title: '', message: '' });
+const loadSavedUser = () => {
+  try {
+    const savedUser = localStorage.getItem(USER_KEY);
+    const savedToken = localStorage.getItem(TOKEN_KEY);
+    return savedUser && savedToken ? JSON.parse(savedUser) : null;
+  } catch {
+    return null;
+  }
+};
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem('peony_user');
-    const savedToken = localStorage.getItem('peony_token');
-    
-    if (savedUser && savedToken) {
-      setCurrentUser(JSON.parse(savedUser));
-    }
-    setLoading(false);
-  }, []);
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(loadSavedUser);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('login');
+  const [alertContent, setAlertContent] = useState({ title: '', message: '' });
 
   const login = (userData, token) => {
     setCurrentUser(userData);
-    localStorage.setItem('peony_user', JSON.stringify(userData));
-    localStorage.setItem('peony_token', token);
+    localStorage.setItem(USER_KEY, JSON.stringify(userData));
+    localStorage.setItem(TOKEN_KEY, token);
   };
 
-  const logout = () => {
+  const clearSession = useCallback(() => {
     setCurrentUser(null);
-    localStorage.removeItem('peony_user');
-    localStorage.removeItem('peony_token');
-    window.location.reload(); 
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+  }, []);
+
+  const logout = () => {
+    clearSession();
+    window.location.reload();
   };
 
   const openModal = (mode = 'login') => {
@@ -45,8 +48,8 @@ export const AuthProvider = ({ children }) => {
     setIsModalOpen(false);
     setTimeout(() => {
       setModalMode('login');
-      setAlertContent({ title: '', message: '' }); 
-    }, 300); 
+      setAlertContent({ title: '', message: '' });
+    }, 300);
   };
 
   const showAlert = (title, message) => {
@@ -54,44 +57,46 @@ export const AuthProvider = ({ children }) => {
     openModal('alert');
   };
 
+  // If the server rejects our token (expired or invalid), sign out locally
+  // and ask the user to log in again.
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      clearSession();
+      setModalMode('login');
+      setIsModalOpen(true);
+    });
+    return () => setUnauthorizedHandler(null);
+  }, [clearSession]);
+
   const signInWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfo = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
-        );
-
-        const email = userInfo.data.email;
-        const res = await axios.post('https://flower-catalogue-website.onrender.com/api/auth/google', { email });
-        
+        const res = await apiClient.post('/auth/google', { accessToken: tokenResponse.access_token });
         login(res.data.user, res.data.token);
+        showAlert('Welcome!', 'Successfully logged in with Google.');
       } catch (error) {
         console.error('Google Sign-In Error:', error);
-        showAlert('Sign-In Error', 'Failed to sync Google account with database.'); // Updated
+        showAlert('Sign-In Error', error.response?.data?.message || 'Failed to sync Google account with database.');
       }
     },
     onError: () => {
-      console.log('Google Login Failed');
-      showAlert('Sign-In Cancelled', 'Google login was cancelled or failed.'); // Updated
+      showAlert('Sign-In Cancelled', 'Google login was cancelled or failed.');
     }
   });
 
-  if (loading) return null; 
-
   return (
-    <AuthContext.Provider value={{ 
-      currentUser, 
-      login, 
-      logout, 
+    <AuthContext.Provider value={{
+      currentUser,
+      login,
+      logout,
       signInWithGoogle,
-      isModalOpen, 
-      modalMode, 
+      isModalOpen,
+      modalMode,
       setModalMode,
-      openModal, 
+      openModal,
       closeModal,
-      showAlert,      
-      alertContent    
+      showAlert,
+      alertContent
     }}>
       {children}
     </AuthContext.Provider>
