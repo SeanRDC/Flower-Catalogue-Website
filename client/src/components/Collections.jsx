@@ -6,6 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import { Maximize2, Trash2, X } from 'lucide-react'; 
 import '../styles/Browse.css';
 import '../styles/Favorites.css';
+import { headerImageProps, optimizeImage } from "../utils/image";
+import ProgressiveImage from "./ProgressiveImage";
 
 const Collections = () => {
   const { currentUser, openModal } = useAuth();
@@ -77,7 +79,7 @@ const Collections = () => {
     <motion.div className="desktop-home-page asset-page">
       <div className="browse-hero-header">
         <div className="vector-container">
-          <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
+          <img className="vector" {...headerImageProps} />
           <svg className="wave-svg-clip">
             <defs>
               <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
@@ -122,7 +124,7 @@ const Collections = () => {
                 return (
                   <div key={item._id} className={`top-pick ${isExpanded ? 'expanded' : ''}`} onClick={() => setExpandedId(isExpanded ? null : item._id)}>
                     <div className="image-wrapper">
-                      <img className="images" src={item.imageUrl} alt={item.commonName} />
+                      <ProgressiveImage className="images" src={item.imageUrl} alt={item.commonName} sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
                       {isExpanded && (
                         <button className="expand-fullscreen-btn" onClick={(e) => { e.stopPropagation(); setFullscreenImage(item.imageUrl); }} title="View Fullscreen">
                           <Maximize2 size={18} color="#666" />
@@ -161,7 +163,7 @@ const Collections = () => {
           <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
             <X size={32} color="white" />
           </button>
-          <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
+          <img src={optimizeImage(fullscreenImage, 1600)} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
     </motion.div>

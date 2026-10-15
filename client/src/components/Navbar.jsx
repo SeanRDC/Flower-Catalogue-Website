@@ -5,6 +5,7 @@ import peonyLogo from '../assets/peony-logo.jpg';
 import '../styles/Navbar.css';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import ProgressiveImage from './ProgressiveImage';
 
 const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -197,10 +198,14 @@ const Navbar = () => {
                           setIsSearchFocused(false);
                         }}
                       >
-                         <img 
-                           src={flower.imageUrl} 
-                           alt={flower.commonName} 
-                           className="search-dropdown-img" 
+                         <ProgressiveImage
+                           src={flower.imageUrl}
+                           alt={flower.commonName}
+                           className="search-dropdown-img"
+                           width={80}
+                           srcSetWidths={[80, 160]}
+                           sizes="40px"
+                           eager
                          />
                          <div className="search-dropdown-text">
                            <span className="search-dropdown-title">{flower.commonName}</span>

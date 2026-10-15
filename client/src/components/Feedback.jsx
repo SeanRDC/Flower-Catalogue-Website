@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import '../styles/Feedback.css';
 import { useAuth } from '../context/AuthContext';
+import { headerImageProps } from "../utils/image";
 
 const Feedback = () => {
   const [feedbackText, setFeedbackText] = useState('');
@@ -24,11 +25,7 @@ const Feedback = () => {
     <motion.div className="desktop-home-page short-header-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
-          <img 
-            className="vector" 
-            src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" 
-            alt="Header background" 
-          />
+          <img className="vector" {...headerImageProps} />
           <svg className="wave-svg-clip">
             <defs>
               <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">

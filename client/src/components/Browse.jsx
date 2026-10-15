@@ -6,6 +6,8 @@ import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download, 
 import '../styles/Browse.css';
 import { useAuth } from '../context/AuthContext';
 import FilterBar from '../components/FilterBar';
+import { headerImageProps, optimizeImage } from "../utils/image";
+import ProgressiveImage from "./ProgressiveImage";
 
 const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -224,7 +226,7 @@ const Browse = () => {
         style={{ animationDelay: `${cascadeDelay}s` }}
       >
         <div className="image-wrapper">
-          <img className="images" src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+          <ProgressiveImage className="images" src={flower.imageUrl} alt={flower.commonName} sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
           {isExpanded && (
             <button 
               className="expand-fullscreen-btn" 
@@ -284,7 +286,7 @@ const Browse = () => {
       {!currentSearchQuery && !isNewsfeedMode && (
         <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
           <div className="vector-container">
-            <img className="vector" src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" alt="Header background" />
+            <img className="vector" {...headerImageProps} />
             <svg className="wave-svg-clip">
               <defs>
                 <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
@@ -370,8 +372,7 @@ const Browse = () => {
           filter: 'drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.15))'
         }}>
           <img 
-            src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1600&q=80" 
-            alt="Header background" 
+            {...headerImageProps}
             style={{ width: '100%', height: '100%', objectFit: 'cover', clipPath: 'url(#wave-clip)' }} 
           />
           
@@ -458,7 +459,7 @@ const Browse = () => {
                       onClick={() => handleCategorySelect(cat.id)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <img src={cat.imageUrl} alt={cat.name} loading="lazy" />
+                      <ProgressiveImage src={cat.imageUrl} alt={cat.name} sizes="(max-width: 768px) 45vw, 20vw" />
                       <p className="category-text">{cat.name}</p>
                     </div>
                   ))}
@@ -533,7 +534,7 @@ const Browse = () => {
               <div className="petals-marquee-container">
                 <div className="petals-track">
                   {[...petalsImages, ...petalsImages].map((flower, index) => (
-                    <img key={`petal-${index}`} src={flower.imageUrl} alt={flower.commonName} loading="lazy" />
+                    <ProgressiveImage key={`petal-${index}`} src={flower.imageUrl} alt={index < petalsImages.length ? flower.commonName : ""} sizes="340px" srcSetWidths={[240, 360, 480, 680]} />
                   ))}
                 </div>
               </div>
@@ -548,7 +549,7 @@ const Browse = () => {
           <button className="close-fullscreen-btn" onClick={() => setFullscreenImage(null)}>
             <X size={32} color="white" />
           </button>
-          <img src={fullscreenImage} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
+          <img src={optimizeImage(fullscreenImage, 1600)} alt="Fullscreen bloom" className="fullscreen-image-view" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
     </motion.div>

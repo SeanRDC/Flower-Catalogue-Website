@@ -139,7 +139,7 @@ const imageDictionary = {
   "Green Star Gladiolus": "https://images.pexels.com/photos/7457841/pexels-photo-7457841.jpeg",
   "Blue Isle Gladiolus": "https://images.pexels.com/photos/8782485/pexels-photo-8782485.jpeg",
   "Plum Tart Gladiolus": "https://images.pexels.com/photos/17121360/pexels-photo-17121360.jpeg",
-  "White Prosperity Gladiolus": "https://images.pexels.com/photos/10752810/pexels-photo-10752810.jpe",
+  "White Prosperity Gladiolus": "https://images.pexels.com/photos/10752810/pexels-photo-10752810.jpeg",
 
   // --- ZINNIAS & MARIGOLDS (111-120) ---
   "California Giant Zinnia": "https://images.pexels.com/photos/14559000/pexels-photo-14559000.jpeg",
