@@ -69,7 +69,10 @@ app.get('/api/flowers', async (req, res) => {
       Flower.countDocuments(query),
     ]);
 
-    res.set('Cache-Control', 'public, max-age=300');
+    // Let browsers briefly reuse real results, but never cache an empty list:
+    // while Atlas is resuming the server can return [] for a moment, and a
+    // cached empty response would keep the catalogue blank for visitors.
+    res.set('Cache-Control', flowers.length > 0 ? 'public, max-age=60' : 'no-store');
     res.json({
       flowers,
       totalPages: Math.ceil(total / limit),
