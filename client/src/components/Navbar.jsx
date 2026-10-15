@@ -101,18 +101,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Publish the navbar's height so sticky elements (the filter bar) sit
-  // right below it, even as it shrinks on scroll
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header || typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(([entry]) => {
-      document.documentElement.style.setProperty('--header-height', `${Math.round(entry.borderBoxSize?.[0]?.blockSize ?? header.offsetHeight)}px`);
-    });
-    observer.observe(header);
-    return () => observer.disconnect();
-  }, []);
-
   useEffect(() => () => clearTimeout(closeTimerRef.current), []);
 
   // Mirror of isMobileMenuOpen for event handlers registered once

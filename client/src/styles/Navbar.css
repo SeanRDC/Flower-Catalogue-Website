@@ -49,38 +49,11 @@
   opacity: 1;
 }
 
-/* In the complete catalogue the filter bar docks under the navbar, so the
-   scrolled navbar gets a flat edge instead of the decorative wave */
 .header.newsfeed-header.scrolled {
   background: transparent;
   backdrop-filter: none;
   box-shadow: none;
-}
-
-.header.newsfeed-header.scrolled::before {
-  height: 100%;
-  clip-path: none;
-}
-
-/* Keep the navbar the same height while scrolling this page: the filter
-   bar is offset by it, so a shrinking navbar would make the page jump */
-.header.newsfeed-header.scrolled {
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
-@media (max-width: 1024px) {
-  .header.newsfeed-header.scrolled {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .header.newsfeed-header.scrolled {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.12)); 
 }
 
 .header {
