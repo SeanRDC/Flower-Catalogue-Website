@@ -1,0 +1,29 @@
+name: Keep backend and database alive
+
+# MongoDB Atlas pauses free clusters after a long period with no activity,
+# and a paused cluster can only be resumed by hand. A daily request that
+# runs a real database query keeps the cluster active (and wakes Render).
+on:
+  schedule:
+    - cron: '0 6 * * *' # every day at 06:00 UTC
+  workflow_dispatch: # allow running it manually from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Query the flower catalogue
+        run: |
+          # Render's free tier can take up to a minute to wake up, so retry
+          for attempt in 1 2 3 4 5; do
+            body=$(curl -sS --max-time 90 "https://flower-catalogue-website.onrender.com/api/flowers?limit=1" || true)
+            if echo "$body" | grep -q '"commonName"'; then
+              echo "Backend and database are up (attempt $attempt)"
+              exit 0
+            fi
+            echo "Attempt $attempt failed: ${body:0:200}"
+            sleep 30
+          done
+          echo "::error::Flower API did not return data. The Atlas cluster may be paused."
+          exit 1
