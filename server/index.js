@@ -6,6 +6,7 @@ import Flower from './models/Flower.js';
 import User from './models/User.js';
 import authRoutes from './routes/auth.js';
 import { requireAuth } from './middleware/auth.js';
+import { classifyFlower, FLOWER_TRAITS } from './lib/classifyFlower.js';
 
 dotenv.config();
 
@@ -19,11 +20,36 @@ app.use(express.json({ limit: '20kb' }));
 
 app.use('/api/auth', authRoutes);
 
+// Re-derive each flower's filter traits from the shared classifier and fix
+// any that differ, so classifier fixes reach existing data without a reseed
+// (a reseed would change every flower's id and break saved favorites).
+const syncFlowerTraits = async () => {
+  try {
+    const flowers = await Flower.find({}, 'commonName family description color petalShape type symbolism').lean();
+    const updates = [];
+    for (const flower of flowers) {
+      const traits = classifyFlower(flower.commonName, flower.family, flower.description);
+      const changed = Object.keys(traits).filter((key) => flower[key] !== traits[key]);
+      if (changed.length) {
+        updates.push({ updateOne: { filter: { _id: flower._id }, update: { $set: traits } } });
+        console.log(`[sync] ${flower.commonName}: ${changed.map((k) => `${k} ${flower[k]} -> ${traits[k]}`).join(', ')}`);
+      }
+    }
+    if (updates.length) await Flower.bulkWrite(updates);
+    console.log(`[sync] Flower traits checked: ${flowers.length}, updated: ${updates.length}`);
+  } catch (err) {
+    console.error('[sync] Could not sync flower traits:', err.message);
+  }
+};
+
 // Keep retrying instead of giving up after one failed attempt, so a brief
 // Atlas outage during a cold start doesn't leave the server broken.
 const connectWithRetry = () => {
   mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 10000 })
-    .then(() => console.log('Connected to MongoDB Atlas'))
+    .then(() => {
+      console.log('Connected to MongoDB Atlas');
+      syncFlowerTraits();
+    })
     .catch((err) => {
       console.error('Could not connect to MongoDB, retrying in 10s:', err.message);
       setTimeout(connectWithRetry, 10000);
@@ -81,6 +107,33 @@ app.get('/api/flowers', async (req, res) => {
   } catch (error) {
     console.error('Fetch flowers error:', error);
     res.status(500).json({ error: 'Could not load flowers' });
+  }
+});
+
+// Filter options with live counts. Each trait's counts respect the filters
+// chosen for the *other* traits, so the UI can show how many flowers each
+// option would return and disable options that would return none.
+app.get('/api/flowers/facets', async (req, res) => {
+  try {
+    const selected = {};
+    for (const key of Object.keys(FLOWER_TRAITS)) {
+      if (typeof req.query[key] === 'string' && req.query[key]) selected[key] = req.query[key];
+    }
+
+    const flowers = await Flower.find({}, Object.keys(FLOWER_TRAITS).join(' ')).lean();
+    const facets = {};
+    for (const [key, values] of Object.entries(FLOWER_TRAITS)) {
+      const matchesOthers = (flower) =>
+        Object.entries(selected).every(([otherKey, value]) => otherKey === key || flower[otherKey] === value);
+      const pool = flowers.filter(matchesOthers);
+      facets[key] = values.map((value) => ({ value, count: pool.filter((f) => f[key] === value).length }));
+    }
+
+    res.set('Cache-Control', 'public, max-age=60');
+    res.json({ facets, total: flowers.filter((f) => Object.entries(selected).every(([k, v]) => f[k] === v)).length });
+  } catch (error) {
+    console.error('Facets error:', error);
+    res.status(500).json({ error: 'Could not load filters' });
   }
 });
 
