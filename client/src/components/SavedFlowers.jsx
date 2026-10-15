@@ -99,8 +99,8 @@ const SavedFlowers = ({ config }) => {
         </div>
 
         <div className="sub-nav-bar desktop-only">
-          <Link to="/favorites" className={location.pathname === '/favorites' ? 'active' : ''}>Favorites</Link>
-          <Link to="/collections" className={location.pathname === '/collections' ? 'active' : ''}>Collections</Link>
+          <Link to="/favorites" className={location.pathname === '/favorites' ? 'active' : ''}><span className="bold-safe" data-text="Favorites">Favorites</span></Link>
+          <Link to="/collections" className={location.pathname === '/collections' ? 'active' : ''}><span className="bold-safe" data-text="Collections">Collections</span></Link>
         </div>
       </div>
 

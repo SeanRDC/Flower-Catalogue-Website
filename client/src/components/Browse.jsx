@@ -326,16 +326,16 @@ const Browse = () => {
               <div className="sub-nav-bar desktop-only">
                 {!selectedCategory ? (
                   <>
-                    <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}>Browse</a>
-                    <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}>Top picks</a>
-                    <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}>Petals</a>
+                    <a onClick={() => scrollTo(browseRef, 'browse')} className={activeTab === 'browse' ? 'active' : ''}><span className="bold-safe" data-text="Browse">Browse</span></a>
+                    <a onClick={() => scrollTo(topPicksRef, 'toppicks')} className={activeTab === 'toppicks' ? 'active' : ''}><span className="bold-safe" data-text="Top picks">Top picks</span></a>
+                    <a onClick={() => scrollTo(petalsRef, 'petals')} className={activeTab === 'petals' ? 'active' : ''}><span className="bold-safe" data-text="Petals">Petals</span></a>
                   </>
                 ) : (
                   <>
                     <a onClick={() => handleCategorySelect(null)} style={{ cursor: 'pointer', fontWeight: 'bold' }}>← All Categories</a>
-                    <a onClick={() => handleCategorySelect('Annual')} className={selectedCategory === 'Annual' ? 'active' : ''}>Annual</a>
-                    <a onClick={() => handleCategorySelect('Biennial')} className={selectedCategory === 'Biennial' ? 'active' : ''}>Biennial</a>
-                    <a onClick={() => handleCategorySelect('Perennial')} className={selectedCategory === 'Perennial' ? 'active' : ''}>Perennial</a>
+                    <a onClick={() => handleCategorySelect('Annual')} className={selectedCategory === 'Annual' ? 'active' : ''}><span className="bold-safe" data-text="Annual">Annual</span></a>
+                    <a onClick={() => handleCategorySelect('Biennial')} className={selectedCategory === 'Biennial' ? 'active' : ''}><span className="bold-safe" data-text="Biennial">Biennial</span></a>
+                    <a onClick={() => handleCategorySelect('Perennial')} className={selectedCategory === 'Perennial' ? 'active' : ''}><span className="bold-safe" data-text="Perennial">Perennial</span></a>
                   </>
                 )}
               </div>

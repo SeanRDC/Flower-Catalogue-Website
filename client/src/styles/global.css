@@ -22,3 +22,21 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+/* Reserves the width of the bold version of a label, so switching to bold
+   on hover/selection doesn't change its size and push its neighbours.
+   Usage: <span className="bold-safe" data-text="Label">Label</span> */
+.bold-safe {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bold-safe::after {
+  content: attr(data-text);
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
