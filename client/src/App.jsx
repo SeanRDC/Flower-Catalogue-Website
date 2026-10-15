@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { API_BASE_URL } from './api/client';
+import { ToastProvider } from './context/ToastContext';
 import { AnimatePresence } from 'framer-motion';
 import AuthModal from './components/AuthModal';
 import Navbar from './components/Navbar';
@@ -55,17 +56,19 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
-        <div className="app-container">
-          <ScrollToTop />
-          <Navbar />
-          <AuthModal />
-          
-          <AnimatedRoutes />
-          
-          <Footer />
-        </div>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <div className="app-container">
+            <ScrollToTop />
+            <Navbar />
+            <AuthModal />
+
+            <AnimatedRoutes />
+
+            <Footer />
+          </div>
+        </Router>
+      </ToastProvider>
     </AuthProvider>
   );
 }

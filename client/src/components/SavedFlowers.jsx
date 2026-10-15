@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/useAuth';
-import { Maximize2, Trash2 } from 'lucide-react';
+import { Trash2, Download } from 'lucide-react';
 import { headerImageProps } from '../utils/image';
-import ProgressiveImage from './ProgressiveImage';
+import FlowerCard from './FlowerCard';
+import { useToast } from '../context/useToast';
+import { downloadImage } from '../utils/download';
 import FullscreenImage from './FullscreenImage';
 import '../styles/Browse.css';
 import '../styles/Favorites.css';
@@ -14,6 +16,7 @@ import '../styles/Favorites.css';
 // endpoints, how to pick the flowers out of the user record, and the copy.
 const SavedFlowers = ({ config }) => {
   const { currentUser, openModal } = useAuth();
+  const showToast = useToast();
   const [items, setItems] = useState([]);
   const [loadedFor, setLoadedFor] = useState(null);
   const [loadError, setLoadError] = useState('');
@@ -50,14 +53,15 @@ const SavedFlowers = ({ config }) => {
     return () => controller.abort();
   }, [currentUser, config]);
 
-  const handleRemoveItem = async (e, flowerId) => {
-    e.stopPropagation();
+  const handleRemoveItem = async (flower) => {
     try {
-      await apiClient.post(config.removeEndpoint, { flowerId });
-      setItems((prev) => prev.filter((item) => item._id !== flowerId));
+      await apiClient.post(config.removeEndpoint, { flowerId: flower._id });
+      setItems((prev) => prev.filter((item) => item._id !== flower._id));
       setExpandedId(null);
+      showToast(`Removed ${flower.commonName} from your ${config.noun}`);
     } catch (err) {
       console.error(`Failed to remove from ${config.noun}`, err);
+      if (err.response?.status !== 401) showToast('Something went wrong. Please try again.', 'error');
     }
   };
 
@@ -67,8 +71,10 @@ const SavedFlowers = ({ config }) => {
     try {
       await apiClient.post(config.clearEndpoint);
       setItems([]);
+      showToast(`Cleared your ${config.noun}`);
     } catch (err) {
       console.error(`Failed to clear ${config.noun}`, err);
+      if (err.response?.status !== 401) showToast('Something went wrong. Please try again.', 'error');
     }
   };
 
@@ -124,36 +130,20 @@ const SavedFlowers = ({ config }) => {
         ) : (
           <div className="frame">
             {filteredItems.length > 0 ? (
-              filteredItems.map((item) => {
-                const isExpanded = expandedId === item._id;
-                return (
-                  <div key={item._id} className={`top-pick ${isExpanded ? 'expanded' : ''}`} onClick={() => setExpandedId(isExpanded ? null : item._id)}>
-                    <div className="image-wrapper">
-                      <ProgressiveImage className="images" src={item.imageUrl} alt={item.commonName} sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
-                      {isExpanded && (
-                        <button className="expand-fullscreen-btn" onClick={(e) => { e.stopPropagation(); setFullscreenImage(item); }} title="View Fullscreen" aria-label="View fullscreen">
-                          <Maximize2 size={18} color="#666" />
-                        </button>
-                      )}
-                    </div>
-                    <div className="card-content-wrapper">
-                      {isExpanded && (
-                        <div className="action-bar">
-                          <button className="action-icon-btn delete-btn" title={`Remove from ${config.noun}`} aria-label={`Remove from ${config.noun}`} onClick={(e) => handleRemoveItem(e, item._id)}>
-                            <Trash2 size={20} />
-                          </button>
-                        </div>
-                      )}
-                      <div className="description">
-                        <div className="product-name-item">{item.commonName}</div>
-                        <p className="sort-description">
-                          {isExpanded ? item.description : (item.description?.length > 80 ? `${item.description.substring(0, 80)}...` : item.description)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+              filteredItems.map((item, index) => (
+                <FlowerCard
+                  key={item._id}
+                  flower={item}
+                  index={index}
+                  isExpanded={expandedId === item._id}
+                  onToggle={() => setExpandedId((current) => (current === item._id ? null : item._id))}
+                  onFullscreen={() => setFullscreenImage(item)}
+                  actions={[
+                    { label: 'Remove', icon: Trash2, danger: true, onClick: () => handleRemoveItem(item) },
+                    { label: 'Download', icon: Download, onClick: () => downloadImage(item.imageUrl, item.commonName) },
+                  ]}
+                />
+              ))
             ) : (
               <p className="empty-msg">
                 {currentSearchQuery ? config.noMatches : config.empty}
@@ -167,6 +157,7 @@ const SavedFlowers = ({ config }) => {
         <FullscreenImage
           src={fullscreenImage.imageUrl}
           alt={fullscreenImage.commonName}
+          caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
           onClose={() => setFullscreenImage(null)}
         />
       )}

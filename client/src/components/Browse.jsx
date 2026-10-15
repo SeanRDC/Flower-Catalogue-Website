@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download } from 'lucide-react';
+import { ChevronDown, ChevronUp, Image as ImageIcon, Star, Download } from 'lucide-react';
 import '../styles/Browse.css';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/useAuth';
+import { useToast } from '../context/useToast';
+import { downloadImage } from '../utils/download';
 import FilterBar from '../components/FilterBar';
 import { headerImageProps } from '../utils/image';
 import ProgressiveImage from './ProgressiveImage';
 import FullscreenImage from './FullscreenImage';
+import FlowerCard from './FlowerCard';
 
 const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -59,7 +62,8 @@ const LIFECYCLE_CATEGORIES = {
 };
 
 const Browse = () => {
- const { currentUser, openModal, showAlert } = useAuth();
+  const { currentUser, openModal } = useAuth();
+  const showToast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -186,112 +190,72 @@ const Browse = () => {
   scrollTo(browseRef, 'browse');
 };
 
-  // Asset handlers
-  const handleDownload = (e, url, name) => {
-    e.stopPropagation();
-    fetch(url, { referrerPolicy: 'no-referrer' })
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.blob();
-      })
-      .then(blob => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = `${name.replace(/\s+/g, '_')}.jpg`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
-      })
-      .catch(err => {
-        // Some image hosts block cross-origin downloads; open the image instead
-        console.error('Error downloading image:', err);
-        window.open(url, '_blank', 'noopener,noreferrer');
-      });
-  };
+  // Which flowers the signed-in user has already saved, so the card buttons
+  // can show their state and act as toggles
+  const [savedIds, setSavedIds] = useState({ favorites: new Set(), collections: new Set() });
 
-  const handleSaveToAssets = async (e, flowerId, type) => {
-    e.stopPropagation(); 
-    
+  useEffect(() => {
+    if (!currentUser) return;
+    const controller = new AbortController();
+    apiClient.get('/user/me', { signal: controller.signal })
+      .then((res) => {
+        setSavedIds({
+          favorites: new Set((res.data.favorites || []).map((f) => f._id)),
+          collections: new Set((res.data.collections?.[0]?.flowers || []).map((f) => f._id)),
+        });
+      })
+      .catch((err) => {
+        if (!controller.signal.aborted) console.error('Error loading saved flowers:', err);
+      });
+    return () => controller.abort();
+  }, [currentUser]);
+
+  const handleToggleSaved = async (flower, type) => {
     if (!currentUser) {
       openModal('login');
       return;
     }
 
-    try {
-      const endpoint = type === 'favorite' ? '/favorites' : '/collections';
-      await apiClient.post(endpoint, { flowerId });
+    const isSaved = savedIds[type].has(flower._id);
+    const label = type === 'favorites' ? 'favorites' : 'collection';
 
-      showAlert('Success!', `Successfully added to your ${type}s!`);
+    try {
+      await apiClient.post(isSaved ? `/${type}/remove` : `/${type}`, { flowerId: flower._id });
+      setSavedIds((prev) => {
+        const next = new Set(prev[type]);
+        if (isSaved) next.delete(flower._id); else next.add(flower._id);
+        return { ...prev, [type]: next };
+      });
+      showToast(isSaved ? `Removed ${flower.commonName} from your ${label}` : `Added ${flower.commonName} to your ${label}`);
     } catch (err) {
-      console.error(`Failed to save ${type}:`, err);
+      console.error(`Failed to update ${type}:`, err);
       // A 401 already re-opens the login modal via the API client
       if (err.response?.status !== 401) {
-        showAlert('Error', 'Something went wrong saving your flower.');
+        showToast('Something went wrong. Please try again.', 'error');
       }
     }
   };
 
-  // Card UI Component
+  const toggleExpanded = (id) => setExpandedId((current) => (current === id ? null : id));
+
   const renderFlowerCard = (flower, index) => {
-    const isExpanded = expandedId === flower._id;
-    
-    const cascadeDelay = index >= 8 ? ((index - 8) % 12) * 0.05 : 0;
+    const isFavorite = savedIds.favorites.has(flower._id);
+    const inCollection = savedIds.collections.has(flower._id);
 
     return (
-      <div 
-        key={flower._id} 
-        className={`top-pick ${isExpanded ? 'expanded' : ''}`}
-        onClick={() => setExpandedId(isExpanded ? null : flower._id)}
-        style={{ animationDelay: `${cascadeDelay}s` }}
-      >
-        <div className="image-wrapper">
-          <ProgressiveImage className="images" src={flower.imageUrl} alt={flower.commonName} sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" />
-          {isExpanded && (
-            <button 
-              className="expand-fullscreen-btn" 
-              onClick={(e) => {
-                e.stopPropagation();
-                setFullscreenImage(flower);
-              }}
-              title="View Fullscreen"
-              aria-label="View fullscreen"
-            >
-              <Maximize2 size={18} color="#666" />
-            </button>
-          )}
-        </div>
-
-        <div className="card-content-wrapper">
-          {isExpanded && (
-            <div className="action-bar">
-              <button className="action-icon-btn" title="Add to collections" aria-label="Add to collections"
-                onClick={(e) => handleSaveToAssets(e, flower._id, 'collection')}>
-                <ImageIcon size={20} />
-              </button>
-
-              <button className="action-icon-btn" title="Add to favorites" aria-label="Add to favorites"
-                onClick={(e) => handleSaveToAssets(e, flower._id, 'favorite')}>
-                <Star size={20} />
-              </button>
-              
-              <button className="action-icon-btn" title="Download image" aria-label="Download image" onClick={(e) => handleDownload(e, flower.imageUrl, flower.commonName)}>
-                <Download size={20} />
-              </button>
-            </div>
-          )}
-
-          <div className="description">
-            <div className="product-name-item">{flower.commonName}</div>
-            <p className="sort-description">
-              {isExpanded 
-                ? flower.description 
-                : (flower.description?.length > 80 ? `${flower.description.substring(0, 80)}...` : flower.description)}
-            </p>
-          </div>
-        </div>
-      </div>
+      <FlowerCard
+        key={flower._id}
+        flower={flower}
+        index={index}
+        isExpanded={expandedId === flower._id}
+        onToggle={() => toggleExpanded(flower._id)}
+        onFullscreen={() => setFullscreenImage(flower)}
+        actions={[
+          { label: isFavorite ? 'Favorited' : 'Favorite', icon: Star, active: isFavorite, onClick: () => handleToggleSaved(flower, 'favorites') },
+          { label: inCollection ? 'In collection' : 'Collect', icon: ImageIcon, active: inCollection, onClick: () => handleToggleSaved(flower, 'collections') },
+          { label: 'Download', icon: Download, onClick: () => downloadImage(flower.imageUrl, flower.commonName) },
+        ]}
+      />
     );
   };
 
@@ -587,6 +551,7 @@ const Browse = () => {
         <FullscreenImage
           src={fullscreenImage.imageUrl}
           alt={fullscreenImage.commonName}
+          caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
           onClose={() => setFullscreenImage(null)}
         />
       )}

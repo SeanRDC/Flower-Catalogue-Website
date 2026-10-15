@@ -51,8 +51,3 @@
   background: #d32f2f;
   color: white;
 }
-
-.action-icon-btn.delete-btn:hover {
-  color: #d32f2f;
-  transform: translateY(-3px);
-}
