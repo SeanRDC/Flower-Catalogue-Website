@@ -1,3 +1,13 @@
+/* Shared animation timing (mirrored in src/utils/motion.js for Framer Motion)
+   so every transition on the site moves with the same feel */
+:root {
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 0.2s;     /* hovers, small state changes, exits */
+  --dur-base: 0.3s;     /* panels, overlays, most transitions */
+  --dur-slow: 0.4s;     /* menus sliding open, larger surfaces */
+  --dur-entrance: 0.6s; /* content arriving on the page */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -39,4 +49,16 @@ body {
   font-weight: 700;
   pointer-events: none;
   user-select: none;
+}
+
+/* Respect the OS "reduce motion" setting everywhere */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -41,12 +41,11 @@ export const AuthProvider = ({ children }) => {
     setIsModalOpen(true);
   };
 
+  // The modal keeps its mode and content while it animates out; every way of
+  // opening it sets the mode again, so nothing needs resetting here (a delayed
+  // reset could also wipe an alert opened right after closing).
   const closeModal = () => {
     setIsModalOpen(false);
-    setTimeout(() => {
-      setModalMode('login');
-      setAlertContent({ title: '', message: '' });
-    }, 300);
   };
 
   const showAlert = (title, message) => {

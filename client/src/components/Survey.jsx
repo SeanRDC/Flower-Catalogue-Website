@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import '../styles/Survey.css';
 import { useAuth } from '../context/useAuth';
@@ -42,7 +41,7 @@ const Survey = () => {
   };
 
   return (
-    <motion.div className="desktop-home-page short-header-page">
+    <div className="desktop-home-page short-header-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
           <img className="vector" {...headerImageProps} />
@@ -105,7 +104,7 @@ const Survey = () => {
           </form>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

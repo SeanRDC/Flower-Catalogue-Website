@@ -4,18 +4,10 @@
   flex-direction: column;
   background-color: #f5f5f5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  opacity: 0;
-  animation: pageFadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-@keyframes pageFadeInUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  /* End with no transform: a lingering transform would trap fixed overlays */
-  100% { opacity: 1; transform: none; }
 }
 
 .chevron-icon {
-  transition: transform 0.3s ease;
+  transition: transform var(--dur-base) var(--ease);
 }
 
 .chevron-icon.rotate {
@@ -87,7 +79,9 @@
   align-items: flex-end;
   gap: 290px;
   padding-bottom: 25px; 
-  animation: smoothSlideDown 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  /* backwards: hold the first frame during any delay, then release, so the
+     animation never keeps overriding transforms (hover effects) afterwards */
+  animation: smoothSlideDown var(--dur-entrance) var(--ease) backwards;
 }
 
 .sub-nav-bar a {
@@ -97,7 +91,7 @@
   font-size: 18px;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
   position: relative;
   z-index: 10;
   pointer-events: auto;
@@ -156,7 +150,7 @@
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
 }
 
 .category-item:hover {
@@ -168,7 +162,7 @@
   width: 45%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform var(--dur-base) var(--ease);
 }
 
 .category-item:hover img {
@@ -236,8 +230,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-  animation: fadeSlideDown 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition: box-shadow var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+  animation: fadeSlideDown var(--dur-entrance) var(--ease) backwards;
 }
 
 .top-pick:not(.expanded):hover {
@@ -301,7 +295,7 @@
   border: 2px solid #2c2c2c;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
 }
 
 .show-more:hover {
@@ -369,7 +363,7 @@
 .petals-track img {
   object-fit: cover;
   border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
   cursor: pointer;
 }
 
@@ -464,7 +458,7 @@
 
   .browse-hero-header {
     height: 260px;
-    transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: height var(--dur-slow) var(--ease);
   }
 
   .browse-hero-header.expanded {
@@ -477,7 +471,7 @@
 
   .sub-nav-bar.mobile-only {
     height: 280px;
-    transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: height var(--dur-slow) var(--ease);
     padding-bottom: 15px;
     align-items: flex-end;
     gap: 0;
@@ -560,7 +554,7 @@
   grid-row: span 2;
   cursor: default;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
-  animation: cardExpand 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: cardExpand var(--dur-base) var(--ease);
 }
 
 .top-pick.expanded .images {
@@ -643,7 +637,7 @@
   border: 1px solid #d9dcd3;
   border-radius: 999px;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 
 .card-action:hover {
@@ -682,8 +676,8 @@
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   cursor: pointer;
-  animation: fadeScaleIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transition: background 0.2s ease, transform 0.2s ease;
+  animation: fadeScaleIn var(--dur-base) var(--ease) backwards;
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 
 .card-close-btn {
@@ -707,7 +701,7 @@
 .card-close-btn:hover,
 .expand-fullscreen-btn:hover {
   background: white;
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
 @keyframes fadeSlideDown {
@@ -740,7 +734,6 @@
   background: rgba(12, 14, 10, 0.92);
   backdrop-filter: blur(6px);
   cursor: zoom-out;
-  animation: overlayFadeIn 0.25s ease;
 }
 
 .fullscreen-figure {
@@ -763,7 +756,7 @@
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
   opacity: 0;
   transform: scale(0.97);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
 }
 
 .fullscreen-image-view.loaded {
@@ -811,17 +804,12 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 50%;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 
 .close-fullscreen-btn:hover {
   background: rgba(255, 255, 255, 0.28);
-  transform: scale(1.06);
-}
-
-@keyframes overlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  transform: scale(1.05);
 }
 
 @keyframes spin {

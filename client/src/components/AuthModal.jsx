@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../api/client';
-import '../styles/modal.css'; 
+import { motion, AnimatePresence } from 'framer-motion';
+import { backdropMotion, panelMotion, useMotionPreset } from '../utils/motion';
+import '../styles/modal.css';
 
-const AuthModal = () => {
-  const { isModalOpen, closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser, showAlert, alertContent } = useAuth();
+const AuthModalBody = () => {
+  const backdropAnimation = useMotionPreset(backdropMotion);
+  const panelAnimation = useMotionPreset(panelMotion);
+  const { closeModal, modalMode, setModalMode, login, signInWithGoogle, logout, currentUser, showAlert, alertContent } = useAuth();
   
   const [step, setStep] = useState(1); 
   
@@ -44,12 +48,10 @@ const AuthModal = () => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  if (!isModalOpen) return null;
-
   if (modalMode === 'alert') {
     return (
-      <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <motion.div className="modal" style={{ display: 'flex' }} onClick={closeModal} {...backdropAnimation}>
+        <motion.div className="modal-content" onClick={(e) => e.stopPropagation()} {...panelAnimation}>
           <button className="close-btn" onClick={closeModal}>
              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
@@ -60,15 +62,15 @@ const AuthModal = () => {
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
             <button className="modal-continue-btn" style={{ width: '100%' }} onClick={closeModal}>Awesome</button>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 
   if (modalMode === 'logout') {
     return (
-      <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <motion.div className="modal" style={{ display: 'flex' }} onClick={closeModal} {...backdropAnimation}>
+        <motion.div className="modal-content" onClick={(e) => e.stopPropagation()} {...panelAnimation}>
           <button className="close-btn" onClick={closeModal}>
              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
@@ -80,8 +82,8 @@ const AuthModal = () => {
             <button className="modal-continue-btn" style={{ background: '#f5f5f5', color: '#333', border: '1px solid #ddd' }} onClick={closeModal}>Cancel</button>
             <button className="modal-continue-btn" style={{ background: '#d32f2f', border: 'none' }} onClick={() => { logout(); closeModal(); }}>Yes, Log Out</button>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 
@@ -161,8 +163,8 @@ const AuthModal = () => {
   };
 
   return (
-    <div className="modal" style={{ display: 'flex' }} onClick={closeModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <motion.div className="modal" style={{ display: 'flex' }} onClick={closeModal} {...backdropAnimation}>
+      <motion.div className="modal-content" onClick={(e) => e.stopPropagation()} {...panelAnimation}>
         <button className="close-btn" onClick={closeModal} aria-label="Close modal">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
@@ -311,8 +313,18 @@ const AuthModal = () => {
             </p>
           </>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// Mounted only while open, so the dialog can animate out when it closes
+const AuthModal = () => {
+  const { isModalOpen } = useAuth();
+  return (
+    <AnimatePresence>
+      {isModalOpen && <AuthModalBody key="auth-modal" />}
+    </AnimatePresence>
   );
 };
 

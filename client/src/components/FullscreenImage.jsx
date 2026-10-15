@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
+import { backdropMotion, useMotionPreset } from '../utils/motion';
 import { X } from 'lucide-react';
 import { optimizeImage } from '../utils/image';
 
-// Rendered into <body> through a portal: page wrappers use CSS transforms for
-// their animations, which would otherwise trap this fixed overlay inside them.
+// Rendered into <body> through a portal: cards use CSS transforms for their
+// animations, which would otherwise trap this fixed overlay inside them.
 const FullscreenImage = ({ src, alt = 'Fullscreen bloom', caption, onClose }) => {
   const [loaded, setLoaded] = useState(false);
+  const backdropAnimation = useMotionPreset(backdropMotion);
   const closeRef = useRef(null);
   // Keep the latest onClose without re-running the setup effect each render
   const onCloseRef = useRef(onClose);
@@ -37,7 +40,7 @@ const FullscreenImage = ({ src, alt = 'Fullscreen bloom', caption, onClose }) =>
   }, []);
 
   return createPortal(
-    <div className="fullscreen-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={alt}>
+    <motion.div className="fullscreen-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={alt} {...backdropAnimation}>
       <button ref={closeRef} className="close-fullscreen-btn" onClick={onClose} aria-label="Close full size image">
         <X size={26} />
       </button>
@@ -54,7 +57,7 @@ const FullscreenImage = ({ src, alt = 'Fullscreen bloom', caption, onClose }) =>
         />
         {caption && <figcaption className="fullscreen-caption">{caption}</figcaption>}
       </figure>
-    </div>,
+    </motion.div>,
     document.body
   );
 };

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Image as ImageIcon, Star, Download } from 'lucide-react';
@@ -306,7 +306,7 @@ const Browse = () => {
     : [...allFlowers, ...allFlowers, ...allFlowers].slice(0, 9);
 
   return (
-    <motion.div className="desktop-home-page">
+    <div className="desktop-home-page">
       {!currentSearchQuery && !isNewsfeedMode && (
         <div className={`browse-hero-header ${isMobileSubNavExpanded ? 'expanded' : ''}`}>
           <div className="vector-container">
@@ -573,15 +573,17 @@ const Browse = () => {
       )}
 
       {/* FULLSCREEN IMAGE MODAL */}
-      {fullscreenImage && (
-        <FullscreenImage
-          src={fullscreenImage.imageUrl}
-          alt={fullscreenImage.commonName}
-          caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
-          onClose={() => setFullscreenImage(null)}
-        />
-      )}
-    </motion.div>
+      <AnimatePresence>
+        {fullscreenImage && (
+          <FullscreenImage
+            src={fullscreenImage.imageUrl}
+            alt={fullscreenImage.commonName}
+            caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
+            onClose={() => setFullscreenImage(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

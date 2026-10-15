@@ -49,7 +49,7 @@
   font-family: inherit;
   font-size: 15px;
   resize: vertical;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
 }
 
 .feedback-form textarea:focus {
@@ -67,7 +67,7 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
 }
 
 .submit-btn:hover {

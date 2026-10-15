@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import '../styles/Hero.css'; 
 import { useAuth } from '../context/useAuth';
+import { EASE, DURATION } from '../utils/motion';
 
 const Hero = () => {
   const navigate = useNavigate();
   const { openModal, currentUser } = useAuth();
+  // With reduce motion on, show everything immediately (no fades or stagger)
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     document.title = "Home | Peony";
@@ -17,8 +20,9 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.25, 
-        delayChildren: 0.3,    
+        // Starts partway through the page fade-in, items follow in a steady rhythm
+        staggerChildren: 0.15,
+        delayChildren: DURATION.fast,
       }
     }
   };
@@ -28,7 +32,7 @@ const Hero = () => {
     visible: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.8, ease: [0.2, 0.8, 0.2, 1] } 
+      transition: { duration: DURATION.entrance, ease: EASE }
     }
   };
 
@@ -42,15 +46,15 @@ const Hero = () => {
         alt="Beautiful featured flower"
         fetchPriority="high"
         decoding="async"
-        initial={{ opacity: 0 }}
+        initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
+        transition={{ duration: 1.2, ease: EASE }}
       />
       <div className="hero-overlay"></div>
 
       <motion.div 
         className="hero-content"
-        initial="hidden"
+        initial={reduceMotion ? false : 'hidden'}
         animate="visible"
         variants={containerVariants}
       >

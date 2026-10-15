@@ -74,7 +74,7 @@
   background: white;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--dur-fast) var(--ease);
   font-size: 14px;
   font-weight: 600;
   color: #666;
@@ -113,7 +113,7 @@
   font-size: 14px;
   resize: vertical;
   min-height: 120px;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
 }
 
 .textarea-section textarea:focus {
@@ -133,7 +133,7 @@
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
   font-weight: 600;
 }
 

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { apiClient } from '../api/client';
@@ -85,7 +85,7 @@ const SavedFlowers = ({ config }) => {
   );
 
   return (
-    <motion.div className="desktop-home-page asset-page">
+    <div className="desktop-home-page asset-page">
       <div className="browse-hero-header">
         <div className="vector-container">
           <img className="vector" {...headerImageProps} />
@@ -153,15 +153,17 @@ const SavedFlowers = ({ config }) => {
         )}
       </section>
 
-      {fullscreenImage && (
-        <FullscreenImage
-          src={fullscreenImage.imageUrl}
-          alt={fullscreenImage.commonName}
-          caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
-          onClose={() => setFullscreenImage(null)}
-        />
-      )}
-    </motion.div>
+      <AnimatePresence>
+        {fullscreenImage && (
+          <FullscreenImage
+            src={fullscreenImage.imageUrl}
+            alt={fullscreenImage.commonName}
+            caption={<><strong>{fullscreenImage.commonName}</strong> <em>{fullscreenImage.scientificName}</em></>}
+            onClose={() => setFullscreenImage(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

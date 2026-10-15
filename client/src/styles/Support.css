@@ -47,7 +47,7 @@
   text-decoration: none;
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: all var(--dur-base) var(--ease);
 }
 
 .support-email-link:hover {
@@ -68,7 +68,7 @@
   font-weight: 500;
   color: #888;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--dur-base) var(--ease);
 }
 
 .support-home-link:hover {

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import '../styles/Feedback.css';
 import { useAuth } from '../context/useAuth';
@@ -22,7 +21,7 @@ const Feedback = () => {
   };
 
   return (
-    <motion.div className="desktop-home-page short-header-page">
+    <div className="desktop-home-page short-header-page">
       <div className="subpage-hero-header">
         <div className="vector-container">
           <img className="vector" {...headerImageProps} />
@@ -52,7 +51,7 @@ const Feedback = () => {
           <button type="submit" className="submit-btn">Submit</button>
         </form>
       </main>
-    </motion.div>
+    </div>
   );
 };
 

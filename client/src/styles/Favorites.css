@@ -44,7 +44,7 @@
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--dur-fast) var(--ease);
 }
 
 .clear-all-btn:hover {

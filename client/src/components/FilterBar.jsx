@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { EASE, DURATION } from '../utils/motion';
 import '../styles/FilterBar.css';
 
 // Filter groups shown in the bar: label -> field name used by the API
@@ -14,6 +15,7 @@ const FILTER_GROUPS = [
 // comes from /api/flowers/facets: { color: [{ value, count }], ... }.
 const FilterBar = ({ selected = {}, facets, total, onChange }) => {
   const [activeTab, setActiveTab] = useState(null);
+  const reduceMotion = useReducedMotion();
   const containerRef = useRef(null);
 
   // Close the open options strip on outside click or Escape
@@ -93,7 +95,7 @@ const FilterBar = ({ selected = {}, facets, total, onChange }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={{ duration: reduceMotion ? 0 : DURATION.base, ease: EASE }}
           >
             <div className="sub-filter-options" role="group" aria-label={`${activeLabel} options`}>
               {!options ? (

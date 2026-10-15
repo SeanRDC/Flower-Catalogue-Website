@@ -81,7 +81,9 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  /* Not transform: Framer Motion drives the hover/tap scale, and a CSS
+     transition on transform would lag behind it */
+  transition: background var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -97,7 +99,6 @@
 
 .browse-now-button:hover,
 .log-in-button:hover {
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 

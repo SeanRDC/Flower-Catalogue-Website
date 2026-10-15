@@ -1,6 +1,6 @@
 .progressive-img {
   background-color: #e2e5de;
-  transition: opacity 0.4s ease-in-out;
+  transition: opacity var(--dur-slow) var(--ease);
 }
 
 .progressive-img.loading {
@@ -13,5 +13,5 @@
 
 /* Keep the card's own height/zoom transitions alongside the fade-in */
 .progressive-img.images {
-  transition: opacity 0.4s ease-in-out, height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s ease;
+  transition: opacity var(--dur-slow) var(--ease), height var(--dur-slow) var(--ease), transform var(--dur-base) var(--ease);
 }
