@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import '../styles/Footer.css';
-import peonyLogo from '../assets/peony-logo.jpg';
+import peonyLogo from '../assets/peony-logo.webp';
 import { useAuth } from '../context/AuthContext';
 
 const Footer = () => {

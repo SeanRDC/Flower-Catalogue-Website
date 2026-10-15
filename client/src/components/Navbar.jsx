@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
-import peonyLogo from '../assets/peony-logo.jpg';
+import peonyLogo from '../assets/peony-logo.webp';
 import '../styles/Navbar.css';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import '../styles/Hero.css'; 
-import heroImage from '/heroimage.jpg';
 import { useAuth } from '../context/AuthContext';
 
 const Hero = () => {
@@ -37,8 +36,12 @@ const Hero = () => {
     <section className="hero-section">
       <motion.img 
         className="hero-background" 
-        src={heroImage} 
-        alt="Beautiful featured flower" 
+        src="/hero-1600.webp"
+        srcSet="/hero-960.webp 960w, /hero-1600.webp 1600w, /hero-2400.webp 2400w"
+        sizes="100vw"
+        alt="Beautiful featured flower"
+        fetchPriority="high"
+        decoding="async"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeInOut" }}
