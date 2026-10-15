@@ -88,11 +88,11 @@ You can explore the interactive botanical engine, test the complex filtering sys
 ```text
 ├── client/                           # React (Vite) frontend application
 │   ├── public/                       # Static public assets
-│   │   ├── heroimage.jpg             # Landing page background
+│   │   ├── hero-*.webp               # Responsive landing page backgrounds
 │   │   └── peony-logo.jpg            # Brand logo
 │   ├── src/                          # Frontend source code
 │   │   ├── api/                      # API communication logic
-│   │   │   └── client.js             # Axios/fetch configurations
+│   │   │   └── client.js             # Shared Axios client (base URL + auth token)
 │   │   ├── assets/                   # Image and media assets
 │   │   ├── components/               # Reusable UI components
 │   │   │   ├── AuthModal.jsx         # Secure authentication interface
@@ -101,10 +101,14 @@ You can explore the interactive botanical engine, test the complex filtering sys
 │   │   │   ├── Favorites.jsx         # Liked items component
 │   │   │   ├── FilterBar.jsx         # Multi-parameter search filter
 │   │   │   ├── FlowerCard.jsx        # Individual botanical display card
-│   │   │   ├── ProgressiveImage.jsx  # Optimized image loader
+│   │   │   ├── ProgressiveImage.jsx  # Lazy, resized image loader with fallback
+│   │   │   ├── SavedFlowers.jsx      # Shared Favorites/Collections page
 │   │   │   └── [Other UI Components] # Footer, Hero, Navbar, Modals, etc.
 │   │   ├── context/                  # React Context providers
-│   │   │   └── AuthContext.jsx       # Global authentication state management
+│   │   │   ├── AuthContext.jsx       # Global authentication state management
+│   │   │   └── useAuth.js            # Auth context hook
+│   │   ├── utils/                    # Helpers
+│   │   │   └── image.js              # CDN image resizing and srcset builder
 │   │   ├── pages/                    # Main application views
 │   │   │   └── Browse.jsx            # Main encyclopedia page
 │   │   ├── styles/                   # CSS modules and component styles
@@ -118,6 +122,8 @@ You can explore the interactive botanical engine, test the complex filtering sys
 │   ├── vercel.json                   # Vercel deployment routing configuration
 │   └── vite.config.js                # Vite bundler configuration
 ├── server/                           # Express.js backend application
+│   ├── middleware/                   # Express middleware
+│   │   └── auth.js                   # JWT verification for user routes
 │   ├── models/                       # Mongoose database schemas
 │   │   ├── Flower.js                 # Botanical data and classification schema
 │   │   └── User.js                   # User account and collections schema
@@ -132,12 +138,29 @@ You can explore the interactive botanical engine, test the complex filtering sys
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- CONFIGURATION -->
+## Configuration
+
+To run the project locally, create `server/.env`:
+
+```env
+MONGO_URI=your-mongodb-atlas-connection-string
+JWT_SECRET=a-long-random-secret
+RESEND_API_KEY=your-resend-api-key
+# Optional: comma-separated list of allowed frontend origins
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+The client talks to the deployed Render API by default. To use a local server instead, create `client/.env` with `VITE_API_URL=http://localhost:5000`.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- CONTACT -->
 ## Contact
 
 Sean Rhani Jarin Dela Cruz
 
-Project Link: https://github.com/SeanRDC/beaded-by-unknown <br />
+Project Link: https://github.com/SeanRDC/Flower-Catalogue-Website <br />
 LinkedIn Link: https://www.linkedin.com/in/sean-rhani-dela-cruz-834573334/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
