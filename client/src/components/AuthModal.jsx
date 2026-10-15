@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import '../styles/modal.css'; 
@@ -20,21 +20,23 @@ const AuthModal = () => {
   const [timeLeft, setTimeLeft] = useState(300);
 
   useEffect(() => {
-    let timer;
-    if (step === 2 && timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    } else if (timeLeft === 0 && step === 2) {
-      setError('OTP has expired. Please try again.');
-    }
+    if (step !== 2) return;
+    const timer = setInterval(() => setTimeLeft((prev) => Math.max(prev - 1, 0)), 1000);
     return () => clearInterval(timer);
-  }, [step, timeLeft]);
+  }, [step]);
 
-  useEffect(() => {
+  // Reset the flow whenever the modal switches mode (adjusting state during
+  // render avoids an extra effect-triggered render)
+  const [prevMode, setPrevMode] = useState(modalMode);
+  if (modalMode !== prevMode) {
+    setPrevMode(modalMode);
     setError('');
     setStep(1);
     setOtp('');
     setNewPassword('');
-  }, [modalMode]);
+  }
+
+  const displayError = error || (step === 2 && timeLeft === 0 ? 'OTP has expired. Please try again.' : '');
 
   const formatTime = () => {
     const minutes = Math.floor(timeLeft / 60);
@@ -172,7 +174,7 @@ const AuthModal = () => {
               Enter a secure new password for your account.
             </p>
             
-            {error && <div className="modal-error-msg">{error}</div>}
+            {displayError && <div className="modal-error-msg">{displayError}</div>}
             
             <form className="modal-form" onSubmit={handleResetPasswordSubmit}>
               <input 
@@ -205,7 +207,7 @@ const AuthModal = () => {
               {formatTime()}
             </div>
 
-            {error && <div className="modal-error-msg">{error}</div>}
+            {displayError && <div className="modal-error-msg">{displayError}</div>}
             
             <form className="modal-form" onSubmit={handleOtpSubmit}>
               <input
@@ -237,7 +239,7 @@ const AuthModal = () => {
               {isSignUp ? 'Full access to save favorites and collections' : (isForgotPw ? 'Enter your email to receive a reset code' : 'Log in to view your saved flowers')}
             </p>
 
-            {error && <div className="modal-error-msg">{error}</div>}
+            {displayError && <div className="modal-error-msg">{displayError}</div>}
 
             <form className="modal-form" onSubmit={handleInitialSubmit}>
               <input 

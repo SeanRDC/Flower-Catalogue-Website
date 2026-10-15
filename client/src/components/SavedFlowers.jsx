@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { apiClient } from '../api/client';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Maximize2, Trash2 } from 'lucide-react';
 import { headerImageProps } from '../utils/image';
 import ProgressiveImage from './ProgressiveImage';

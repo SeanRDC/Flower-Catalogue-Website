@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import '../styles/Feedback.css';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { headerImageProps } from "../utils/image";
 
 const Feedback = () => {

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import '../styles/Survey.css';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { headerImageProps } from "../utils/image";
 
 

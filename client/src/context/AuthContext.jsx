@@ -1,10 +1,7 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { apiClient, setUnauthorizedHandler, TOKEN_KEY, USER_KEY } from '../api/client';
-
-const AuthContext = createContext();
-
-export const useAuth = () => useContext(AuthContext);
+import { AuthContext } from './useAuth';
 
 const loadSavedUser = () => {
   try {

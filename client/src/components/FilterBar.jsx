@@ -2,15 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/FilterBar.css';
 
-const FilterBar = ({ onFilterSelect }) => {
+// The selected filters live in the parent so that resetting them there
+// (e.g. "Clear Filters") also clears the highlighted options here.
+const FilterBar = ({ selectedFilters = {}, onFilterSelect }) => {
   const [activeTab, setActiveTab] = useState(null);
-  
-  const [selectedFilters, setSelectedFilters] = useState({
-    Color: '',
-    'Petal Shape': '',
-    Type: '',
-    Symbolism: ''
-  });
 
   const filterCategories = {
     Color: ['Red', 'Pink', 'White', 'Yellow', 'Purple', 'Blue', 'Orange', 'Green'],
@@ -32,9 +27,7 @@ const FilterBar = ({ onFilterSelect }) => {
       ...selectedFilters,
       [category]: selectedFilters[category] === option ? '' : option 
     };
-    
-    setSelectedFilters(newFilters);
-    
+
     if (onFilterSelect) {
       onFilterSelect(newFilters);
     }

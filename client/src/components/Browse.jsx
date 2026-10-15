@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Maximize2, Image as ImageIcon, Star, Download } from 'lucide-react';
 import '../styles/Browse.css';
 import { apiClient } from '../api/client';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import FilterBar from '../components/FilterBar';
 import { headerImageProps } from '../utils/image';
 import ProgressiveImage from './ProgressiveImage';
@@ -429,7 +429,7 @@ const Browse = () => {
           zIndex: 10,
           marginTop: '80px'
         }}>
-          <FilterBar onFilterSelect={handleFiltersUpdated} />
+          <FilterBar selectedFilters={activeFilters} onFilterSelect={handleFiltersUpdated} />
         </div>
       )}
 
