@@ -295,7 +295,7 @@ const extractTruthfulData = (name, family, description) => {
   else if (color === "Blue" || color === "Purple") symbolism = "Peace";
   else symbolism = "Friendship";
 
-  const imageUrl = imageDictionary[name] || "/heroimage.jpg";
+  const imageUrl = imageDictionary[name] || "/flower-fallback.svg";
 
   return { color, petalShape, type, symbolism, imageUrl };
 };

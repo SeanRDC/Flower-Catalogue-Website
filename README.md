@@ -89,7 +89,8 @@ You can explore the interactive botanical engine, test the complex filtering sys
 ├── client/                           # React (Vite) frontend application
 │   ├── public/                       # Static public assets
 │   │   ├── hero-*.webp               # Responsive landing page backgrounds
-│   │   └── peony-logo.jpg            # Brand logo
+│   │   ├── favicon.png               # Browser tab icon
+│   │   └── flower-fallback.svg       # Shown when a flower image fails
 │   ├── src/                          # Frontend source code
 │   │   ├── api/                      # API communication logic
 │   │   │   └── client.js             # Shared Axios client (base URL + auth token)
@@ -132,8 +133,7 @@ You can explore the interactive botanical engine, test the complex filtering sys
 │   ├── index.js                      # Main Express server entry point
 │   ├── package.json                  # Backend dependencies and scripts
 │   └── seed.js                       # Database seeding script for the catalog
-├── .gitignore                        # Root git ignore file
-└── package.json                      # Root workspace dependencies
+└── .gitignore                        # Root git ignore file
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
