@@ -10,7 +10,8 @@
 
 @keyframes pageFadeInUp {
   0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
+  /* End with no transform: a lingering transform would trap fixed overlays */
+  100% { opacity: 1; transform: none; }
 }
 
 .chevron-icon {
@@ -442,7 +443,7 @@
     gap: 100px;
   }
 
-  .category-grid, .frame {
+  .frame {
     grid-template-columns: repeat(2, 1fr);
   }
   

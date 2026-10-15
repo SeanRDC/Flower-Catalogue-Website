@@ -37,6 +37,9 @@ const customSmoothScroll = (targetPosition, duration = 600) => {
   requestAnimationFrame(animation);
 };
 
+// Catalogue fields the filter bar can narrow by (also the URL parameter names)
+const FILTER_KEYS = ['color', 'petalShape', 'type', 'symbolism'];
+
 const LIFECYCLE_CATEGORIES = {
   Annual: {
     id: "Annual",
@@ -84,13 +87,23 @@ const Browse = () => {
   const [expandedId, setExpandedId] = useState(null);
   const [fullscreenImage, setFullscreenImage] = useState(null);
 
-  const [activeFilters, setActiveFilters] = useState({});
   const [retryCount, setRetryCount] = useState(0);
   const [loadedQuery, setLoadedQuery] = useState(null);
   const [loadError, setLoadError] = useState(false);
-  
-  const handleFiltersUpdated = (selectedFilters) => {
-    setActiveFilters(selectedFilters);
+  const [facets, setFacets] = useState(null);
+
+  // Filters live in the URL (e.g. ?view=all&color=Red) so they survive a
+  // refresh, work with back/forward and can be shared. They only apply to
+  // the complete catalogue view.
+  const activeFilters = isNewsfeedMode
+    ? Object.fromEntries(FILTER_KEYS.map((key) => [key, searchParams.get(key) || '']).filter(([, value]) => value))
+    : {};
+
+  const handleFiltersUpdated = (nextFilters) => {
+    const next = new URLSearchParams(location.search);
+    FILTER_KEYS.forEach((key) => (nextFilters[key] ? next.set(key, nextFilters[key]) : next.delete(key)));
+    navigate(`/browse?${next.toString()}`, { replace: true });
+    setExpandedId(null);
   };
   
   // Refs for smooth scrolling
@@ -118,12 +131,22 @@ const Browse = () => {
   }, [selectedCategory]);
 
   // Fetch Live Data from Render
-  const params = new URLSearchParams({ page: 1, limit: 250 });
-  if (activeFilters['Color']) params.set('color', activeFilters['Color']);
-  if (activeFilters['Petal Shape']) params.set('petalShape', activeFilters['Petal Shape']);
-  if (activeFilters['Type']) params.set('type', activeFilters['Type']);
-  if (activeFilters['Symbolism']) params.set('symbolism', activeFilters['Symbolism']);
-  const queryString = params.toString();
+  const filterParams = new URLSearchParams();
+  FILTER_KEYS.forEach((key) => activeFilters[key] && filterParams.set(key, activeFilters[key]));
+  const filterQuery = filterParams.toString();
+  const queryString = `page=1&limit=250${filterQuery ? `&${filterQuery}` : ''}`;
+
+  // Filter options and counts for the current selection
+  useEffect(() => {
+    if (!isNewsfeedMode) return;
+    const controller = new AbortController();
+    apiClient.get(`/flowers/facets?${filterQuery}`, { signal: controller.signal })
+      .then((res) => setFacets(res.data.facets))
+      .catch((err) => {
+        if (!controller.signal.aborted) console.error('Error loading filter options:', err);
+      });
+    return () => controller.abort();
+  }, [isNewsfeedMode, filterQuery]);
   const requestKey = `${queryString}#${retryCount}`;
   const isLoading = loadedQuery !== requestKey;
 
@@ -325,7 +348,7 @@ const Browse = () => {
                       <>
                         <a onClick={() => scrollTo(browseRef, 'browse')}>Browse</a>
                         <div className="nav-divider"></div>
-                        <a onClick={() => scrollTo(topPicksRef, 'toppicks')}>Top pick</a>
+                        <a onClick={() => scrollTo(topPicksRef, 'toppicks')}>Top picks</a>
                         <div className="nav-divider"></div>
                         <a onClick={() => scrollTo(petalsRef, 'petals')}>Petals</a>
                       </>
@@ -347,7 +370,7 @@ const Browse = () => {
                 ) : (
                   <div className="mobile-nav-links collapsed-view" onClick={() => setIsMobileSubNavExpanded(true)}>
                     <span className="active-tab-text">
-                      {selectedCategory || (activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top pick' : 'Petals')}
+                      {selectedCategory || (activeTab === 'browse' ? 'Browse' : activeTab === 'toppicks' ? 'Top picks' : 'Petals')}
                     </span>
                     <ChevronDown size={20} color="white" />
                   </div>
@@ -388,12 +411,13 @@ const Browse = () => {
       )}
 
       {isNewsfeedMode && (
-        <div style={{ 
-          position: 'relative', 
-          zIndex: 10,
-          marginTop: '80px'
-        }}>
-          <FilterBar selectedFilters={activeFilters} onFilterSelect={handleFiltersUpdated} />
+        <div className="filter-sticky">
+          <FilterBar
+            selected={activeFilters}
+            facets={facets}
+            total={isLoading || loadError ? undefined : displayedFlowers.length}
+            onChange={handleFiltersUpdated}
+          />
         </div>
       )}
 
@@ -501,7 +525,9 @@ const Browse = () => {
               {displayedFlowers.length > 0 ? displayedFlowers.map((flower, index) => renderFlowerCard(flower, index)) : (
                 <div className="no-results-container" style={{ gridColumn: '1/-1', textAlign: 'center', padding: '50px' }}>
                   <h2 className="no-results-title">No flowers match these filters</h2>
-                  <button className="show-more" onClick={() => setActiveFilters({})}>Clear Filters</button>
+                  <button className="show-more" onClick={() => handleFiltersUpdated({})}>
+                    <div className="text-wrapper-11">Clear filters</div>
+                  </button>
                 </div>
               )}
             </div>
